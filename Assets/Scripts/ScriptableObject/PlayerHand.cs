@@ -23,6 +23,10 @@ public class PlayerHand : ScriptableObject
     [Multiline]
     string _cardEffect;
 
+    [SerializeField]
+    [Header("効果")]
+    HandEffect _handEffect;
+
     public enum RSP
     {
         [Tooltip("グー")]
@@ -32,5 +36,4 @@ public class PlayerHand : ScriptableObject
         [Tooltip("パー")]
         Paper
     }
-
 }

@@ -15,7 +15,7 @@ public class PlayerBase : MonoBehaviour, IAddHand, IReceiveDamage
     public void AddHand(PlayerHand playerHand)
     {
         _playerHands.Add(playerHand);
-        if(_playerHands.Count < 5)
+        if(_playerHands.Count < BattleManager.Instance.InitialHandNum)
         {
 
         }

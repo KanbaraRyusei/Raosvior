@@ -5,6 +5,17 @@ using System;
 
 public class BattleManager : SingletonMonoBehaviour<BattleManager>
 {
+    public int InitialLife => _initialLife;
+    public int InitialHandNum => _initialHandNum;
+
+    [SerializeField]
+    [Header("Player‚Ì‰Šúƒ‰ƒCƒt")]
+    int _initialLife;
+
+    [SerializeField]
+    [Header("Player‚Ì‰ŠúèD–‡”")]
+    int _initialHandNum;
+
     private bool _isSelectedPlayer1 = false;
     private bool _isSelectedPlayer2 = false;
 
