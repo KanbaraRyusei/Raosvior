@@ -2,7 +2,7 @@
 name: Bug report
 about: 不具合を報告するIssueテンプレ
 title: ''
-labels: Todo
+labels: '不具合発見 :bug:'
 assignees: ''
 
 ---
