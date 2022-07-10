@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class BattleManager : MonoBehaviour
+public class BattleManager : SingletonMonoBehaviour<BattleManager>
 {
     private bool _isSelectedPlayer1 = false;
     private bool _isSelectedPlayer2 = false;
