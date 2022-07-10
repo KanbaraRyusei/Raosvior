@@ -2,7 +2,7 @@
 name: Feature-Fix Todo
 about: 機能の作成, 修正を行う際に使うテンプレート
 title: ''
-labels: ''
+labels: '不具合発見 :bug:'
 assignees: ''
 
 ---
