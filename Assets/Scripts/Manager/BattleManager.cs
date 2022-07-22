@@ -25,8 +25,13 @@ public class BattleManager : SingletonMonoBehaviour<BattleManager>
         Player2
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
     /// <summary>
-    /// Playerがカードを選択し終わったときに呼び出される関数
+    /// Playerが勝負するカードを選択し終わったときに呼び出される関数
     /// </summary>
     public void SelectedNotification(Player player)
     {
@@ -52,6 +57,11 @@ public class BattleManager : SingletonMonoBehaviour<BattleManager>
     private void BattleJudgement()
     {
 
+    }
+
+    private void CharacterCardEffect()
+    {
+        
     }
 
     private void BattleEnd()

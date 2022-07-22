@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandEffect : MonoBehaviour
+public abstract class HandEffect
 {
-    // ここにカードに書いてある効果を書いてください（開発者向け）
-    public void Effect()
-    {
-        // ここに効果を書いてください
-    }
+    // 使い方
+    // 1 新しいクラスを作る
+    // 2 このクラスを継承させる
+    // 3 Effect関数をoverrideさせてその中に効果を書く
+    public abstract void Effect();
 }

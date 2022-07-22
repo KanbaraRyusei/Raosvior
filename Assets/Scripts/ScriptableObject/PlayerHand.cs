@@ -7,12 +7,13 @@ using System;
 [CreateAssetMenu(menuName = "ScriptableObjects/CreatePlayerHandAsset")]
 public class PlayerHand : ScriptableObject
 {
-    public RSP Hand => _rSP;
+    public RSPParam Hand => _rSP;
     public string CardName => _cardName;
+    public HandEffect HandEffect => _handEffect;
 
     [SerializeField]
     [Header("じゃんけんの手")]
-    RSP _rSP = RSP.Rock;
+    RSPParam _rSP = RSPParam.Rock;
 
     [SerializeField]
     [Header("カード名")]
@@ -26,14 +27,4 @@ public class PlayerHand : ScriptableObject
     [SerializeField]
     [Header("効果")]
     HandEffect _handEffect;
-
-    public enum RSP
-    {
-        [Tooltip("グー")]
-        Rock,
-        [Tooltip("チョキ")]
-        Scissors,
-        [Tooltip("パー")]
-        Paper
-    }
 }

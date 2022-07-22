@@ -2,23 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBase : MonoBehaviour, IAddHand, IReceiveDamage
+public class PlayerBase : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage
 {
+    public int Life => _life;
+    public int Shild => _shield;
+
     [SerializeField]
     [Header("PlayerÇÃî‘çÜ")]
     BattleManager.Player _player = BattleManager.Player.Player1;
 
-    int _life;
-    int _shield;
+    private int _life;
+    private int _shield;
     List<PlayerHand> _playerHands = new List<PlayerHand>();
+
+    private void Start()
+    {
+        Init();
+    }
+
+    private void Init()
+    {
+        _life = BattleManager.Instance.InitialLife;
+        _shield = 0;
+    }
 
     public void AddHand(PlayerHand playerHand)
     {
         _playerHands.Add(playerHand);
-        if(_playerHands.Count < BattleManager.Instance.InitialHandNum)
-        {
+    }
 
-        }
+    public void DeleteHand(PlayerHand playerHand)
+    {
+        _playerHands.Remove(playerHand);
     }
 
     public void ReceiveDamage(int damage)
@@ -28,12 +43,14 @@ public class PlayerBase : MonoBehaviour, IAddHand, IReceiveDamage
             if(_shield - damage > 0)
             {
                 _shield -= damage;
+                return;
+            }
+            else
+            {
+                damage -= _shield;
+                _shield = 0;
             }
         }
-    }
-
-    public void OnClick()
-    {
-        BattleManager.Instance.SelectedNotification(_player);
+        _life -= damage;
     }
 }
