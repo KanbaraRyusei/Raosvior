@@ -2,14 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBase : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage
+public class PlayerBase : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage, IGetShield
 {
     public int Life => _life;
     public int Shild => _shield;
-
-    [SerializeField]
-    [Header("PlayerÇÃî‘çÜ")]
-    BattleManager.Player _player = BattleManager.Player.Player1;
+    public List<PlayerHand> PlayerHands => _playerHands;
 
     private int _life;
     private int _shield;
@@ -22,7 +19,7 @@ public class PlayerBase : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage
 
     private void Init()
     {
-        _life = BattleManager.Instance.InitialLife;
+        _life = 5;
         _shield = 0;
     }
 
@@ -52,5 +49,10 @@ public class PlayerBase : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage
             }
         }
         _life -= damage;
+    }
+
+    public void GetShield(int num)
+    {
+        _shield += num;
     }
 }
