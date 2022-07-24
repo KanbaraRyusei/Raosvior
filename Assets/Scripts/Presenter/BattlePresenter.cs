@@ -22,7 +22,7 @@ public class BattlePresenter : MonoBehaviour
 
     private void ViewSubscribe()
     {
-        _battleViewManager.SelectedObservable.Where(x => x).Subscribe(_ =>
+        _battleViewManager.SelectedObservable.Where(x => x.Item1).Subscribe(_ =>
         {
             StartCoroutine(_battleModel.WaitingForPreparation(_coroutineFlag));
             if (_coroutineFlag)
