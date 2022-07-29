@@ -8,10 +8,12 @@ public class PlayerBase : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage, 
     public int Life => _life;
     public int Shild => _shield;
     public List<PlayerHand> PlayerHands => _playerHands;
+    public List<PlayerHand> PlayerTrashs => _playerTrashs;
 
     private int _life;
     private int _shield;
     List<PlayerHand> _playerHands = new List<PlayerHand>();
+    List<PlayerHand> _playerTrashs = new List<PlayerHand>();
 
     private void Start()
     {
@@ -32,6 +34,11 @@ public class PlayerBase : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage, 
     public void DeleteHand(PlayerHand playerHand)
     {
         _playerHands.Remove(playerHand);
+        _playerTrashs.Add(playerHand);
+        if(_playerHands.Count == 0)
+        {
+
+        }
     }
 
     public void ReceiveDamage(int damage)

@@ -24,11 +24,8 @@ public class BattlePresenter : MonoBehaviour
     {
         _battleViewManager.SelectedObservable.Where(x => x.Item1).Subscribe(_ =>
         {
-            StartCoroutine(_battleModel.WaitingForPreparation(_coroutineFlag));
-            if (_coroutineFlag)
-            {
-                _coroutineFlag = false;
-            }
+            _battleModel.WaitingForPreparation(_coroutineFlag);
+            _coroutineFlag = !_coroutineFlag;
         });
     }
 

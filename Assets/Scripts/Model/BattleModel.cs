@@ -16,12 +16,12 @@ public class BattleModel : MonoBehaviour
     [Header("Player‚Ì‰ŠúèD–‡”")]
     int _initialHandNum;
 
-    public IEnumerator WaitingForPreparation(bool flag)
+    public void WaitingForPreparation(bool flag)
     {
         Debug.Log("1‰ñ–Ú");
-        while (flag)
+        if(flag)
         {
-            yield return null;
+            return;
         }
         BattleJudgement();
     }

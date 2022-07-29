@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class HandEffect
+public abstract class HandEffect : MonoBehaviour
 {
     // 使い方
     // 1 新しいクラスを作る
