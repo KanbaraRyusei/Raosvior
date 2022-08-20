@@ -7,8 +7,15 @@ using UnityEngine;
 /// </summary>
 public class ScissorsCardChainAx : HandEffect
 {
+    PlayerBase[] _playerBase;
+
+    void Awake()
+    {
+        _playerBase = FindObjectsOfType<PlayerBase>();
+    }
+
     public override void Effect()
     {
-        throw new System.NotImplementedException();
+
     }
 }
