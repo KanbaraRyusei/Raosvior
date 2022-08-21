@@ -15,6 +15,7 @@ public class BattleView : MonoBehaviour
     Button _cardSelectButton;
 
     private Subject<(bool, RSPParam)> _isSelected = new Subject<(bool, RSPParam)>();
+    RSPParam _selectCard;
 
     private void Start()
     {
@@ -29,7 +30,7 @@ public class BattleView : MonoBehaviour
 
     public void TentativeSelect()
     {
-
+        
     }
 
     private void OnSelect()

@@ -19,7 +19,6 @@ public class BattlePresenter : MonoBehaviour
         ModelSubscribe();
     }
 
-
     private void ViewSubscribe()
     {
         _battleViewManager.SelectedObservable.Where(x => x.Item1).Subscribe(_ =>
