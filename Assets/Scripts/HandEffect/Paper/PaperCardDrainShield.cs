@@ -17,9 +17,8 @@ public class PaperCardDrainShield : HandEffect
     PlayerHand _playerHand;
 
     PlayerBase[] _playerBase;
-    int _player;
-    int _enemy;
-
+    int _player = 0;
+    int _enemy = 1;
     int _addShild;
 
     const int ONE = 1;

@@ -14,7 +14,7 @@ public class RockCardExplodingArrow : HandEffect
 
     PlayerBase[] _playerBase;
     int _player;
-    int _enemy;
+    int _enemy = 1;
 
     const int ONE = 1;
     const int TWO = 2;

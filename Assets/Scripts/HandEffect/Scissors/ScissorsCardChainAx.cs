@@ -14,10 +14,10 @@ public class ScissorsCardChainAx : HandEffect
     PlayerHand _playerHand;
 
     PlayerBase[] _playerBase;
-    int _player;
-    int _enemy;
-
+    int _player = 0;
+    int _enemy = 1;
     bool _isDelete;
+
     const int ONE = 1;
 
     void Awake()

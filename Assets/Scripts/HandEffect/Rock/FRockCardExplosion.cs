@@ -13,10 +13,9 @@ public class FRockCardExplosion : HandEffect
     PlayerHand _playerHand;
 
     PlayerBase[] _playerBase;
-    int _player;
-    int _enemy;
+    int _player = 0;
+    int _enemy = 1;
 
-    const int THREE_CARDS = 3;
     const int ONE = 1;
     const int THREE = 3;
 
@@ -29,7 +28,7 @@ public class FRockCardExplosion : HandEffect
     {
 
         //自分のリザーフにカードが3枚以上あれば
-        if (_playerBase[_player].PlayerTrashs.Count >= THREE_CARDS)
+        if (_playerBase[_player].PlayerTrashs.Count >= THREE)
         {
             _playerBase[_enemy].ReceiveDamage(THREE);//3ダメージを与える
         }

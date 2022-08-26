@@ -13,8 +13,8 @@ public class FScissorsCardJammingWave : HandEffect
     PlayerHand _playerHand;
 
     PlayerBase[] _playerBase;
-    int _player;
-    int _enemy;
+    int _player = 0;
+    int _enemy = 1;
 
     const int ONE = 1;
 
