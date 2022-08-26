@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//※自分のシールドを減らす枚数を決める処理が必要
 /// <summary>
 /// アイギスの裁き・F(パー)
 /// 勝利した時、自分のシールドトークンを1つに付きさらに1ダメージを与えてもよいそうした場合、自分のシールドトークンを破壊する。
+/// ※自分のシールドを減らす枚数を決める処理が必要
 /// </summary>
 public class FPaperCardJudgmentOfAigis : HandEffect
 {
@@ -29,7 +29,7 @@ public class FPaperCardJudgmentOfAigis : HandEffect
 
     public override void Effect()
     {
-        //自分のシールドを破壊する枚数を決める
+        //自分のシールドを破壊する枚数を決めれるようにする
 
 
         //自分のシールドを減らす
@@ -42,5 +42,5 @@ public class FPaperCardJudgmentOfAigis : HandEffect
     }
 
     /// <summary>シールドを減らす量を設定する</summary>
-    public int BreakMyShield(int num) => _addDamege -= num;
+    public int SelectBreakShields(int num) => _addDamege -= num;
 }

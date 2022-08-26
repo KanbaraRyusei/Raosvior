@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//※カードを手札に戻すかどうかの選択が必要
 /// <summary>
 /// チェーンアックス(チョキ)
 /// 勝利した時このカードを手札に戻せる。
+/// ※カードを手札に戻すかどうかの選択が必要
 /// </summary>
 public class ScissorsCardChainAx : HandEffect
 {
+    public bool IsDelete => _isDelete;
+
     [SerializeField]
     [Header("この効果がついているカード")]
     PlayerHand _playerHand;
@@ -16,7 +18,7 @@ public class ScissorsCardChainAx : HandEffect
     PlayerBase[] _playerBase;
     int _player = 0;
     int _enemy = 1;
-    bool _isDelete;
+    bool _isDelete = false;
 
     const int ONE = 1;
 
@@ -33,11 +35,12 @@ public class ScissorsCardChainAx : HandEffect
 
 
         //捨てるなら
-        if(_isDelete)
+        if(_isDelete == true)
         {
             _playerBase[_player].DeleteHand(_playerHand);//このカードを捨てる  
         }
     }
 
-    public bool IsDelete(bool delete) => _isDelete = delete;
+    /// <summary>カードを捨てるかどうか</summary>
+    public bool SelectIsDelete(bool delete) => _isDelete = delete;
 }

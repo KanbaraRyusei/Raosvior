@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-//※相手のカードを選択する必要がある。そのカードが破壊されたときの処理も必要
 /// <summary>
 /// ドレインシールド(パー)
 /// 勝利した時、相手の手札を1枚選んで裏向きのまま自分のシールドトークンにする。(このシールドトークンは破壊されたとき持ち物のレシーブに置く)
+/// ※相手のカードを選択する必要がある。そのカードが破壊されたときの処理も必要
 /// </summary>
 public class PaperCardDrainShield : HandEffect
 {
@@ -19,7 +19,7 @@ public class PaperCardDrainShield : HandEffect
     PlayerBase[] _playerBase;
     int _player = 0;
     int _enemy = 1;
-    int _addShild;
+    int _addShild = 0;
 
     const int ONE = 1;
 
@@ -44,5 +44,5 @@ public class PaperCardDrainShield : HandEffect
     }
 
     /// <summary>選んだカードが何番目かを決める</summary>
-    public int SelectNumber(int number) =>  _addShild = number;
+    public int SelectCardNumber(int number) =>  _addShild = number;
 }
