@@ -1,17 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /// <summary>
 /// エクスプロージョン・F(グー)
 /// 勝利した時自分のリザーフにカードが3枚以上あればさらに2ダメージを与える。
 /// </summary>
 public class FRockCardExplosion : HandEffect
 {
+    [SerializeField]
+    [Header("この効果がついているカード")]
+    PlayerHand _playerHand;
+
     PlayerBase[] _playerBase;
+    int _player;
+    int _enemy;
 
     const int THREE_CARDS = 3;
     const int ONE = 1;
-    const int TWO = 2;
+    const int THREE = 3;
 
     void Awake()
     {
@@ -20,11 +27,17 @@ public class FRockCardExplosion : HandEffect
 
     public override void Effect()
     {
-        _playerBase[1].ReceiveDamage(ONE);
 
-        if(_playerBase[0].PlayerTrashs.Count >= THREE_CARDS)
+        //自分のリザーフにカードが3枚以上あれば
+        if (_playerBase[_player].PlayerTrashs.Count >= THREE_CARDS)
         {
-            _playerBase[1].ReceiveDamage(TWO);
+            _playerBase[_enemy].ReceiveDamage(THREE);//3ダメージを与える
         }
+        else
+        {
+            _playerBase[_enemy].ReceiveDamage(ONE);//相手にダメージを与える
+        }
+
+        _playerBase[_player].DeleteHand(_playerHand);//このカードを捨てる  
     }
 }

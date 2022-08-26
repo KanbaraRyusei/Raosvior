@@ -1,13 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /// <summary>
 /// ジャミングウェーブ・F(チョキ)
 /// 勝利した時ダメージを与える前に相手のシールドトークンを全て破壊する
 /// </summary>
 public class FScissorsCardJammingWave : HandEffect
 {
+    [SerializeField]
+    [Header("この効果がついているカード")]
+    PlayerHand _playerHand;
+
     PlayerBase[] _playerBase;
+    int _player;
+    int _enemy;
 
     const int ONE = 1;
 
@@ -18,7 +25,8 @@ public class FScissorsCardJammingWave : HandEffect
 
     public override void Effect()
     {
-        _playerBase[1].GetShield(-_playerBase[1].Shild);
-        _playerBase[1].ReceiveDamage(ONE);
+        _playerBase[_enemy].GetShield(-_playerBase[1].Shild);//相手のシールドを全て破壊
+        _playerBase[_enemy].ReceiveDamage(ONE);//相手にダメージを与える
+        _playerBase[_player].DeleteHand(_playerHand);//このカードを捨てる  
     }
 }
