@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// じゃんけんのパラメータ
 /// </summary>
-public enum RSPParam
+public enum RSPParameter
 {
     [Tooltip("グー")]
     Rock,

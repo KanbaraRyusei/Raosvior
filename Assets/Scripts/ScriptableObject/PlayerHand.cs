@@ -7,14 +7,14 @@ using System;
 [CreateAssetMenu(menuName = "ScriptableObjects/CreatePlayerHandAsset")]
 public class PlayerHand : ScriptableObject
 {
-    public RSPParam Hand => _rSP;
+    public RSPParameter Hand => _rSP;
     public string CardName => _cardName;
     public string CardEffect => _cardEffect;
     public HandEffect HandEffect => _handEffect;
 
     [SerializeField]
     [Header("Ç∂Ç·ÇÒÇØÇÒÇÃéË")]
-    RSPParam _rSP = RSPParam.Rock;
+    RSPParameter _rSP = RSPParameter.Rock;
 
     [SerializeField]
     [Header("ÉJÅ[Éhñº")]

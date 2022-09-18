@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniRx;
 
 public class PlayerData : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage, IGetShield
 {
@@ -19,9 +18,6 @@ public class PlayerData : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage, 
     List<PlayerHand> _playerHands = new List<PlayerHand>();
     List<PlayerHand> _playerTrashs = new List<PlayerHand>();
 
-    private const int LIFE_DEFAULT = 5;
-    private const int ZERO = 0;
-
     private void Start()
     {
         Init();
@@ -29,8 +25,8 @@ public class PlayerData : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage, 
 
     private void Init()
     {
-        _life = LIFE_DEFAULT;
-        _shield = ZERO;
+        _life = ConstParameter.LIFE_DEFAULT;
+        _shield = ConstParameter.ZERO;
     }
 
     public void AddHand(PlayerHand playerHand)
@@ -42,7 +38,7 @@ public class PlayerData : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage, 
     {
         _playerHands.Remove(playerHand);
         _playerTrashs.Add(playerHand);
-        if(_playerHands.Count == ZERO)
+        if(_playerHands.Count == ConstParameter.ZERO)
         {
             _isRedraw = true;
         }
@@ -50,9 +46,9 @@ public class PlayerData : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage, 
 
     public void ReceiveDamage(int damage)
     {
-        if(_shield > ZERO)
+        if(_shield > ConstParameter.ZERO)
         {
-            if(_shield - damage > ZERO)
+            if(_shield - damage >= ConstParameter.ZERO)
             {
                 _shield -= damage;
                 return;
@@ -60,7 +56,7 @@ public class PlayerData : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage, 
             else
             {
                 damage -= _shield;
-                _shield = ZERO;
+                _shield = ConstParameter.ZERO;
             }
         }
         _life -= damage;
