@@ -14,12 +14,12 @@ public enum PhaseParameter
     WinnerCardEffect,
     [Tooltip("キャラクターの効果処理フェーズ")]
     CharacterEffect,
-    [Tooltip("介入処理フェーズ")]
-    Intervention,
     [Tooltip("リザーブ処理フェーズ")]
     UseCardOnReserve,
     [Tooltip("リフレッシュ処理フェーズ")]
     Refresh,
     [Tooltip("決着処理フェーズ")]
-    Judgement
+    Judgement,
+    [Tooltip("介入処理フェーズ")]
+    Intervention
 }

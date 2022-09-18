@@ -2,31 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerData : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage, IGetShield
+/// <summary>
+/// プレイヤーのデータを持つクラス
+/// </summary>
+public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
 {
     public int Life => _life;
     public int Shild => _shield;
-    public bool IsRedraw => _isRedraw;
     public IReadOnlyList<PlayerHand> PlayerHands => _playerHands;
-    public IReadOnlyList<PlayerHand> PlayerTrashs => _playerTrashs;
+    public IReadOnlyList<PlayerHand> PlayerReserve => _playerReserve;
+    public PlayerHand PlayerSetHand => _playerSetHand;
 
     private int _life;
     private int _shield;
 
-    private bool _isRedraw = false;
+    private List<PlayerHand> _playerHands = new List<PlayerHand>(5);
+    private List<PlayerHand> _playerReserve = new List<PlayerHand>(5);
 
-    List<PlayerHand> _playerHands = new List<PlayerHand>();
-    List<PlayerHand> _playerTrashs = new List<PlayerHand>();
+   private PlayerHand _playerSetHand;
 
     private void Start()
     {
         Init();
     }
 
-    private void Init()
+    private void Init()// 初期化する関数
     {
         _life = ConstParameter.LIFE_DEFAULT;
         _shield = ConstParameter.ZERO;
+    }
+
+    public void SetHand(PlayerHand playerHand)
+    {
+        _playerHands.Remove(playerHand);
+        _playerSetHand = playerHand;
+    }
+
+    public void SetCardOnReserve()
+    {
+        _playerReserve.Add(_playerSetHand);
     }
 
     public void AddHand(PlayerHand playerHand)
@@ -34,14 +48,15 @@ public class PlayerData : MonoBehaviour, IAddHand, IDeleteHand, IReceiveDamage, 
         _playerHands.Add(playerHand);
     }
 
-    public void DeleteHand(PlayerHand playerHand)
+    public void OnReserveHand(PlayerHand playerHand)
     {
         _playerHands.Remove(playerHand);
-        _playerTrashs.Add(playerHand);
-        if(_playerHands.Count == ConstParameter.ZERO)
-        {
-            _isRedraw = true;
-        }
+        _playerReserve.Add(playerHand);
+    }
+
+    public void HealLife(int heal)
+    {
+        _life += heal;
     }
 
     public void ReceiveDamage(int damage)
