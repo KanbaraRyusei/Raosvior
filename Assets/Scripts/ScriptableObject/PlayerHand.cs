@@ -9,6 +9,7 @@ public class PlayerHand : ScriptableObject
 {
     public RSPParam Hand => _rSP;
     public string CardName => _cardName;
+    public string CardEffect => _cardEffect;
     public HandEffect HandEffect => _handEffect;
 
     [SerializeField]

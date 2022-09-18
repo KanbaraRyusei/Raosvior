@@ -132,9 +132,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 135181189}
-  - component: {fileID: 135181188}
-  - component: {fileID: 135181187}
-  - component: {fileID: 135181186}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -142,47 +139,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &135181186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 135181185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3edfdbb820d87164dbc99f681a0ca311, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _battleViewManager: {fileID: 135181188}
-  _battleModel: {fileID: 135181187}
---- !u!114 &135181187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 135181185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ac418598ac1f624ca80b67149f7acc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _initialLife: 5
-  _initialHandNum: 5
---- !u!114 &135181188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 135181185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9217a57381ee831448b87b661da05740, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cardSelectButton: {fileID: 1029567166}
 --- !u!4 &135181189
 Transform:
   m_ObjectHideFlags: 0
