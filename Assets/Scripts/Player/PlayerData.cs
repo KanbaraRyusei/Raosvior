@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
 {
+    #region public property
+
     /// <summary>
     /// プレイヤーのライフの読み取り専用プロパティ
     /// </summary>
@@ -29,6 +31,10 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
     /// 場にセットするカードの読み取り専用プロパティ
     /// </summary>
     public PlayerHand PlayerSetHand => _playerSetHand;
+
+    #endregion
+
+    #region private member
 
     /// <summary>
     /// プレイヤーのライフ
@@ -55,16 +61,28 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
     /// </summary>
     private PlayerHand _playerSetHand;
 
+    #endregion
+
+    #region unity event
+
     private void Start()
     {
         Init();
     }
+
+    #endregion
+
+    #region private method
 
     private void Init()// 初期化する関数
     {
         _life = ConstParameter.LIFE_DEFAULT;
         _shield = ConstParameter.ZERO;
     }
+
+    #endregion
+
+    #region IHandCollection interface
 
     public void SetHand(PlayerHand playerHand)
     {
@@ -88,6 +106,10 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
         _playerHands.Remove(playerHand);// 手札からカードを削除
         _playerReserve.Add(playerHand);// リザーブにカードを追加
     }
+
+    #endregion
+
+    #region ILifeChange interface
 
     public void HealLife(int heal)
     {
@@ -116,4 +138,6 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
     {
         _shield += num;// シールドを追加 上限がないため余計な処理はない
     }
+
+    #endregion
 }

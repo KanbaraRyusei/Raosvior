@@ -6,13 +6,23 @@ using UnityEngine;
 /// </summary>
 public class PhaseManager : MonoBehaviour
 {
+    #region public property
+
     /// <summary>
     /// 現在のフェーズを公開するプロパティ
     /// </summary>
     public PhaseParameter CurrentPhasePropety { get; private set;}
 
+    #endregion
+
+    #region private member
+
     private PhaseParameter _currentPhase;// 現在のフェーズ
     private PhaseParameter _oldPhase;// 1つ前のフェーズ
+
+    #endregion
+
+    #region public method
 
     /// <summary>
     /// フェーズを進める関数
@@ -43,4 +53,6 @@ public class PhaseManager : MonoBehaviour
         _currentPhase++;// 現在のフェーズを次のフェーズに進める
         CurrentPhasePropety = _currentPhase;// 外部に現在のフェーズを公開する
     }
+
+    #endregion
 }

@@ -8,6 +8,8 @@ using System;
 [CreateAssetMenu(menuName = "ScriptableObjects/CreatePlayerHandAsset")]
 public class PlayerHand : ScriptableObject
 {
+    #region public property
+
     /// <summary>
     /// カードの手の読み取り専用プロパティ
     /// </summary>
@@ -25,6 +27,10 @@ public class PlayerHand : ScriptableObject
     /// </summary>
     public HandEffect HandEffect => _handEffect;
 
+    #endregion
+
+    #region private property
+
     [SerializeField]
     [Header("じゃんけんの手")]
     private RSPParameter _rSP = RSPParameter.Rock;
@@ -41,4 +47,6 @@ public class PlayerHand : ScriptableObject
     [SerializeField]
     [Header("効果")]
     private HandEffect _handEffect;
+
+    #endregion
 }
