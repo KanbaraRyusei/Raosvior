@@ -1,5 +1,10 @@
 using UnityEngine;
 
+/// <summary>
+/// フェーズのパラメータ
+/// 順番になっているのでインクリメントすればフェーズが進む
+/// 介入処理だけ特殊なので最後にしている
+/// </summary>
 public enum PhaseParameter
 {
     [Tooltip("手札選択フェーズ")]
