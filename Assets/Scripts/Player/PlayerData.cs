@@ -68,29 +68,30 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
 
     public void SetHand(PlayerHand playerHand)
     {
-        _playerHands.Remove(playerHand);
-        _playerSetHand = playerHand;
+        _playerHands.Remove(playerHand);// 手札のListからカードを削除する
+        _playerSetHand = playerHand;// 場にカードをセット
     }
 
     public void SetCardOnReserve()
     {
-        _playerReserve.Add(_playerSetHand);
+        _playerReserve.Add(_playerSetHand);// セットされているカードをリザーブに送る
+        _playerSetHand = null;// セットされていたカードを消す
     }
 
     public void AddHand(PlayerHand playerHand)
     {
-        _playerHands.Add(playerHand);
+        _playerHands.Add(playerHand);// 手札にカードを加える
     }
 
     public void OnReserveHand(PlayerHand playerHand)
     {
-        _playerHands.Remove(playerHand);
-        _playerReserve.Add(playerHand);
+        _playerHands.Remove(playerHand);// 手札からカードを削除
+        _playerReserve.Add(playerHand);// リザーブにカードを追加
     }
 
     public void HealLife(int heal)
     {
-        _life += heal;
+        _life += heal;// ライフを回復 上限がないため余計な処理はない
     }
 
     public void ReceiveDamage(int damage)
@@ -113,6 +114,6 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
 
     public void GetShield(int num)
     {
-        _shield += num;
+        _shield += num;// シールドを追加 上限がないため余計な処理はない
     }
 }
