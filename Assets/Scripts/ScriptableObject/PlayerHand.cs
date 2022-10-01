@@ -14,14 +14,17 @@ public class PlayerHand : ScriptableObject
     /// カードの手の読み取り専用プロパティ
     /// </summary>
     public RSPParameter Hand => _rSP;
+
     /// <summary>
     /// カードの名前の読み取り専用プロパティ
     /// </summary>
     public string CardName => _cardName;
+
     /// <summary>
     /// カードの効果の文の読み取り専用プロパティ
     /// </summary>
     public string CardEffect => _cardEffect;
+
     /// <summary>
     /// カードの効果の読み取り専用プロパティ
     /// </summary>

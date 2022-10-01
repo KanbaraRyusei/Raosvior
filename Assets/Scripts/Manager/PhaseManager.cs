@@ -17,6 +17,7 @@ public static class PhaseManager
     #region private member
 
     private static PhaseParameter _currentPhase;// 現在のフェーズ
+
     private static PhaseParameter _oldPhase;// 1つ前のフェーズ
 
     #endregion

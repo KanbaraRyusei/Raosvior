@@ -9,12 +9,14 @@ public interface ILifeChange
     /// </summary>
     /// <param name="heal"></param>
     void HealLife(int heal);
+
     /// <summary>
     /// プレイヤーのライフにダメージを与える関数
     /// シールドがあれば先に削ってからライフにダメージを与える
     /// </summary>
     /// <param name="damage"></param>
     void ReceiveDamage(int damage);
+
     /// <summary>
     /// プレイヤーのシールドを増やす関数
     /// </summary>

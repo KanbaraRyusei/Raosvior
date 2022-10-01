@@ -7,8 +7,10 @@ public enum RSPParameter
 {
     [Tooltip("グー")]
     Rock,
+
     [Tooltip("チョキ")]
     Scissors,
+
     [Tooltip("パー")]
     Paper
 }

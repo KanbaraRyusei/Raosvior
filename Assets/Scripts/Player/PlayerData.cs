@@ -13,20 +13,24 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
     /// プレイヤーのライフの読み取り専用プロパティ
     /// </summary>
     public int Life => _life;
+
     /// <summary>
     /// プレイヤーのシールドの読み取り専用プロパティ
     /// </summary>
     public int Shild => _shield;
+
     /// <summary>
     /// プレイヤーの手札の読み取り専用プロパティ
     /// キャストして変更しようとする奴は殺すので要注意
     /// </summary>
     public IReadOnlyList<PlayerHand> PlayerHands => _playerHands;
+
     /// <summary>
     /// プレイヤーのリザーブの読み取り専用プロパティ
     /// キャストして変更しようとする奴は殺すので要注意
     /// </summary>
     public IReadOnlyList<PlayerHand> PlayerReserve => _playerReserve;
+
     /// <summary>
     /// 場にセットするカードの読み取り専用プロパティ
     /// </summary>

@@ -14,4 +14,5 @@ public abstract class HandEffect : MonoBehaviour
     /// ƒJ[ƒh‚ÌŒø‰Ê‚ğ”­“®‚³‚¹‚éŠÖ”
     /// </summary>
     public abstract void Effect();
+
 }
