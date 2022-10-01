@@ -1,12 +1,18 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ä½¿ã„æ–¹
+/// 1 æ–°ã—ã„ã‚¯ãƒ©ã‚¹ã‚’ä½œã‚‹
+/// 2 ã“ã®ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã•ã›ã‚‹
+/// 3 Effecté–¢æ•°ã‚’overrideã•ã›ã¦ãã®ä¸­ã«åŠ¹æœã‚’æ›¸ã
+/// </summary>
 public abstract class HandEffect : MonoBehaviour
 {
-    // g‚¢•û
-    // 1 V‚µ‚¢ƒNƒ‰ƒX‚ğì‚é
-    // 2 ‚±‚ÌƒNƒ‰ƒX‚ğŒp³‚³‚¹‚é
-    // 3 EffectŠÖ”‚ğoverride‚³‚¹‚Ä‚»‚Ì’†‚ÉŒø‰Ê‚ğ‘‚­
+    /// <summary>
+    /// ã‚«ãƒ¼ãƒ‰ã®åŠ¹æœã‚’ç™ºå‹•ã•ã›ã‚‹é–¢æ•°
+    /// </summary>
     public abstract void Effect();
+
 }
