@@ -1,16 +1,16 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ‚¶‚á‚ñ‚¯‚ñ‚Ìƒpƒ‰ƒ[ƒ^
+/// ã˜ã‚ƒã‚“ã‘ã‚“ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 /// </summary>
 public enum RSPParameter
 {
-    [Tooltip("ƒO[")]
+    [Tooltip("ã‚°ãƒ¼")]
     Rock,
 
-    [Tooltip("ƒ`ƒ‡ƒL")]
+    [Tooltip("ãƒãƒ§ã‚­")]
     Scissors,
 
-    [Tooltip("ƒp[")]
+    [Tooltip("ãƒ‘ãƒ¼")]
     Paper
 }

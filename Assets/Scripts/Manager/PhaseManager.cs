@@ -1,14 +1,14 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ƒQ[ƒ€‚ÌisŠÇ—‚ğ‚·‚éƒNƒ‰ƒX
+/// ã‚²ãƒ¼ãƒ ã®é€²è¡Œç®¡ç†ã‚’ã™ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public static class PhaseManager
 {
     #region public property
 
     /// <summary>
-    /// Œ»İ‚ÌƒtƒF[ƒY‚ğŒöŠJ‚·‚éƒvƒƒpƒeƒB
+    /// ç¾åœ¨ã®ãƒ•ã‚§ãƒ¼ã‚ºã‚’å…¬é–‹ã™ã‚‹ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
     /// </summary>
     public static PhaseParameter CurrentPhasePropety { get; private set;}
 
@@ -16,42 +16,42 @@ public static class PhaseManager
 
     #region private member
 
-    private static PhaseParameter _currentPhase;// Œ»İ‚ÌƒtƒF[ƒY
+    private static PhaseParameter _currentPhase;// ç¾åœ¨ã®ãƒ•ã‚§ãƒ¼ã‚º
 
-    private static PhaseParameter _oldPhase;// 1‚Â‘O‚ÌƒtƒF[ƒY
+    private static PhaseParameter _oldPhase;// 1ã¤å‰ã®ãƒ•ã‚§ãƒ¼ã‚º
 
     #endregion
 
     #region public method
 
     /// <summary>
-    /// ƒtƒF[ƒY‚ği‚ß‚éŠÖ”
-    /// ‰î“üˆ—‚ª‚ ‚é‚Æ‚«‚Ì‚İˆø”‚Étrue‚ğ“n‚·
+    /// ãƒ•ã‚§ãƒ¼ã‚ºã‚’é€²ã‚ã‚‹é–¢æ•°
+    /// ä»‹å…¥å‡¦ç†ãŒã‚ã‚‹ã¨ãã®ã¿å¼•æ•°ã«trueã‚’æ¸¡ã™
     /// </summary>
     /// <param name="isIntervetion"></param>
     public static void OnNextPhase(bool isIntervetion = false)
     {
-        if(_currentPhase == PhaseParameter.Judgement)// ‚à‚µŒˆ’…”»’è‚¾‚Á‚½‚ç
+        if(_currentPhase == PhaseParameter.Judgement)// ã‚‚ã—æ±ºç€åˆ¤å®šã ã£ãŸã‚‰
         {
-            _oldPhase = _currentPhase;// ‘O‚ÌƒtƒF[ƒY‚ğ•Û‘¶
-            _currentPhase = PhaseParameter.CardSelect;// Å‰‚ÌƒtƒF[ƒY‚É–ß‚é
-            CurrentPhasePropety = _currentPhase;// ŠO•”‚ÉŒ»İ‚ÌƒtƒF[ƒY‚ğŒöŠJ‚·‚é
+            _oldPhase = _currentPhase;// å‰ã®ãƒ•ã‚§ãƒ¼ã‚ºã‚’ä¿å­˜
+            _currentPhase = PhaseParameter.CardSelect;// æœ€åˆã®ãƒ•ã‚§ãƒ¼ã‚ºã«æˆ»ã‚‹
+            CurrentPhasePropety = _currentPhase;// å¤–éƒ¨ã«ç¾åœ¨ã®ãƒ•ã‚§ãƒ¼ã‚ºã‚’å…¬é–‹ã™ã‚‹
             return;
         }
-        if(isIntervetion)// ‚à‚µ‰î“üˆ—‚ª‚ ‚Á‚½‚ç
+        if(isIntervetion)// ã‚‚ã—ä»‹å…¥å‡¦ç†ãŒã‚ã£ãŸã‚‰
         {
-            _oldPhase = _currentPhase;// ‘O‚ÌƒtƒF[ƒY‚ğ•Û‘¶
-            _currentPhase = PhaseParameter.Intervention;// ‰î“üƒtƒF[ƒY‚É‚·‚é
-            CurrentPhasePropety = _currentPhase;// ŠO•”‚ÉŒ»İ‚ÌƒtƒF[ƒY‚ğŒöŠJ‚·‚é
+            _oldPhase = _currentPhase;// å‰ã®ãƒ•ã‚§ãƒ¼ã‚ºã‚’ä¿å­˜
+            _currentPhase = PhaseParameter.Intervention;// ä»‹å…¥ãƒ•ã‚§ãƒ¼ã‚ºã«ã™ã‚‹
+            CurrentPhasePropety = _currentPhase;// å¤–éƒ¨ã«ç¾åœ¨ã®ãƒ•ã‚§ãƒ¼ã‚ºã‚’å…¬é–‹ã™ã‚‹
             return;
         }
-        if(_currentPhase == PhaseParameter.Intervention)// ‚à‚µ‰î“üˆ—‚¾‚Á‚½‚ç
+        if(_currentPhase == PhaseParameter.Intervention)// ã‚‚ã—ä»‹å…¥å‡¦ç†ã ã£ãŸã‚‰
         {
-            _currentPhase = _oldPhase;// ‰î“ü‘O‚ÌƒtƒF[ƒY‚É–ß‚·
+            _currentPhase = _oldPhase;// ä»‹å…¥å‰ã®ãƒ•ã‚§ãƒ¼ã‚ºã«æˆ»ã™
         }
-        _oldPhase = _currentPhase;// ‘O‚ÌƒtƒF[ƒY‚ğ•Û‘¶
-        _currentPhase++;// Œ»İ‚ÌƒtƒF[ƒY‚ğŸ‚ÌƒtƒF[ƒY‚Éi‚ß‚é
-        CurrentPhasePropety = _currentPhase;// ŠO•”‚ÉŒ»İ‚ÌƒtƒF[ƒY‚ğŒöŠJ‚·‚é
+        _oldPhase = _currentPhase;// å‰ã®ãƒ•ã‚§ãƒ¼ã‚ºã‚’ä¿å­˜
+        _currentPhase++;// ç¾åœ¨ã®ãƒ•ã‚§ãƒ¼ã‚ºã‚’æ¬¡ã®ãƒ•ã‚§ãƒ¼ã‚ºã«é€²ã‚ã‚‹
+        CurrentPhasePropety = _currentPhase;// å¤–éƒ¨ã«ç¾åœ¨ã®ãƒ•ã‚§ãƒ¼ã‚ºã‚’å…¬é–‹ã™ã‚‹
     }
 
     #endregion

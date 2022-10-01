@@ -1,9 +1,9 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ’è”‚ğ‹¤—L‚µ‚Äg‚¦‚é‚æ‚¤‚É‚·‚éƒNƒ‰ƒX
+/// å®šæ•°ã‚’å…±æœ‰ã—ã¦ä½¿ãˆã‚‹ã‚ˆã†ã«ã™ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public static class ConstParameter
 {

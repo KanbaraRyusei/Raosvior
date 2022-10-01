@@ -1,28 +1,28 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public interface IHandCollection
 {
     /// <summary>
-    /// èD‚ğê‚ÉƒZƒbƒg‚·‚éŠÖ”
+    /// æ‰‹æœ­ã‚’å ´ã«ã‚»ãƒƒãƒˆã™ã‚‹é–¢æ•°
     /// </summary>
     /// <param name="playerHand"></param>
     void SetHand(PlayerHand playerHand);
 
     /// <summary>
-    /// ê‚ÉƒZƒbƒg‚³‚ê‚½ƒJ[ƒh‚ğƒŠƒU[ƒu‚É‘—‚éŠÖ”
+    /// å ´ã«ã‚»ãƒƒãƒˆã•ã‚ŒãŸã‚«ãƒ¼ãƒ‰ã‚’ãƒªã‚¶ãƒ¼ãƒ–ã«é€ã‚‹é–¢æ•°
     /// </summary>
     void SetCardOnReserve();
 
     /// <summary>
-    /// èD‚ÉƒJ[ƒh‚ğ‰Á‚¦‚éŠÖ”
+    /// æ‰‹æœ­ã«ã‚«ãƒ¼ãƒ‰ã‚’åŠ ãˆã‚‹é–¢æ•°
     /// </summary>
     /// <param name="playerHand"></param>
     void AddHand(PlayerHand playerHand);
 
     /// <summary>
-    /// èD‚ğƒŠƒU[ƒu‚É‘—‚éŠÖ”
+    /// æ‰‹æœ­ã‚’ãƒªã‚¶ãƒ¼ãƒ–ã«é€ã‚‹é–¢æ•°
     /// </summary>
     /// <param name="playerHand"></param>
     void OnReserveHand(PlayerHand playerHand);

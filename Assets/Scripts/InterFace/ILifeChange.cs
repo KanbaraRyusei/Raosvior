@@ -1,24 +1,24 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public interface ILifeChange
 {
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Ìƒ‰ƒCƒt‚ğ‰ñ•œ‚·‚éŠÖ”
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ©ã‚¤ãƒ•ã‚’å›å¾©ã™ã‚‹é–¢æ•°
     /// </summary>
     /// <param name="heal"></param>
     void HealLife(int heal);
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Ìƒ‰ƒCƒt‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚éŠÖ”
-    /// ƒV[ƒ‹ƒh‚ª‚ ‚ê‚Îæ‚Éí‚Á‚Ä‚©‚çƒ‰ƒCƒt‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚é
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ©ã‚¤ãƒ•ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹é–¢æ•°
+    /// ã‚·ãƒ¼ãƒ«ãƒ‰ãŒã‚ã‚Œã°å…ˆã«å‰Šã£ã¦ã‹ã‚‰ãƒ©ã‚¤ãƒ•ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹
     /// </summary>
     /// <param name="damage"></param>
     void ReceiveDamage(int damage);
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ÌƒV[ƒ‹ƒh‚ğ‘‚â‚·ŠÖ”
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚·ãƒ¼ãƒ«ãƒ‰ã‚’å¢—ã‚„ã™é–¢æ•°
     /// </summary>
     /// <param name="num"></param>
     void GetShield(int num);

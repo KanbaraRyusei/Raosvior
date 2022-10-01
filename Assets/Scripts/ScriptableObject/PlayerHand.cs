@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System;
 
 /// <summary>
-/// ƒJ[ƒh‚Ìî•ñ‚ğ‚ÂƒNƒ‰ƒX
+/// ã‚«ãƒ¼ãƒ‰ã®æƒ…å ±ã‚’æŒã¤ã‚¯ãƒ©ã‚¹
 /// </summary>
 [Serializable]
 [CreateAssetMenu(menuName = "ScriptableObjects/CreatePlayerHandAsset")]
@@ -11,22 +11,22 @@ public class PlayerHand : ScriptableObject
     #region public property
 
     /// <summary>
-    /// ƒJ[ƒh‚Ìè‚Ì“Ç‚İæ‚èê—pƒvƒƒpƒeƒB
+    /// ã‚«ãƒ¼ãƒ‰ã®æ‰‹ã®èª­ã¿å–ã‚Šå°‚ç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
     /// </summary>
     public RSPParameter Hand => _rSP;
 
     /// <summary>
-    /// ƒJ[ƒh‚Ì–¼‘O‚Ì“Ç‚İæ‚èê—pƒvƒƒpƒeƒB
+    /// ã‚«ãƒ¼ãƒ‰ã®åå‰ã®èª­ã¿å–ã‚Šå°‚ç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
     /// </summary>
     public string CardName => _cardName;
 
     /// <summary>
-    /// ƒJ[ƒh‚ÌŒø‰Ê‚Ì•¶‚Ì“Ç‚İæ‚èê—pƒvƒƒpƒeƒB
+    /// ã‚«ãƒ¼ãƒ‰ã®åŠ¹æœã®æ–‡ã®èª­ã¿å–ã‚Šå°‚ç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
     /// </summary>
     public string CardEffect => _cardEffect;
 
     /// <summary>
-    /// ƒJ[ƒh‚ÌŒø‰Ê‚Ì“Ç‚İæ‚èê—pƒvƒƒpƒeƒB
+    /// ã‚«ãƒ¼ãƒ‰ã®åŠ¹æœã®èª­ã¿å–ã‚Šå°‚ç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
     /// </summary>
     public HandEffect HandEffect => _handEffect;
 
@@ -35,20 +35,20 @@ public class PlayerHand : ScriptableObject
     #region private property
 
     [SerializeField]
-    [Header("‚¶‚á‚ñ‚¯‚ñ‚Ìè")]
+    [Header("ã˜ã‚ƒã‚“ã‘ã‚“ã®æ‰‹")]
     private RSPParameter _rSP = RSPParameter.Rock;
 
     [SerializeField]
-    [Header("ƒJ[ƒh–¼")]
+    [Header("ã‚«ãƒ¼ãƒ‰å")]
     private string _cardName = "None";
 
     [SerializeField]
-    [Header("Œø‰Ê–¼")]
+    [Header("åŠ¹æœå")]
     [Multiline]
     private string _cardEffect = "None";
 
     [SerializeField]
-    [Header("Œø‰Ê")]
+    [Header("åŠ¹æœ")]
     private HandEffect _handEffect;
 
     #endregion

@@ -1,39 +1,39 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ƒtƒF[ƒY‚Ìƒpƒ‰ƒ[ƒ^
-/// ‡”Ô‚É‚È‚Á‚Ä‚¢‚é‚Ì‚ÅƒCƒ“ƒNƒŠƒƒ“ƒg‚·‚ê‚ÎƒtƒF[ƒY‚ªi‚Ş
-/// ‰î“üˆ—‚¾‚¯“Áê‚È‚Ì‚ÅÅŒã‚É‚µ‚Ä‚¢‚é
+/// ãƒ•ã‚§ãƒ¼ã‚ºã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+/// é †ç•ªã«ãªã£ã¦ã„ã‚‹ã®ã§ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã™ã‚Œã°ãƒ•ã‚§ãƒ¼ã‚ºãŒé€²ã‚€
+/// ä»‹å…¥å‡¦ç†ã ã‘ç‰¹æ®Šãªã®ã§æœ€å¾Œã«ã—ã¦ã„ã‚‹
 /// </summary>
 public enum PhaseParameter
 {
-    [Tooltip("èD‘I‘ğƒtƒF[ƒY")]
+    [Tooltip("æ‰‹æœ­é¸æŠãƒ•ã‚§ãƒ¼ã‚º")]
     HandSelect,
 
-    [Tooltip("ƒJ[ƒh‚Ì‘I‘ğƒtƒF[ƒY")]
+    [Tooltip("ã‚«ãƒ¼ãƒ‰ã®é¸æŠãƒ•ã‚§ãƒ¼ã‚º")]
     CardSelect,
 
-    [Tooltip("ƒoƒgƒ‹Ÿ”sŒˆ’èˆ—ƒtƒF[ƒY")]
+    [Tooltip("ãƒãƒˆãƒ«å‹æ•—æ±ºå®šå‡¦ç†ãƒ•ã‚§ãƒ¼ã‚º")]
     Battle,
 
-    [Tooltip("ŸÒ‚Ìƒ_ƒ[ƒWˆ—ƒtƒF[ƒY")]
+    [Tooltip("å‹è€…ã®ãƒ€ãƒ¡ãƒ¼ã‚¸å‡¦ç†ãƒ•ã‚§ãƒ¼ã‚º")]
     WinnerDamageProcess,
 
-    [Tooltip("ŸÒ‚ÌƒJ[ƒhŒø‰Êˆ—ƒtƒF[ƒY")]
+    [Tooltip("å‹è€…ã®ã‚«ãƒ¼ãƒ‰åŠ¹æœå‡¦ç†ãƒ•ã‚§ãƒ¼ã‚º")]
     WinnerCardEffect,
 
-    [Tooltip("ƒLƒƒƒ‰ƒNƒ^[‚ÌŒø‰Êˆ—ƒtƒF[ƒY")]
+    [Tooltip("ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®åŠ¹æœå‡¦ç†ãƒ•ã‚§ãƒ¼ã‚º")]
     CharacterEffect,
 
-    [Tooltip("ƒŠƒU[ƒuˆ—ƒtƒF[ƒY")]
+    [Tooltip("ãƒªã‚¶ãƒ¼ãƒ–å‡¦ç†ãƒ•ã‚§ãƒ¼ã‚º")]
     UseCardOnReserve,
 
-    [Tooltip("ƒŠƒtƒŒƒbƒVƒ…ˆ—ƒtƒF[ƒY")]
+    [Tooltip("ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥å‡¦ç†ãƒ•ã‚§ãƒ¼ã‚º")]
     Refresh,
 
-    [Tooltip("Œˆ’…ˆ—ƒtƒF[ƒY")]
+    [Tooltip("æ±ºç€å‡¦ç†ãƒ•ã‚§ãƒ¼ã‚º")]
     Judgement,
 
-    [Tooltip("‰î“üˆ—ƒtƒF[ƒY")]
+    [Tooltip("ä»‹å…¥å‡¦ç†ãƒ•ã‚§ãƒ¼ã‚º")]
     Intervention
 }

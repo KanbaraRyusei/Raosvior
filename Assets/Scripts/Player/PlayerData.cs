@@ -1,38 +1,38 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// �v���C���[�̃f�[�^�����N���X
+/// プレイヤーのデータを持つクラス
 /// </summary>
 public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
 {
     #region public property
 
     /// <summary>
-    /// �v���C���[�̃��C�t�̓ǂݎ���p�v���p�e�B
+    /// プレイヤーのライフの読み取り専用プロパティ
     /// </summary>
     public int Life => _life;
 
     /// <summary>
-    /// �v���C���[�̃V�[���h�̓ǂݎ���p�v���p�e�B
+    /// プレイヤーのシールドの読み取り専用プロパティ
     /// </summary>
     public int Shild => _shield;
 
     /// <summary>
-    /// �v���C���[�̎�D�̓ǂݎ���p�v���p�e�B
-    /// �L���X�g���ĕύX���悤�Ƃ���z�͎E���̂ŗv����
+    /// プレイヤーの手札の読み取り専用プロパティ
+    /// キャストして変更しようとする奴は殺すので要注意
     /// </summary>
     public IReadOnlyList<PlayerHand> PlayerHands => _playerHands;
 
     /// <summary>
-    /// �v���C���[�̃��U�[�u�̓ǂݎ���p�v���p�e�B
-    /// �L���X�g���ĕύX���悤�Ƃ���z�͎E���̂ŗv����
+    /// プレイヤーのリザーブの読み取り専用プロパティ
+    /// キャストして変更しようとする奴は殺すので要注意
     /// </summary>
     public IReadOnlyList<PlayerHand> PlayerReserve => _playerReserve;
 
     /// <summary>
-    /// ��ɃZ�b�g����J�[�h�̓ǂݎ���p�v���p�e�B
+    /// 場にセットするカードの読み取り専用プロパティ
     /// </summary>
     public PlayerHand PlayerSetHand => _playerSetHand;
 
@@ -41,27 +41,27 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
     #region private member
 
     /// <summary>
-    /// �v���C���[�̃��C�t
+    /// プレイヤーのライフ
     /// </summary>
     private int _life;
     /// <summary>
-    /// �v���C���[�̃V�[���h
+    /// プレイヤーのシールド
     /// </summary>
     private int _shield;
 
     /// <summary>
-    /// �v���C���[�̎�D
-    /// ��������܂��Ă��邽�߁A�v�f�����w�肵�ď����y������
+    /// プレイヤーの手札
+    /// 上限が決まっているため、要素数を指定して少し軽くした
     /// </summary>
     private List<PlayerHand> _playerHands = new List<PlayerHand>(5);
     /// <summary>
-    /// �v���C���[�̃��U�[�u
-    /// ��������܂��Ă��邽�߁A�v�f�����w�肵�ď����y������
+    /// プレイヤーのリザーブ
+    /// 上限が決まっているため、要素数を指定して少し軽くした
     /// </summary>
     private List<PlayerHand> _playerReserve = new List<PlayerHand>(5);
 
     /// <summary>
-    /// ��ɃZ�b�g����J�[�h
+    /// 場にセットするカード
     /// </summary>
     private PlayerHand _playerSetHand;
 
@@ -78,7 +78,7 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
 
     #region private method
 
-    private void Init()// ����������֐�
+    private void Init()// 初期化する関数
     {
         _life = ConstParameter.LIFE_DEFAULT;
         _shield = ConstParameter.ZERO;
@@ -90,25 +90,25 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
 
     public void SetHand(PlayerHand playerHand)
     {
-        _playerHands.Remove(playerHand);// ��D��List����J�[�h���폜����
-        _playerSetHand = playerHand;// ��ɃJ�[�h���Z�b�g
+        _playerHands.Remove(playerHand);// 手札のListからカードを削除する
+        _playerSetHand = playerHand;// 場にカードをセット
     }
 
     public void SetCardOnReserve()
     {
-        _playerReserve.Add(_playerSetHand);// �Z�b�g����Ă���J�[�h�����U�[�u�ɑ���
-        _playerSetHand = null;// �Z�b�g����Ă����J�[�h������
+        _playerReserve.Add(_playerSetHand);// セットされているカードをリザーブに送る
+        _playerSetHand = null;// セットされていたカードを消す
     }
 
     public void AddHand(PlayerHand playerHand)
     {
-        _playerHands.Add(playerHand);// ��D�ɃJ�[�h��������
+        _playerHands.Add(playerHand);// 手札にカードを加える
     }
 
     public void OnReserveHand(PlayerHand playerHand)
     {
-        _playerHands.Remove(playerHand);// ��D����J�[�h���폜
-        _playerReserve.Add(playerHand);// ���U�[�u�ɃJ�[�h��ǉ�
+        _playerHands.Remove(playerHand);// 手札からカードを削除
+        _playerReserve.Add(playerHand);// リザーブにカードを追加
     }
 
     #endregion
@@ -117,30 +117,30 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
 
     public void HealLife(int heal)
     {
-        _life += heal;// ���C�t���� ������Ȃ����ߗ]�v�ȏ����͂Ȃ�
+        _life += heal;// ライフを回復 上限がないため余計な処理はない
     }
 
     public void ReceiveDamage(int damage)
     {
-        if(_shield > ConstParameter.ZERO)// �V�[���h�����邩�ǂ�������
+        if(_shield > ConstParameter.ZERO)// シールドがあるかどうか判定
         {
-            if(_shield - damage >= ConstParameter.ZERO)// �V�[���h�̐����_���[�W���傫��������
+            if(_shield - damage >= ConstParameter.ZERO)// シールドの数がダメージより大きかったら
             {
-                _shield -= damage;// �V�[���h�����
+                _shield -= damage;// シールドを削る
                 return;
             }
-            else// �V�[���h�̐����_���[�W��菭�Ȃ�������
+            else// シールドの数がダメージより少なかったら
             {
-                damage -= _shield;// �_���[�W���V�[���h�̐����炷
-                _shield = ConstParameter.ZERO;// �V�[���h��0�ɂ���
+                damage -= _shield;// ダメージをシールドの数減らす
+                _shield = ConstParameter.ZERO;// シールドを0にする
             }
         }
-        _life -= damage;// ���C�t�����炷
+        _life -= damage;// ライフを減らす
     }
 
     public void GetShield(int num)
     {
-        _shield += num;// �V�[���h��ǉ� ������Ȃ����ߗ]�v�ȏ����͂Ȃ�
+        _shield += num;// シールドを追加 上限がないため余計な処理はない
     }
 
     #endregion
