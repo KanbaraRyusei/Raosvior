@@ -2,23 +2,22 @@ using UnityEngine;
 
 /// <summary>
 /// ゲームの進行管理をするクラス
-/// Presenterのみが参照を持つ
 /// </summary>
-public class PhaseManager : MonoBehaviour
+public static class PhaseManager
 {
     #region public property
 
     /// <summary>
     /// 現在のフェーズを公開するプロパティ
     /// </summary>
-    public PhaseParameter CurrentPhasePropety { get; private set;}
+    public static PhaseParameter CurrentPhasePropety { get; private set;}
 
     #endregion
 
     #region private member
 
-    private PhaseParameter _currentPhase;// 現在のフェーズ
-    private PhaseParameter _oldPhase;// 1つ前のフェーズ
+    private static PhaseParameter _currentPhase;// 現在のフェーズ
+    private static PhaseParameter _oldPhase;// 1つ前のフェーズ
 
     #endregion
 
@@ -29,7 +28,7 @@ public class PhaseManager : MonoBehaviour
     /// 介入処理があるときのみ引数にtrueを渡す
     /// </summary>
     /// <param name="isIntervetion"></param>
-    public void OnNextPhase(bool isIntervetion = false)
+    public static void OnNextPhase(bool isIntervetion = false)
     {
         if(_currentPhase == PhaseParameter.Judgement)// もし決着判定だったら
         {
