@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 /// <summary>
 /// プレイヤーのデータを持つクラス
 /// </summary>
-public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
+public class PlayerData : IHandCollection, ILifeChange
 {
     #region public property
 
@@ -17,7 +16,7 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
     /// <summary>
     /// プレイヤーのシールドの読み取り専用プロパティ
     /// </summary>
-    public int Shild => _shield;
+    public int Shield => _shield;
 
     /// <summary>
     /// プレイヤーの手札の読み取り専用プロパティ
@@ -67,9 +66,9 @@ public class PlayerData : MonoBehaviour, IHandCollection, ILifeChange
 
     #endregion
 
-    #region unity event
+    #region constructor
 
-    private void Start()
+    public PlayerData()
     {
         Init();
     }
