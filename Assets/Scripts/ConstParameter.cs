@@ -11,5 +11,6 @@ public static class ConstParameter
     public const int ONE = 1;
     public const int TWO = 2;
     public const int THREE = 3;
+    public const int FIVE = 5;
     public const int LIFE_DEFAULT = 5;
 }
