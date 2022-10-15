@@ -21,7 +21,11 @@ public class knightData : CharacterBase
 
         if(true)//パーで勝利したら
         {
-
+            // シールドトークンを獲得する。
+            Players[MyselfPlayerIndex]
+                .GetShield(Players[EnemyPlayerIndex]
+                            .PlayerReserve
+                            .Count);
         }
     }
 

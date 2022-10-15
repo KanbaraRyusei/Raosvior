@@ -12,7 +12,7 @@ public class GrapplerData : CharacterBase
     #region public method
 
     /// <summary>
-    /// グーで勝利したときに呼び出す
+    /// グーで勝利したときに呼び出すメソッド
     /// </summary>
     public override void CardEffect(PlayerData player)
     {

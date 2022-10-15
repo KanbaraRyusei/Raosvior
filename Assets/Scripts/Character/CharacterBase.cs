@@ -23,8 +23,8 @@ public abstract class CharacterBase : MonoBehaviour
     protected int EnemyPlayerIndex => _enemyPlayerIndex;
 
     /// <summary>
-    /// プレイヤーを参照する手段がないため
-    /// 仮で用意した派生クラス用プロパティ
+    /// プレイヤーを参照するものがないため
+    /// 仮で用意した派生クラス用プロパティ(仮)
     /// </summary>
     protected PlayerData[] Players => _players;
 
@@ -41,7 +41,7 @@ public abstract class CharacterBase : MonoBehaviour
     private int _enemyPlayerIndex;
 
     /// <summary>
-    /// プレイヤーを参照する手段がないため仮で用意した配列
+    /// プレイヤーを参照するものがないため仮で用意した配列(仮)
     /// </summary>
     private PlayerData[] _players = {new(),new()};
 
@@ -53,6 +53,9 @@ public abstract class CharacterBase : MonoBehaviour
     /// カードの効果を書く
     /// </summary>
     public abstract void CardEffect(PlayerData player);
+
+    //public abstract void CardEffect(PlayerData player,);
+
 
     #endregion
 
@@ -67,7 +70,7 @@ public abstract class CharacterBase : MonoBehaviour
     }
 
     /// <summary>
-    /// プレイヤーを切り替えるメソッド
+    /// プレイヤーを切り替えるメソッド(仮)
     /// </summary>
     protected void ChangePlayersIndex(PlayerData player)
     {

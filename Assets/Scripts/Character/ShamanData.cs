@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -20,15 +21,21 @@ public class ShamanData : CharacterBase
 
     #region public method
 
+    /// <summary>
+    /// ダメージを受けるときに呼び出すメソッド
+    /// </summary>
+    /// <param name="player"></param>
     public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
 
-        if(true)
-        {
-            //チョキを捨てる
-            //Players[MyselfPlayerIndex].OnReserveHand();
-        }
+        //チョキを捨てる
+        Players[MyselfPlayerIndex]
+            .OnReserveHand(Players[MyselfPlayerIndex]
+                            .PlayerHands
+                            .FirstOrDefault(x => x
+                                .Hand == RSPParameter
+                                    .Scissors));
     }
 
     #endregion
