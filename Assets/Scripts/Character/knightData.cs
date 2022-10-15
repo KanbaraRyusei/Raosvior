@@ -10,11 +10,20 @@ using UnityEngine;
 /// </summary>
 public class knightData : CharacterBase
 {
+    #region public method
+
     /// <summary>
     /// パーで勝利したときに呼び出す
     /// </summary>
-    public override void CardEffect()
+    public override void CardEffect(PlayerData player)
     {
+        ChangePlayersIndex(player);
 
+        if(true)//パーで勝利したら
+        {
+
+        }
     }
+
+    #endregion
 }

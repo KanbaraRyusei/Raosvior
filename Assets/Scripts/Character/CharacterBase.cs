@@ -16,11 +16,34 @@ public abstract class CharacterBase : MonoBehaviour
 
     #endregion
 
-    #region private member
+    #region protected property
 
+    // プレイヤーを参照する配列用のインデックス
+    protected int MyselfPlayerIndex => _MyselfPlayerIndex;
+    protected int EnemyPlayerIndex => _enemyPlayerIndex;
+
+    /// <summary>
+    /// プレイヤーを参照する手段がないため
+    /// 仮で用意した派生クラス用プロパティ
+    /// </summary>
+    protected PlayerData[] Players => _players;
+
+    #endregion
+
+    #region private member
+    // <summary>
+    /// 介入処理の有無のメンバー変数
+    /// </summary>
     private bool _isIntervetion;
 
-    private PlayerData[] _playerDatas = {new(),new()};
+    //プレイヤーを参照する配列用のインデックス
+    private int _MyselfPlayerIndex;
+    private int _enemyPlayerIndex;
+
+    /// <summary>
+    /// プレイヤーを参照する手段がないため仮で用意した配列
+    /// </summary>
+    private PlayerData[] _players = {new(),new()};
 
     #endregion
 
@@ -29,7 +52,11 @@ public abstract class CharacterBase : MonoBehaviour
     /// <summary>
     /// カードの効果を書く
     /// </summary>
-    public abstract void CardEffect();
+    public abstract void CardEffect(PlayerData player);
+
+    #endregion
+
+    #region protected method
 
     /// <summary>
     /// 介入処理の有無を変更するメソッド
@@ -37,6 +64,23 @@ public abstract class CharacterBase : MonoBehaviour
     protected bool ChangeIntervetion(bool isIntervetion)
     {
         return _isIntervetion = isIntervetion;
+    }
+
+    /// <summary>
+    /// プレイヤーを切り替えるメソッド
+    /// </summary>
+    protected void ChangePlayersIndex(PlayerData player)
+    {
+        if(_players[ConstParameter.ZERO] == player)
+        {
+            _MyselfPlayerIndex = ConstParameter.ZERO;
+            _enemyPlayerIndex = ConstParameter.ONE;
+        }
+        else
+        {
+            _MyselfPlayerIndex = ConstParameter.ONE;
+            _enemyPlayerIndex = ConstParameter.ZERO;
+        }     
     }
 
     #endregion

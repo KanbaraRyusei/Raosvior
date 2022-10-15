@@ -13,13 +13,23 @@ public class ShamanData : CharacterBase
 
     private void Awake()
     {
-        ChangeIntervetion(true);
+        ChangeIntervetion(true);//‰î“üˆ—‚ª‚ ‚é
     }
 
     #endregion
 
-    public override void CardEffect()
+    #region public method
+
+    public override void CardEffect(PlayerData player)
     {
-       
+        ChangePlayersIndex(player);
+
+        if(true)
+        {
+            //ƒ`ƒ‡ƒL‚ğÌ‚Ä‚é
+            //Players[MyselfPlayerIndex].OnReserveHand();
+        }
     }
+
+    #endregion
 }
