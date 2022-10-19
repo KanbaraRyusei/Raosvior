@@ -11,15 +11,19 @@ public class GrapplerData : CharacterBase
 {
     #region public method
 
-    /// <summary>
-    /// グーで勝利したときに呼び出すメソッド
-    /// </summary>
     public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
-        if(true)//グーで勝利したら
+        // グー>チョキ
+        bool win =
+            Players[MyselfIndex].PlayerSetHand.Hand ==
+            RSPParameter.Rock &&
+            Players[EnemyIndex].PlayerSetHand.Hand ==
+            RSPParameter.Scissors;
+        if (win)//グーで勝利したら
         {
-            Players[MyselfPlayerIndex].PlayerSetHand.HandEffect.Effect();
+            //効果をもう一度発動
+            Players[MyselfIndex].PlayerSetHand.HandEffect.Effect();
         }
     }
 

@@ -4,6 +4,8 @@ using UnityEngine;
 
 /// <summary>
 /// キャラのデータの基底クラス
+/// プレイヤーを参照する必要があるが
+/// 手段がないためここで仮に用意してます
 /// </summary>
 public abstract class CharacterBase : MonoBehaviour
 {
@@ -19,8 +21,8 @@ public abstract class CharacterBase : MonoBehaviour
     #region protected property
 
     // プレイヤーを参照する配列用のインデックス
-    protected int MyselfPlayerIndex => _MyselfPlayerIndex;
-    protected int EnemyPlayerIndex => _enemyPlayerIndex;
+    protected int MyselfIndex => _MyselfIndex;
+    protected int EnemyIndex => _enemyIndex;
 
     /// <summary>
     /// プレイヤーを参照するものがないため
@@ -37,8 +39,8 @@ public abstract class CharacterBase : MonoBehaviour
     private bool _isIntervetion;
 
     //プレイヤーを参照する配列用のインデックス
-    private int _MyselfPlayerIndex;
-    private int _enemyPlayerIndex;
+    private int _MyselfIndex;
+    private int _enemyIndex;
 
     /// <summary>
     /// プレイヤーを参照するものがないため仮で用意した配列(仮)
@@ -50,12 +52,9 @@ public abstract class CharacterBase : MonoBehaviour
     #region public method
 
     /// <summary>
-    /// カードの効果を書く
+    /// じゃんけんの勝敗がついたときに呼び出される
     /// </summary>
     public abstract void CardEffect(PlayerData player);
-
-    //public abstract void CardEffect(PlayerData player,);
-
 
     #endregion
 
@@ -76,13 +75,13 @@ public abstract class CharacterBase : MonoBehaviour
     {
         if(_players[ConstParameter.ZERO] == player)
         {
-            _MyselfPlayerIndex = ConstParameter.ZERO;
-            _enemyPlayerIndex = ConstParameter.ONE;
+            _MyselfIndex = ConstParameter.ZERO;
+            _enemyIndex = ConstParameter.ONE;
         }
         else
         {
-            _MyselfPlayerIndex = ConstParameter.ONE;
-            _enemyPlayerIndex = ConstParameter.ZERO;
+            _MyselfIndex = ConstParameter.ONE;
+            _enemyIndex = ConstParameter.ZERO;
         }     
     }
 

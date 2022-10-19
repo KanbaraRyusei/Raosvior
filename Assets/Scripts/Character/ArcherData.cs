@@ -9,24 +9,49 @@ using UnityEngine;
 /// </summary>
 public class ArcherData : CharacterBase
 {
+    bool test;
+
     #region public method
 
-    /// <summary>
-    /// 勝ち以外の時に呼び出す
-    /// </summary>
     public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
-
-        if(true)//負けなら
+        bool draw =
+            Players[MyselfIndex].PlayerSetHand.Hand == 
+            Players[EnemyIndex].PlayerSetHand.Hand;
+        bool[] losePattern =
         {
-            //1ダメージを受ける。
-            Players[MyselfPlayerIndex].ReceiveDamage(ConstParameter.ONE);
-        }
-        else//引き分けなら
+            //グー<パー
+            Players[MyselfIndex].PlayerSetHand.Hand ==
+            RSPParameter.Rock &&
+            Players[EnemyIndex].PlayerSetHand.Hand ==
+            RSPParameter.Paper,
+            //チョキ<グー
+            Players[MyselfIndex].PlayerSetHand.Hand ==
+            RSPParameter.Scissors &&
+            Players[EnemyIndex].PlayerSetHand.Hand ==
+            RSPParameter.Rock,
+            //パー<チョキ
+            Players[MyselfIndex].PlayerSetHand.Hand ==
+            RSPParameter.Paper &&
+            Players[EnemyIndex].PlayerSetHand.Hand ==
+            RSPParameter.Scissors
+        };
+        bool lose =
+            losePattern[ConstParameter.ZERO] ||
+            losePattern[ConstParameter.ONE] ||
+            losePattern[ConstParameter.TWO];
+        if (draw)//引き分けなら
         {
             //1ダメージ与える。
-            Players[EnemyPlayerIndex].ReceiveDamage(ConstParameter.ONE);
+            Players[EnemyIndex]
+                .ReceiveDamage(ConstParameter.ONE);
+        }
+        else if(lose)//負けなら
+        {
+            //1ダメージを受ける。
+            Players[MyselfIndex]
+                .ReceiveDamage(ConstParameter.ONE);
         }
     }
 

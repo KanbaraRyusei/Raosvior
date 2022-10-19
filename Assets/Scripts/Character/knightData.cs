@@ -12,18 +12,20 @@ public class knightData : CharacterBase
 {
     #region public method
 
-    /// <summary>
-    /// パーで勝利したときに呼び出す
-    /// </summary>
     public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
-
-        if(true)//パーで勝利したら
+        // パー>グー
+        bool win =
+            Players[MyselfIndex].PlayerSetHand.Hand ==
+            RSPParameter.Paper &&
+            Players[EnemyIndex].PlayerSetHand.Hand ==
+            RSPParameter.Rock;
+        if (win)//パーで勝利したら
         {
-            // シールドトークンを獲得する。
-            Players[MyselfPlayerIndex]
-                .GetShield(Players[EnemyPlayerIndex]
+            // 相手のリザーブの数だけシールドトークンを獲得
+            Players[MyselfIndex]
+                .GetShield(Players[EnemyIndex]
                             .PlayerReserve
                             .Count);
         }
