@@ -22,15 +22,15 @@ public class PlayerPresenter : MonoBehaviour
             .Subscribe(x => _playerView.ChangeShieldText(x)).AddTo(this);
 
         _playerData.ObserveEveryValueChanged(x => _playerData.PlayerReserve.Count)
-            .Subscribe(x => _playerView.ChangeReserveText(x));
+            .Subscribe(x => _playerView.ChangeReserveText(x)).AddTo(this);
 
         for (int i = 0; i < _playerData.PlayerHands.Count; i++)
         {
             _playerData.ObserveEveryValueChanged(x => _playerData.PlayerHands[i])
-                .Subscribe(x => _playerView.ChangeHandsImage(x.CardImage, i));
+                .Subscribe(x => _playerView.ChangeHandsImage(x.CardImage, i)).AddTo(this);
         }
 
         _playerData.ObserveEveryValueChanged(x => _playerData.PlayerSetHand.CardImage)
-            .Subscribe(x => _playerView.ChangeSetHandImage(x));
+            .Subscribe(x => _playerView.ChangeSetHandImage(x)).AddTo(this);
     }
 }
