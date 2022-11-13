@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 /// <summary>
@@ -30,6 +31,8 @@ public class PlayerHand : ScriptableObject
     /// </summary>
     public HandEffect HandEffect => _handEffect;
 
+    public Image CardImage => _cardImage;
+
     #endregion
 
     #region private property
@@ -51,5 +54,8 @@ public class PlayerHand : ScriptableObject
     [Header("効果")]
     private HandEffect _handEffect;
 
+    [SerializeField]
+    [Header("カードの画像")]
+    private Image _cardImage;
     #endregion
 }
