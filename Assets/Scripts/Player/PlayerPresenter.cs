@@ -8,9 +8,6 @@ public class PlayerPresenter : MonoBehaviour
     [SerializeField]
     PlayerView _playerView;
 
-    [SerializeField]
-    HandsImageData _handsImageData;
-
     private void Awake()
     {
         _playerData = PlayerManager.Players[0];
