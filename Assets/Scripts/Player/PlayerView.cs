@@ -6,50 +6,46 @@ using UnityEngine.UI;
 public class PlayerView : MonoBehaviour
 {
     [SerializeField]
-    [Header("ƒ‰ƒCƒt‚ÌƒeƒLƒXƒg")]
+    [Header("ãƒ©ã‚¤ãƒ•ã®ãƒ†ã‚­ã‚¹ãƒˆ")]
     Text _lifeText;
 
     [SerializeField]
-    [Header("ƒV[ƒ‹ƒh‚ÌƒeƒLƒXƒg")]
+    [Header("ã‚·ãƒ¼ãƒ«ãƒ‰ã®ãƒ†ã‚­ã‚¹ãƒˆ")]
     Text _shieldText;
 
     [SerializeField]
-    [Header("•æ’n‚Ì–‡”‚ÌƒeƒLƒXƒg")]
+    [Header("å¢“åœ°ã®æšæ•°ã®ãƒ†ã‚­ã‚¹ãƒˆ")]
     Text _playerReserve;
 
     [SerializeField]
-    [Header("ƒZƒbƒg‚·‚éƒJ[ƒh‚Ì‰æ‘œ")]
+    [Header("ã‚»ãƒƒãƒˆã™ã‚‹ã‚«ãƒ¼ãƒ‰ã®ç”»åƒ")]
     Image _playerSetHand;
 
     [SerializeField]
-    [Header("èD‚Ì‰æ‘œ")]
+    [Header("æ‰‹æœ­ã®ç”»åƒ")]
     Image[] _playerHands;
 
-    public void ChangeLifeText(int value)//ƒeƒLƒXƒg‚Éˆø”‚ğ‘ã“ü
+    public void ChangeLifeText(int value)// ãƒ†ã‚­ã‚¹ãƒˆã«å¼•æ•°ã‚’ä»£å…¥
     {
         _lifeText.text = value.ToString();
     }
 
-    public void ChangeShieldText(int value)//ƒeƒLƒXƒg‚Éˆø”‚ğ‘ã“ü
+    public void ChangeShieldText(int value)// ãƒ†ã‚­ã‚¹ãƒˆã«å¼•æ•°ã‚’ä»£å…¥
     {
         _shieldText.text = value.ToString();
     }
 
-    public void ChangeReserveText(int value)//ƒeƒLƒXƒg‚Éˆø”‚ğ‘ã“ü
+    public void ChangeReserveText(int value)// ãƒ†ã‚­ã‚¹ãƒˆã«å¼•æ•°ã‚’ä»£å…¥
     {
         _playerReserve.text = value.ToString();
     }
 
-    public void ChangeHandsImage(Image[] img)//Image‚Éˆø”‚ğ‘ã“ü
+    public void ChangeHandsImage(Image img, int index)// Imageã«å¼•æ•°ã‚’ä»£å…¥
     {
-        for (int i = 0; i < ConstParameter.FIVE; i++)
-        {
-            _playerHands[i] = img[i];
-        }
-
+        _playerHands[index] = img;
     }
 
-    public void ChangeSetHandImage(Image img)//Image‚Éˆø”‚ğ‘ã“ü
+    public void ChangeSetHandImage(Image img)// Imageã«å¼•æ•°ã‚’ä»£å…¥
     {
         _playerSetHand = img;
     }
