@@ -3,56 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒLƒƒƒ‰‚Ìƒf[ƒ^‚ÌŠî’êƒNƒ‰ƒX
-/// ƒvƒŒƒCƒ„[‚ğQÆ‚·‚é•K—v‚ª‚ ‚é‚ª
-/// è’i‚ª‚È‚¢‚½‚ß‚±‚±‚Å‰¼‚É—pˆÓ‚µ‚Ä‚Ü‚·
+/// ã‚­ãƒ£ãƒ©ã®ãƒ‡ãƒ¼ã‚¿ã®åŸºåº•ã‚¯ãƒ©ã‚¹
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å‚ç…§ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ãŒ
+/// æ‰‹æ®µãŒãªã„ãŸã‚ã“ã“ã§ä»®ã«ç”¨æ„ã—ã¦ã¾ã™
 /// </summary>
 public abstract class CharacterBase : MonoBehaviour
 {
-    #region public property
-
-    /// <summary>
-    /// ‰î“üˆ—‚Ì—L–³‚ğŒöŠJ‚·‚éƒvƒƒpƒeƒB
-    /// </summary>
-    public bool IsIntervetion => _isIntervetion;
-
-    #endregion
-
     #region protected property
 
-    // ƒvƒŒƒCƒ„[‚ğQÆ‚·‚é”z—ñ—p‚ÌƒCƒ“ƒfƒbƒNƒX
-    protected int MyselfIndex => _MyselfIndex;
-    protected int EnemyIndex => _enemyIndex;
-
-    /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ğQÆ‚·‚é‚à‚Ì‚ª‚È‚¢‚½‚ß
-    /// ‰¼‚Å—pˆÓ‚µ‚½”h¶ƒNƒ‰ƒX—pƒvƒƒpƒeƒB(‰¼)
-    /// </summary>
-    protected PlayerData[] Players => _players;
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å‚ç…§ã™ã‚‹Listç”¨ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+    protected int PlayerIndex { get; private set; }
+    protected int EnemyIndex { get; private set; }
 
     #endregion
 
-    #region private member
-    // <summary>
-    /// ‰î“üˆ—‚Ì—L–³‚Ìƒƒ“ƒo[•Ï”
-    /// </summary>
-    private bool _isIntervetion;
-
-    //ƒvƒŒƒCƒ„[‚ğQÆ‚·‚é”z—ñ—p‚ÌƒCƒ“ƒfƒbƒNƒX
-    private int _MyselfIndex;
-    private int _enemyIndex;
+    #region protected member
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ğQÆ‚·‚é‚à‚Ì‚ª‚È‚¢‚½‚ß‰¼‚Å—pˆÓ‚µ‚½”z—ñ(‰¼)
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å‚ç…§ã™ã‚‹List
     /// </summary>
-    private PlayerData[] _players = {new(),new()};
+    protected IReadOnlyList<PlayerData> _players = PlayerManager.Players;
 
     #endregion
 
     #region public method
 
     /// <summary>
-    /// ‚¶‚á‚ñ‚¯‚ñ‚ÌŸ”s‚ª‚Â‚¢‚½‚Æ‚«‚ÉŒÄ‚Ño‚³‚ê‚é
+    /// ã˜ã‚ƒã‚“ã‘ã‚“ã®å‹æ•—ãŒã¤ã„ãŸã¨ãã«å‘¼ã³å‡ºã•ã‚Œã‚‹
     /// </summary>
     public abstract void CardEffect(PlayerData player);
 
@@ -61,27 +38,19 @@ public abstract class CharacterBase : MonoBehaviour
     #region protected method
 
     /// <summary>
-    /// ‰î“üˆ—‚Ì—L–³‚ğ•ÏX‚·‚éƒƒ\ƒbƒh
-    /// </summary>
-    protected bool ChangeIntervetion(bool isIntervetion)
-    {
-        return _isIntervetion = isIntervetion;
-    }
-
-    /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ğØ‚è‘Ö‚¦‚éƒƒ\ƒbƒh(‰¼)
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
     /// </summary>
     protected void ChangePlayersIndex(PlayerData player)
     {
         if(_players[ConstParameter.ZERO] == player)
         {
-            _MyselfIndex = ConstParameter.ZERO;
-            _enemyIndex = ConstParameter.ONE;
+            PlayerIndex = ConstParameter.ZERO;
+            EnemyIndex = ConstParameter.ONE;
         }
         else
         {
-            _MyselfIndex = ConstParameter.ONE;
-            _enemyIndex = ConstParameter.ZERO;
+            PlayerIndex = ConstParameter.ONE;
+            EnemyIndex = ConstParameter.ZERO;
         }     
     }
 

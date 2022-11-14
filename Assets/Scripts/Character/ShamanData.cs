@@ -1,53 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// ƒVƒƒ[ƒ}ƒ“
-/// ƒ_ƒ[ƒW‚ğó‚¯‚é
-/// ƒ`ƒ‡ƒL‚ğ1–‡Ì‚Ä‚Ä
-/// ƒ_ƒ[ƒW‚ğ1Œ¸‚ç‚µ‚Ä‚à‚æ‚¢B
+/// ã‚·ãƒ£ãƒ¼ãƒãƒ³
+/// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹æ™‚
+/// ãƒãƒ§ã‚­ã‚’1æšæ¨ã¦ã¦
+/// ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’1æ¸›ã‚‰ã—ã¦ã‚‚ã‚ˆã„ã€‚
 /// </summary>
 public class ShamanData : CharacterBase
 {
-    #region private menber
-
-    /// <summary>
-    /// ‘I‚ñ‚¾ƒ`ƒ‡ƒL‚ÌƒJ[ƒh‚ğ•Û‘¶
-    /// </summary>
-    PlayerHand _scissorsHand;
-
-    #endregion
-
     #region public method
 
     public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
-        //ƒ`ƒ‡ƒL‚ÌƒJ[ƒh‚ği‚è‚Ş
-        PlayerHand[] scissorsHands =
-            Players[MyselfIndex]
-                .PlayerHands
-                .Where(x => x.Hand == RSPParameter.Scissors).ToArray();
-        //ƒ`ƒ‡ƒL‚ÌƒJ[ƒh‚ª‚È‚©‚Á‚½‚ç
-        if (scissorsHands[ConstParameter.ZERO] == null)
+        //ãƒãƒ§ã‚­ã®ã‚«ãƒ¼ãƒ‰ã‚’çµã‚Šè¾¼ã‚€
+        foreach (var RSP in _players[PlayerIndex].PlayerHands)
         {
-            return;
+            //ãƒãƒ§ã‚­ã®ã‚«ãƒ¼ãƒ‰ãŒã‚ã£ãŸã‚‰
+            if(RSP.Hand == RSPParameter.Scissors)
+            {
+                PhaseManager.OnNextPhase(true);
+                return;
+            }
         }
-        else//ƒ`ƒ‡ƒL‚ÌƒJ[ƒh‚ª‚ ‚Á‚½‚ç
-        {
-            ChangeIntervetion(true);//‰î“üˆ—‚ ‚è‚É•ÏX
-
-            //ƒ`ƒ‡ƒL‚ÌƒJ[ƒh‚ğ‘I‘ğ
-            _scissorsHand = scissorsHands[default];
-            //ƒ`ƒ‡ƒL‚ğÌ‚Ä‚é
-            Players[MyselfIndex]
-            .OnReserveHand(_scissorsHand);
-            //1‰ñ•œ(ƒ_ƒ[ƒW‚ğ1Œ¸‚ç‚µ‚Ä‚à‚æ‚¢‚Ì‘ã‚í‚è‚É)
-            Players[MyselfIndex]
-            .HealLife(ConstParameter.ONE);
-        }  
+        //ãƒãƒ§ã‚­ã®ã‚«ãƒ¼ãƒ‰ãŒãªã‹ã£ãŸã‚‰
+        PhaseManager.OnNextPhase();
     }
 
     #endregion

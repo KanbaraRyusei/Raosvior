@@ -3,32 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒiƒCƒg
-/// ƒp[‚ÅŸ—˜‚µ‚½
-/// ‘Šè‚ÌƒŠƒU[ƒu‚Ì”‚¾‚¯
-/// ƒV[ƒ‹ƒhƒg[ƒNƒ“‚ğŠl“¾‚·‚éB
+/// ãƒŠã‚¤ãƒˆ
+/// ãƒ‘ãƒ¼ã§å‹åˆ©ã—ãŸæ™‚
+/// ç›¸æ‰‹ã®ãƒªã‚¶ãƒ¼ãƒ–ã®æ•°ã ã‘
+/// ã‚·ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ç²å¾—ã™ã‚‹ã€‚
 /// </summary>
-public class knightData : CharacterBase
+public class KnightData : CharacterBase
 {
     #region public method
 
     public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
-        // ƒp[>ƒO[
+        // ãƒ‘ãƒ¼>ã‚°ãƒ¼
         bool win =
-            Players[MyselfIndex].PlayerSetHand.Hand ==
+            _players[PlayerIndex].PlayerSetHand.Hand ==
             RSPParameter.Paper &&
-            Players[EnemyIndex].PlayerSetHand.Hand ==
+            _players[EnemyIndex].PlayerSetHand.Hand ==
             RSPParameter.Rock;
-        if (win)//ƒp[‚ÅŸ—˜‚µ‚½‚ç
+        if (win)//ãƒ‘ãƒ¼ã§å‹åˆ©ã—ãŸã‚‰
         {
-            // ‘Šè‚ÌƒŠƒU[ƒu‚Ì”‚¾‚¯ƒV[ƒ‹ƒhƒg[ƒNƒ“‚ğŠl“¾
-            Players[MyselfIndex]
-                .GetShield(Players[EnemyIndex]
-                            .PlayerReserve
-                            .Count);
+            // ç›¸æ‰‹ã®ãƒªã‚¶ãƒ¼ãƒ–ã®æ•°ã ã‘ã‚·ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ç²å¾—
+            var count = _players[EnemyIndex].PlayerReserve.Count;
+            _players[PlayerIndex].GetShield(count);
         }
+        PhaseManager.OnNextPhase();
     }
 
     #endregion

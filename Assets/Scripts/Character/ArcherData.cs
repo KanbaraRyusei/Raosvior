@@ -3,56 +3,56 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒA[ƒ`ƒƒ[
-/// ˆø‚«•ª‚¯‚½1ƒ_ƒ[ƒW—^‚¦‚éB
-/// •‰‚¯‚½A1ƒ_ƒ[ƒW‚ğó‚¯‚éB
+/// ã‚¢ãƒ¼ãƒãƒ£ãƒ¼
+/// å¼•ãåˆ†ã‘ãŸæ™‚1ãƒ€ãƒ¡ãƒ¼ã‚¸ä¸ãˆã‚‹ã€‚
+/// è² ã‘ãŸæ™‚ã€1ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã€‚
 /// </summary>
 public class ArcherData : CharacterBase
 {
-    bool test;
-
     #region public method
 
     public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
         bool draw =
-            Players[MyselfIndex].PlayerSetHand.Hand == 
-            Players[EnemyIndex].PlayerSetHand.Hand;
+            _players[PlayerIndex].PlayerSetHand.Hand == 
+            _players[EnemyIndex].PlayerSetHand.Hand;
         bool[] losePattern =
         {
-            //ƒO[<ƒp[
-            Players[MyselfIndex].PlayerSetHand.Hand ==
+            //ã‚°ãƒ¼<ãƒ‘ãƒ¼
+            _players[PlayerIndex].PlayerSetHand.Hand ==
             RSPParameter.Rock &&
-            Players[EnemyIndex].PlayerSetHand.Hand ==
+            _players[EnemyIndex].PlayerSetHand.Hand ==
             RSPParameter.Paper,
-            //ƒ`ƒ‡ƒL<ƒO[
-            Players[MyselfIndex].PlayerSetHand.Hand ==
+            //ãƒãƒ§ã‚­<ã‚°ãƒ¼
+            _players[PlayerIndex].PlayerSetHand.Hand ==
             RSPParameter.Scissors &&
-            Players[EnemyIndex].PlayerSetHand.Hand ==
+            _players[EnemyIndex].PlayerSetHand.Hand ==
             RSPParameter.Rock,
-            //ƒp[<ƒ`ƒ‡ƒL
-            Players[MyselfIndex].PlayerSetHand.Hand ==
+            //ãƒ‘ãƒ¼<ãƒãƒ§ã‚­
+            _players[PlayerIndex].PlayerSetHand.Hand ==
             RSPParameter.Paper &&
-            Players[EnemyIndex].PlayerSetHand.Hand ==
+            _players[EnemyIndex].PlayerSetHand.Hand ==
             RSPParameter.Scissors
         };
         bool lose =
             losePattern[ConstParameter.ZERO] ||
             losePattern[ConstParameter.ONE] ||
             losePattern[ConstParameter.TWO];
-        if (draw)//ˆø‚«•ª‚¯‚È‚ç
+
+        if (draw)//å¼•ãåˆ†ã‘ãªã‚‰
         {
-            //1ƒ_ƒ[ƒW—^‚¦‚éB
-            Players[EnemyIndex]
+            //ã‚¨ãƒãƒŸãƒ¼ã«1ãƒ€ãƒ¡ãƒ¼ã‚¸ä¸ãˆã‚‹ã€‚
+            _players[EnemyIndex]
                 .ReceiveDamage(ConstParameter.ONE);
         }
-        else if(lose)//•‰‚¯‚È‚ç
+        else if(lose)//è² ã‘ãªã‚‰
         {
-            //1ƒ_ƒ[ƒW‚ğó‚¯‚éB
-            Players[MyselfIndex]
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚‚ã†1ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ã€‚
+            _players[PlayerIndex]
                 .ReceiveDamage(ConstParameter.ONE);
         }
+        PhaseManager.OnNextPhase();
     }
 
     #endregion

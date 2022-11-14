@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒOƒ‰ƒbƒvƒ‰[
-/// ƒO[‚ÅŸ—˜‚µ‚½‚Æ‚«
-/// ƒJ[ƒhŒø‰Ê‚ğ‚à‚¤ˆê“x”­“®‚·‚éB
+/// ã‚°ãƒ©ãƒƒãƒ—ãƒ©ãƒ¼
+/// ã‚°ãƒ¼ã§å‹åˆ©ã—ãŸã¨ã
+/// ã‚«ãƒ¼ãƒ‰åŠ¹æœã‚’ã‚‚ã†ä¸€åº¦ç™ºå‹•ã™ã‚‹ã€‚
 /// </summary>
 public class GrapplerData : CharacterBase
 {
@@ -14,17 +14,18 @@ public class GrapplerData : CharacterBase
     public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
-        // ƒO[>ƒ`ƒ‡ƒL
+        // ã‚°ãƒ¼>ãƒãƒ§ã‚­
         bool win =
-            Players[MyselfIndex].PlayerSetHand.Hand ==
+            _players[PlayerIndex].PlayerSetHand.Hand ==
             RSPParameter.Rock &&
-            Players[EnemyIndex].PlayerSetHand.Hand ==
+            _players[EnemyIndex].PlayerSetHand.Hand ==
             RSPParameter.Scissors;
-        if (win)//ƒO[‚ÅŸ—˜‚µ‚½‚ç
+        if (win)//ã‚°ãƒ¼ã§å‹åˆ©ã—ãŸã‚‰
         {
-            //Œø‰Ê‚ğ‚à‚¤ˆê“x”­“®
-            Players[MyselfIndex].PlayerSetHand.HandEffect.Effect();
+            //åŠ¹æœã‚’ã‚‚ã†ä¸€åº¦ç™ºå‹•
+            _players[PlayerIndex].PlayerSetHand.HandEffect.Effect();
         }
+        PhaseManager.OnNextPhase();
     }
 
     #endregion
