@@ -3,40 +3,46 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒGƒNƒXƒvƒ[ƒWƒ‡ƒ“EF(ƒO[)
-/// Ÿ—˜‚µ‚½©•ª‚ÌƒŠƒU[ƒt‚ÉƒJ[ƒh‚ª3–‡ˆÈã‚ ‚ê‚Î‚³‚ç‚É2ƒ_ƒ[ƒW‚ğ—^‚¦‚éB
+/// ã‚¨ã‚¯ã‚¹ãƒ—ãƒ­ãƒ¼ã‚¸ãƒ§ãƒ³ãƒ»F(ã‚°ãƒ¼)
+/// å‹åˆ©ã—ãŸæ™‚è‡ªåˆ†ã®ãƒªã‚¶ãƒ¼ãƒ•ã«ã‚«ãƒ¼ãƒ‰ãŒ3æšä»¥ä¸Šã‚ã‚Œã°ã•ã‚‰ã«2ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚
 /// </summary>
 public class FRockCardExplosion : HandEffect
 {
     [SerializeField]
-    [Header("‚±‚ÌŒø‰Ê‚ª‚Â‚¢‚Ä‚¢‚éƒJ[ƒh")]
+    [Header("ã“ã®åŠ¹æœãŒã¤ã„ã¦ã„ã‚‹ã‚«ãƒ¼ãƒ‰")]
     PlayerHand _playerHand;
 
-    PlayerBase[] _playerBase;
-    int _player = 0;
-    int _enemy = 1;
-
-    const int ONE = 1;
-    const int THREE = 3;
-
-    void Awake()
-    {
-        _playerBase = FindObjectsOfType<PlayerBase>();
-    }
+    IReadOnlyList<PlayerData> _players = PlayerManager.Players;
+    int _playerIndex = 0;
+    int _enemyIndex = 1;
 
     public override void Effect()
     {
-
-        //©•ª‚ÌƒŠƒU[ƒt‚ÉƒJ[ƒh‚ª3–‡ˆÈã‚ ‚ê‚Î
-        if (_playerBase[_player].PlayerTrashs.Count >= THREE)
+        _players[_enemyIndex].ReceiveDamage(ConstParameter.ONE);//ç›¸æ‰‹ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹
+        //è‡ªåˆ†ã®ãƒªã‚¶ãƒ¼ãƒ•ã«ã‚«ãƒ¼ãƒ‰ãŒ3æšä»¥ä¸Šã‚ã‚Œã°
+        if (_players[_playerIndex].PlayerReserve.Count >= ConstParameter.THREE)
         {
-            _playerBase[_enemy].ReceiveDamage(THREE);//3ƒ_ƒ[ƒW‚ğ—^‚¦‚é
+            //ã•ã‚‰ã«2ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚
+            _players[_enemyIndex].ReceiveDamage(ConstParameter.TWO);
+        }
+        _players[_playerIndex].OnReserveHand(_playerHand);//ã“ã®ã‚«ãƒ¼ãƒ‰ã‚’æ¨ã¦ã‚‹  
+    }
+
+    /// <summary>
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+    /// </summary>
+    void ChangePlayersIndex(PlayerData player)
+    {
+        if (_players[ConstParameter.ZERO] == player)
+        {
+            _playerIndex = ConstParameter.ZERO;
+            _enemyIndex = ConstParameter.ONE;
         }
         else
         {
-            _playerBase[_enemy].ReceiveDamage(ONE);//‘Šè‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚é
+            _playerIndex = ConstParameter.ONE;
+            _enemyIndex = ConstParameter.ZERO;
         }
-
-        _playerBase[_player].DeleteHand(_playerHand);//‚±‚ÌƒJ[ƒh‚ğÌ‚Ä‚é  
+        PhaseManager.OnNextPhase();
     }
 }

@@ -3,44 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒ`ƒF[ƒ“ƒAƒbƒNƒX(ƒ`ƒ‡ƒL)
-/// Ÿ—˜‚µ‚½‚±‚ÌƒJ[ƒh‚ğèD‚É–ß‚¹‚éB
-/// ¦ƒJ[ƒh‚ğèD‚É–ß‚·‚©‚Ç‚¤‚©‚Ì‘I‘ğ‚ª•K—v
+/// ãƒã‚§ãƒ¼ãƒ³ã‚¢ãƒƒã‚¯ã‚¹(ãƒãƒ§ã‚­)
+/// å‹åˆ©ã—ãŸæ™‚ã“ã®ã‚«ãƒ¼ãƒ‰ã‚’æ‰‹æœ­ã«æˆ»ã›ã‚‹ã€‚
+/// â€»ã‚«ãƒ¼ãƒ‰ã‚’æ‰‹æœ­ã«æˆ»ã™ã‹ã©ã†ã‹ã®é¸æŠãŒå¿…è¦
 /// </summary>
 public class ScissorsCardChainAx : HandEffect
 {
-    public bool IsDelete => _isDelete;
-
     [SerializeField]
-    [Header("‚±‚ÌŒø‰Ê‚ª‚Â‚¢‚Ä‚¢‚éƒJ[ƒh")]
+    [Header("ã“ã®åŠ¹æœãŒã¤ã„ã¦ã„ã‚‹ã‚«ãƒ¼ãƒ‰")]
     PlayerHand _playerHand;
 
-    PlayerBase[] _playerBase;
-    int _player = 0;
-    int _enemy = 1;
-    bool _isDelete = false;
-
-    const int ONE = 1;
-
-    void Awake()
-    {
-        _playerBase = FindObjectsOfType<PlayerBase>();
-    }
+    IReadOnlyList<PlayerData> _players = PlayerManager.Players;
+    int _playerIndex = 0;
+    int _enemyIndex = 1;
 
     public override void Effect()
     {
-        _playerBase[_enemy].ReceiveDamage(ONE);//‘Šè‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚é
+        _players[_enemyIndex].ReceiveDamage(ConstParameter.ONE);//ç›¸æ‰‹ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹
 
-        //‚±‚ÌƒJ[ƒh‚ğèD‚É–ß‚·‚Ì‚ÅƒJ[ƒh‚ğÌ‚Ä‚é‚©‘I‘ğ‚Å‚«‚é‚æ‚¤‚É‚·‚é
-
-
-        //Ì‚Ä‚é‚È‚ç
-        if(_isDelete == true)
-        {
-            _playerBase[_player].DeleteHand(_playerHand);//‚±‚ÌƒJ[ƒh‚ğÌ‚Ä‚é  
-        }
+        //ã“ã®ã‚«ãƒ¼ãƒ‰ã‚’æ‰‹æœ­ã«æˆ»ã™ã®ã§ã‚«ãƒ¼ãƒ‰ã‚’æ¨ã¦ã‚‹ã‹é¸æŠã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
+        PhaseManager.OnNextPhase(true);
     }
-
-    /// <summary>ƒJ[ƒh‚ğÌ‚Ä‚é‚©‚Ç‚¤‚©</summary>
-    public bool SelectIsDelete(bool delete) => _isDelete = delete;
 }

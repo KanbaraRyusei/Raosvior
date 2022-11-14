@@ -3,44 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒAƒCƒMƒX‚ÌÙ‚«EF(ƒp[)
-/// Ÿ—˜‚µ‚½A©•ª‚ÌƒV[ƒ‹ƒhƒg[ƒNƒ“‚ğ1‚Â‚É•t‚«‚³‚ç‚É1ƒ_ƒ[ƒW‚ğ—^‚¦‚Ä‚à‚æ‚¢‚»‚¤‚µ‚½ê‡A©•ª‚ÌƒV[ƒ‹ƒhƒg[ƒNƒ“‚ğ”j‰ó‚·‚éB
-/// ¦©•ª‚ÌƒV[ƒ‹ƒh‚ğŒ¸‚ç‚·–‡”‚ğŒˆ‚ß‚éˆ—‚ª•K—v
+/// ã‚¢ã‚¤ã‚®ã‚¹ã®è£ããƒ»F(ãƒ‘ãƒ¼)
+/// å‹åˆ©ã—ãŸæ™‚ã€è‡ªåˆ†ã®ã‚·ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ¼ã‚¯ãƒ³ã‚’1ã¤ã«ä»˜ãã•ã‚‰ã«1ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã¦ã‚‚ã‚ˆã„ãã†ã—ãŸå ´åˆã€è‡ªåˆ†ã®ã‚·ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ç ´å£Šã™ã‚‹ã€‚
+/// â€»è‡ªåˆ†ã®ã‚·ãƒ¼ãƒ«ãƒ‰ã‚’æ¸›ã‚‰ã™æšæ•°ã‚’æ±ºã‚ã‚‹å‡¦ç†ãŒå¿…è¦
 /// </summary>
 public class FPaperCardJudgmentOfAigis : HandEffect
 {
     public int AddDamege => _addDamege;
 
     [SerializeField]
-    [Header("‚±‚ÌŒø‰Ê‚ª‚Â‚¢‚Ä‚¢‚éƒJ[ƒh")]
+    [Header("ã“ã®åŠ¹æœãŒã¤ã„ã¦ã„ã‚‹ã‚«ãƒ¼ãƒ‰")]
     PlayerHand _playerHand;
 
-    PlayerBase[] _playerBase;
+    IReadOnlyList<PlayerData> _players = PlayerManager.Players;
     int _player = 0;
     int _enemy = 1;
     int _addDamege = 0;
 
-    const int ONE = 1;
-
-    void Awake()
-    {
-        _playerBase = FindObjectsOfType<PlayerBase>();
-    }
-
     public override void Effect()
     {
-        //©•ª‚ÌƒV[ƒ‹ƒh‚ğ”j‰ó‚·‚é–‡”‚ğŒˆ‚ß‚ê‚é‚æ‚¤‚É‚·‚é
+        //è‡ªåˆ†ã®ã‚·ãƒ¼ãƒ«ãƒ‰ã‚’ç ´å£Šã™ã‚‹æšæ•°ã‚’æ±ºã‚ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹
 
-
-        //©•ª‚ÌƒV[ƒ‹ƒh‚ğŒ¸‚ç‚·
-        _playerBase[_player].GetShield(_addDamege);
-
-        //’Êíƒ_ƒ[ƒW+’Ç‰Áƒ_ƒ[ƒW(ƒV[ƒ‹ƒh‚ğŒ¸‚ç‚µ‚½–‡”•ª)‚ğ—^‚¦‚é
-        _playerBase[_enemy].ReceiveDamage(ONE + _addDamege);
-
-        _playerBase[_player].DeleteHand(_playerHand);//‚±‚ÌƒJ[ƒh‚ğÌ‚Ä‚é
+        PhaseManager.OnNextPhase(true);
     }
-
-    /// <summary>ƒV[ƒ‹ƒh‚ğŒ¸‚ç‚·—Ê‚ğİ’è‚·‚é</summary>
-    public int SelectBreakShields(int num) => _addDamege -= num;
 }

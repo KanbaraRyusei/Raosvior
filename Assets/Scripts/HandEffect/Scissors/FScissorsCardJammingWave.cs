@@ -3,30 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒWƒƒƒ~ƒ“ƒOƒEƒF[ƒuEF(ƒ`ƒ‡ƒL)
-/// Ÿ—˜‚µ‚½ƒ_ƒ[ƒW‚ğ—^‚¦‚é‘O‚É‘Šè‚ÌƒV[ƒ‹ƒhƒg[ƒNƒ“‚ğ‘S‚Ä”j‰ó‚·‚é
+/// ã‚¸ãƒ£ãƒŸãƒ³ã‚°ã‚¦ã‚§ãƒ¼ãƒ–ãƒ»F(ãƒãƒ§ã‚­)
+/// å‹åˆ©ã—ãŸæ™‚ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹å‰ã«ç›¸æ‰‹ã®ã‚·ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ¼ã‚¯ãƒ³ã‚’å…¨ã¦ç ´å£Šã™ã‚‹
 /// </summary>
 public class FScissorsCardJammingWave : HandEffect
 {
     [SerializeField]
-    [Header("‚±‚ÌŒø‰Ê‚ª‚Â‚¢‚Ä‚¢‚éƒJ[ƒh")]
+    [Header("ã“ã®åŠ¹æœãŒã¤ã„ã¦ã„ã‚‹ã‚«ãƒ¼ãƒ‰")]
     PlayerHand _playerHand;
 
-    PlayerBase[] _playerBase;
-    int _player = 0;
-    int _enemy = 1;
-
-    const int ONE = 1;
-
-    void Awake()
-    {
-        _playerBase = FindObjectsOfType<PlayerBase>();
-    }
+    IReadOnlyList<PlayerData> _players = PlayerManager.Players;
+    int _playerIndex = 0;
+    int _enemyIndex = 1;
 
     public override void Effect()
     {
-        _playerBase[_enemy].GetShield(-_playerBase[_enemy].Shild);//‘Šè‚ÌƒV[ƒ‹ƒh‚ğ‘S‚Ä”j‰ó
-        _playerBase[_enemy].ReceiveDamage(ONE);//‘Šè‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚é
-        _playerBase[_player].DeleteHand(_playerHand);//‚±‚ÌƒJ[ƒh‚ğÌ‚Ä‚é  
+        var allShield = _players[_enemyIndex].Shield;
+        _players[_enemyIndex].GetShield(-allShield);//ç›¸æ‰‹ã®ã‚·ãƒ¼ãƒ«ãƒ‰ã‚’å…¨ã¦ç ´å£Š
+        _players[_enemyIndex].ReceiveDamage(ConstParameter.ONE);//ç›¸æ‰‹ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹
+        _players[_playerIndex].OnReserveHand(_playerHand);//ã“ã®ã‚«ãƒ¼ãƒ‰ã‚’æ¨ã¦ã‚‹  
+        PhaseManager.OnNextPhase();
     }
 }

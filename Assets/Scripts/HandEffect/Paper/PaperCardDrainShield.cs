@@ -4,45 +4,32 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// ƒhƒŒƒCƒ“ƒV[ƒ‹ƒh(ƒp[)
-/// Ÿ—˜‚µ‚½A‘Šè‚ÌèD‚ğ1–‡‘I‚ñ‚Å— Œü‚«‚Ì‚Ü‚Ü©•ª‚ÌƒV[ƒ‹ƒhƒg[ƒNƒ“‚É‚·‚éB(‚±‚ÌƒV[ƒ‹ƒhƒg[ƒNƒ“‚Í”j‰ó‚³‚ê‚½‚Æ‚«‚¿•¨‚ÌƒŒƒV[ƒu‚É’u‚­)
-/// ¦‘Šè‚ÌƒJ[ƒh‚ğ‘I‘ğ‚·‚é•K—v‚ª‚ ‚éB‚»‚ÌƒJ[ƒh‚ª”j‰ó‚³‚ê‚½‚Æ‚«‚Ìˆ—‚à•K—v
+/// ãƒ‰ãƒ¬ã‚¤ãƒ³ã‚·ãƒ¼ãƒ«ãƒ‰(ãƒ‘ãƒ¼)
+/// å‹åˆ©ã—ãŸæ™‚ã€ç›¸æ‰‹ã®æ‰‹æœ­ã‚’1æšé¸ã‚“ã§è£å‘ãã®ã¾ã¾è‡ªåˆ†ã®ã‚·ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ¼ã‚¯ãƒ³ã«ã™ã‚‹ã€‚(ã“ã®ã‚·ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ¼ã‚¯ãƒ³ã¯ç ´å£Šã•ã‚ŒãŸã¨ãæŒã¡ç‰©ã®ãƒ¬ã‚·ãƒ¼ãƒ–ã«ç½®ã)
+/// â€»ç›¸æ‰‹ã®ã‚«ãƒ¼ãƒ‰ã‚’é¸æŠã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚ãã®ã‚«ãƒ¼ãƒ‰ãŒç ´å£Šã•ã‚ŒãŸã¨ãã®å‡¦ç†ã‚‚å¿…è¦
 /// </summary>
 public class PaperCardDrainShield : HandEffect
 {
     public int AddShild => _addShild;
 
     [SerializeField]
-    [Header("‚±‚ÌŒø‰Ê‚ª‚Â‚¢‚Ä‚¢‚éƒJ[ƒh")]
+    [Header("ã“ã®åŠ¹æœãŒã¤ã„ã¦ã„ã‚‹ã‚«ãƒ¼ãƒ‰")]
     PlayerHand _playerHand;
 
-    PlayerBase[] _playerBase;
-    int _player = 0;
-    int _enemy = 1;
+    IReadOnlyList<PlayerData> _players = PlayerManager.Players;
+    int _playerIndex = 0;
+    int _enemyIndex = 1;
     int _addShild = 0;
 
-    const int ONE = 1;
-
-    void Awake()
-    {
-        _playerBase = FindObjectsOfType<PlayerBase>();
-    }
 
     public override void Effect()
     {
-        _playerBase[_enemy].ReceiveDamage(ONE);//‘Šè‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚é
+        _players[_enemyIndex].ReceiveDamage(ConstParameter.ONE);//ç›¸æ‰‹ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹
 
-        //‘Šè‚ÌƒJ[ƒh‚ğ©•ª‚ÌƒV[ƒ‹ƒhƒg[ƒNƒ“‚É‚µ‚½‚¢‚Ì‚Å
-        //‚±‚±‚Å‘Šè‚ÌèD‚ğ‘I‚Ô
-        _playerBase[_enemy]
-            .DeleteHand(_playerBase[_enemy]
-            .PlayerHands//ƒvƒŒƒCƒ„[ƒnƒ“ƒh‚ÌƒJ[ƒh‚Ìindex(‰½”Ô–Ú‚©)‚Åi‚è‚Ş
-            .FirstOrDefault(x => x == _playerBase[_enemy].PlayerHands[_addShild]));
+        //ç›¸æ‰‹ã®ã‚«ãƒ¼ãƒ‰ã‚’è‡ªåˆ†ã®ã‚·ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ¼ã‚¯ãƒ³ã«ã—ãŸã„ã®ã§
+        //ã“ã“ã§ç›¸æ‰‹ã®æ‰‹æœ­ã‚’é¸ã¶
 
-        _playerBase[_player].GetShield(ONE);//ƒV[ƒ‹ƒh‚ğ’Ç‰Á
-        _playerBase[_player].DeleteHand(_playerHand);//‚±‚ÌƒJ[ƒh‚ğÌ‚Ä‚é  
+        PhaseManager.OnNextPhase(true);
     }
 
-    /// <summary>‘I‚ñ‚¾ƒJ[ƒh‚ª‰½”Ô–Ú‚©‚ğŒˆ‚ß‚é</summary>
-    public int SelectCardNumber(int number) =>  _addShild = number;
 }

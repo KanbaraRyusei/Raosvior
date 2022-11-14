@@ -3,39 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ày—ô‚·‚é–î(ƒO[)
-/// Ÿ—˜‚µ‚½‘Šè‚ªƒV[ƒ‹ƒhƒg[ƒNƒ“‚ğŠ‚µ‚Ä‚¢‚é‚È‚ç‚³‚ç‚É1ƒ_ƒ[ƒW‚ğ—^‚¦‚éB
+/// ç‚¸è£‚ã™ã‚‹çŸ¢(ã‚°ãƒ¼)
+/// å‹åˆ©ã—ãŸæ™‚ç›¸æ‰‹ãŒã‚·ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ¼ã‚¯ãƒ³ã‚’æ‰€æŒã—ã¦ã„ã‚‹ãªã‚‰ã•ã‚‰ã«1ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚
 /// </summary>
 public class RockCardExplodingArrow : HandEffect
 {
     [SerializeField]
-    [Header("‚±‚ÌŒø‰Ê‚ª‚Â‚¢‚Ä‚¢‚éƒJ[ƒh")]
+    [Header("ã“ã®åŠ¹æœãŒã¤ã„ã¦ã„ã‚‹ã‚«ãƒ¼ãƒ‰")]
     PlayerHand _playerHand;
 
-    PlayerBase[] _playerBase;
+    IReadOnlyList<PlayerData> _players = PlayerManager.Players;
     int _player = 0;
     int _enemy = 1;
 
-    const int ONE = 1;
-    const int TWO = 2;
-
-    void Awake()
-    {
-        _playerBase = FindObjectsOfType<PlayerBase>();   
-    }
-
     public override  void Effect()
     { 
-        //‘Šè‚ªƒV[ƒ‹ƒhƒg[ƒNƒ“‚ğŠ‚µ‚Ä‚¢‚é‚È‚ç
-        if (_playerBase[_enemy].Shild > 0)
+        _players[_enemy].ReceiveDamage(ConstParameter.ONE);//ç›¸æ‰‹ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹
+
+        //ç›¸æ‰‹ãŒã‚·ãƒ¼ãƒ«ãƒ‰ãƒˆãƒ¼ã‚¯ãƒ³ã‚’æ‰€æŒã—ã¦ã„ã‚‹ãªã‚‰
+        if (_players[_enemy].Shield > ConstParameter.ZERO)
         {
-            _playerBase[_enemy].ReceiveDamage(TWO);//2ƒ_ƒ[ƒW‚ğ—^‚¦‚é
-        }
-        else//Š‚µ‚Ä‚¢‚È‚©‚Á‚½‚ç
-        {
-            _playerBase[_enemy].ReceiveDamage(ONE);//‘Šè‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚é
+            //ã•ã‚‰ã«1ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹
+            _players[_enemy].ReceiveDamage(ConstParameter.ONE);
         }
 
-        _playerBase[_player].DeleteHand(_playerHand);//‚±‚ÌƒJ[ƒh‚ğÌ‚Ä‚é  
+        _players[_player].OnReserveHand(_playerHand);//ã“ã®ã‚«ãƒ¼ãƒ‰ã‚’æ¨ã¦ã‚‹
+        PhaseManager.OnNextPhase();
     }
 }
