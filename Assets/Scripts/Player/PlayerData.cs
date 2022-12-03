@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
@@ -17,6 +17,11 @@ public class PlayerData : IHandCollection, ILifeChange
     /// プレイヤーのシールドの読み取り専用プロパティ
     /// </summary>
     public int Shield => _shield;
+
+    /// <summary>
+    /// プレイヤーのキャラクターカードの読み取り専用プロパティ
+    /// </summary>
+    public CharacterBase CharacterHand => _characterHand;
 
     /// <summary>
     /// プレイヤーの手札の読み取り専用プロパティ
@@ -43,10 +48,16 @@ public class PlayerData : IHandCollection, ILifeChange
     /// プレイヤーのライフ
     /// </summary>
     private int _life;
+
     /// <summary>
     /// プレイヤーのシールド
     /// </summary>
     private int _shield;
+
+    /// <summary>
+    /// プレイヤーのキャラクターカード
+    /// </summary>
+    private CharacterBase _characterHand;
 
     /// <summary>
     /// プレイヤーの手札
