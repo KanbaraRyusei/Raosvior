@@ -7,38 +7,35 @@ using UnityEngine;
 /// 引き分けた時1ダメージ与える。
 /// 負けた時、1ダメージを受ける。
 /// </summary>
-public class ArcherData : CharacterBase
+public class ArcherData : LeaderHandEffect
 {
+    #region unity method
+
+    private void Awake()
+    {
+        LeaderType = LeaderParameter.Archer;
+    }
+
+    #endregion
+
     #region public method
 
-    public override void CardEffect(PlayerData player)
+    public override bool CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
-        bool draw =
-            _players[PlayerIndex].PlayerSetHand.Hand == 
-            _players[EnemyIndex].PlayerSetHand.Hand;
-        bool[] losePattern =
-        {
+        var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
+        var enemyRSP = _players[EnemyIndex].PlayerSetHand.Hand;
+        var r = RSPParameter.Rock;
+        var s = RSPParameter.Scissors;
+        var p = RSPParameter.Paper;
+        var draw = playerRSP == enemyRSP;
+        var lose =
             //グー<パー
-            _players[PlayerIndex].PlayerSetHand.Hand ==
-            RSPParameter.Rock &&
-            _players[EnemyIndex].PlayerSetHand.Hand ==
-            RSPParameter.Paper,
+            playerRSP == r && enemyRSP == p ||
             //チョキ<グー
-            _players[PlayerIndex].PlayerSetHand.Hand ==
-            RSPParameter.Scissors &&
-            _players[EnemyIndex].PlayerSetHand.Hand ==
-            RSPParameter.Rock,
+            playerRSP == s && enemyRSP == r ||
             //パー<チョキ
-            _players[PlayerIndex].PlayerSetHand.Hand ==
-            RSPParameter.Paper &&
-            _players[EnemyIndex].PlayerSetHand.Hand ==
-            RSPParameter.Scissors
-        };
-        bool lose =
-            losePattern[ConstParameter.ZERO] ||
-            losePattern[ConstParameter.ONE] ||
-            losePattern[ConstParameter.TWO];
+            playerRSP == p && enemyRSP == s;
 
         if (draw)//引き分けなら
         {
@@ -52,7 +49,7 @@ public class ArcherData : CharacterBase
             _players[PlayerIndex]
                 .ReceiveDamage(ConstParameter.ONE);
         }
-        PhaseManager.OnNextPhase();
+        return false;
     }
 
     #endregion

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// ゲームの進行管理をするクラス
@@ -48,6 +48,7 @@ public static class PhaseManager
         if(_currentPhase == PhaseParameter.Intervention)// もし介入処理だったら
         {
             _currentPhase = _oldPhase;// 介入前のフェーズに戻す
+            return;//シャーマンさえいなければ...
         }
         _oldPhase = _currentPhase;// 前のフェーズを保存
         _currentPhase++;// 現在のフェーズを次のフェーズに進める

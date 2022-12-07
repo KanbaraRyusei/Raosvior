@@ -8,26 +8,33 @@ using UnityEngine;
 /// 相手のリザーブの数だけ
 /// シールドトークンを獲得する。
 /// </summary>
-public class KnightData : CharacterBase
+public class KnightData : LeaderHandEffect
 {
+    #region unity method
+
+    private void Awake()
+    {
+        LeaderType = LeaderParameter.Knight;
+    }
+
+    #endregion
+
     #region public method
 
-    public override void CardEffect(PlayerData player)
+    public override bool CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
-        // パー>グー
-        bool win =
-            _players[PlayerIndex].PlayerSetHand.Hand ==
-            RSPParameter.Paper &&
-            _players[EnemyIndex].PlayerSetHand.Hand ==
-            RSPParameter.Rock;
-        if (win)//パーで勝利したら
+        var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
+        var enemyRSP = _players[EnemyIndex].PlayerSetHand.Hand;
+        var r = RSPParameter.Rock;
+        var p = RSPParameter.Paper;
+        if (playerRSP == p && enemyRSP == r)//パーで勝利したら
         {
             // 相手のリザーブの数だけシールドトークンを獲得
             var count = _players[EnemyIndex].PlayerReserve.Count;
             _players[PlayerIndex].GetShield(count);
         }
-        PhaseManager.OnNextPhase();
+        return false;
     }
 
     #endregion

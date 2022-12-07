@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// キャラのデータの基底クラス
-/// プレイヤーを参照する必要があるが
-/// 手段がないためここで仮に用意してます
+/// リーダーのデータの基底クラス
 /// </summary>
-public abstract class CharacterBase : MonoBehaviour
+public abstract class LeaderHandEffect : MonoBehaviour
 {
+    #region public propterty
+
+    public LeaderParameter LeaderType { get; protected set; }
+
+    #endregion
+
     #region protected property
 
     // プレイヤーを参照するList用のインデックス
@@ -31,7 +35,7 @@ public abstract class CharacterBase : MonoBehaviour
     /// <summary>
     /// じゃんけんの勝敗がついたときに呼び出される
     /// </summary>
-    public abstract void CardEffect(PlayerData player);
+    public abstract bool CardEffect(PlayerData player);
 
     #endregion
 
