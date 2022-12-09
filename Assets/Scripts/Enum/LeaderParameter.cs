@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// リーダーカードのパラメータ
+/// </summary>
 public enum LeaderParameter
 {
-    [Tooltip("ランダム")]
-    Random,
-
     [Tooltip("シャーマン")]
-    Shaman,
+    Shaman = 1,
 
     [Tooltip("グラップラー")]
     Grappler,

@@ -25,9 +25,9 @@ public class CardManager : MonoBehaviour
     /// </summary>
     /// <param name="playerData"></param>
     /// <param name="leader"></param>
-    public void GetLeaderHand(PlayerData playerData,LeaderParameter leader = 0)
+    public void SetLeaderHand(PlayerData playerData,LeaderParameter leader = 0)
     {
-        var random = 0;
+        var randomIndex = 0;
         if (playerData == PlayerManager.Players[0])
         {
             foreach (var leaderHand in _leaderPlayerHands1)
@@ -37,8 +37,8 @@ public class CardManager : MonoBehaviour
                     PlayerManager.Players[0].AddLeaderHand(leaderHand);
                 }
             }
-            random = Random.Range(0, _leaderPlayerHands1.Count);
-            PlayerManager.Players[0].AddLeaderHand(_leaderPlayerHands1[random]);
+            randomIndex = Random.Range(0, _leaderPlayerHands1.Count);
+            PlayerManager.Players[0].AddLeaderHand(_leaderPlayerHands1[randomIndex]);
         }
         else
         {
@@ -49,14 +49,14 @@ public class CardManager : MonoBehaviour
                     PlayerManager.Players[1].AddLeaderHand(leaderHand);
                 }
             }
-            random = Random.Range(0, _leaderPlayerHands2.Count);
-            PlayerManager.Players[1].AddLeaderHand(_leaderPlayerHands2[random]);
+            randomIndex = Random.Range(0, _leaderPlayerHands2.Count);
+            PlayerManager.Players[1].AddLeaderHand(_leaderPlayerHands2[randomIndex]);
         }
     }
 
 
 
-    public void RemoveRSPHand()
+    public void SetRSPHand(PlayerData playerData)
     {
 
     }
