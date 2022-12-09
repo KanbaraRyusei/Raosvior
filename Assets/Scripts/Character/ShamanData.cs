@@ -24,7 +24,7 @@ public class ShamanData : LeaderHandEffect
     public override bool CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
-        var enemyLeader = _players[EnemyIndex].LeaderHand.LeaderType;
+        var enemyLeader = _players[EnemyIndex].LeaderHand.Leader;
         var archer = LeaderParameter.Archer;
         var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
         var enemyRSP = _players[EnemyIndex].PlayerSetHand.Hand;

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public enum LeaderParameter
 {
+    [Tooltip("ランダム")]
+    Random,
+
     [Tooltip("シャーマン")]
     Shaman,
 

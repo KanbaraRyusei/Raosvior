@@ -21,7 +21,7 @@ public class PlayerData : IHandCollection, ILifeChange
     /// <summary>
     /// プレイヤーのリーダーカードの読み取り専用プロパティ
     /// </summary>
-    public LeaderHandEffect LeaderHand => _leaderHand;
+    public LeaderPlayerHand LeaderHand => _leaderHand;
 
     /// <summary>
     /// プレイヤーの手札の読み取り専用プロパティ
@@ -57,7 +57,7 @@ public class PlayerData : IHandCollection, ILifeChange
     /// <summary>
     /// プレイヤーのリーダーカード
     /// </summary>
-    private LeaderHandEffect _leaderHand;
+    private LeaderPlayerHand _leaderHand;
 
     /// <summary>
     /// プレイヤーの手札
@@ -153,14 +153,14 @@ public class PlayerData : IHandCollection, ILifeChange
         _shield += num;// シールドを追加 上限がないため余計な処理はない
     }
 
-    public void AddLeaderHand(LeaderHandEffect leader)
+    public void AddLeaderHand(LeaderPlayerHand leader)
     {
         _leaderHand = leader;
     }
 
     public bool LeaderEffect()
     {
-        return _leaderHand.CardEffect(this);
+        return _leaderHand.HandEffect.CardEffect(this);
     }
 
     #endregion

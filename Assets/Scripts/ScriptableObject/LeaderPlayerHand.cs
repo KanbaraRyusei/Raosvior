@@ -9,14 +9,14 @@ using UnityEngine.UI;
 /// </summary>
 [Serializable]
 [CreateAssetMenu(menuName = "ScriptableObjects/CreateLeaderHandAsset")]
-public class LeaderHand : ScriptableObject
+public class LeaderPlayerHand : ScriptableObject
 {
     #region public property
 
     /// <summary>
     /// カードの手の読み取り専用プロパティ
     /// </summary>
-    public LeaderParameter LeaderType => _leaderType;
+    public LeaderParameter Leader => _leader;
 
     /// <summary>
     /// リーダーカードの名前の読み取り専用プロパティ
@@ -31,7 +31,7 @@ public class LeaderHand : ScriptableObject
     /// <summary>
     /// リーダーカードの効果の読み取り専用プロパティ
     /// </summary>
-    public LeaderHandEffect HandEffect => _leaderHandEffect;
+    public LeaderHandEffect HandEffect => _handEffect;
 
     public Image CardImage => _cardImage;
 
@@ -40,8 +40,8 @@ public class LeaderHand : ScriptableObject
     #region private property
 
     [SerializeField]
-    [Header("じゃんけんの手")]
-    private LeaderParameter _leaderType = LeaderParameter.Shaman;
+    [Header("リーダーのジョブ")]
+    private LeaderParameter _leader = LeaderParameter.Shaman;
 
     [SerializeField]
     [Header("カード名")]
@@ -54,7 +54,7 @@ public class LeaderHand : ScriptableObject
 
     [SerializeField]
     [Header("効果")]
-    private LeaderHandEffect _leaderHandEffect;
+    private LeaderHandEffect _handEffect;
 
     [SerializeField]
     [Header("カードの画像")]

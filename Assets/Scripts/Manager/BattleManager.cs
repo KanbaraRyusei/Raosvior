@@ -25,8 +25,8 @@ public class BattleManager : MonoBehaviour
 
     //HPが0になっていたらゲームエンド
 
-    //リザーブ処理フェーズ...じゃんけんカードのストックした処理を行う(チェーンアックスのみが該当)
-    //リフレッシュ処理フェーズ...ストックした処理を行う(該当なし?)
+    //リザーブ処理フェーズ...カードをリザーブに送る
+    //リフレッシュ処理フェーズ...ストックした処理を行う
     //決着処理フェーズ...プレイヤーのライフが残っていたら、ゲームを継続する。じゃんけんカードがなかったらリザーブを手持ちに戻す
     ///ターン終了(カード選択フェーズに戻る)
 
@@ -34,7 +34,7 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField]
     [Header("手札選択フェーズ強制終了時間")]
-    float _handSelectTime = 30f;
+    int _handSelectTime = 30000;
 
     [SerializeField]
     [Header("カード選択フェーズ強制終了時間")]
@@ -137,7 +137,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private void WinForLeader()
     {
-        var loserLeader = PlayerManager.Players[1].LeaderHand.LeaderType;
+        var loserLeader = PlayerManager.Players[1].LeaderHand.Leader;
         var shaman = LeaderParameter.Shaman;
         if (loserLeader == shaman)
         {
@@ -154,8 +154,8 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     async private void DrawForLeader()
     {
-        var player0Leader = PlayerManager.Players[0].LeaderHand.LeaderType;
-        var player1Leader = PlayerManager.Players[1].LeaderHand.LeaderType;
+        var player0Leader = PlayerManager.Players[0].LeaderHand.Leader;
+        var player1Leader = PlayerManager.Players[1].LeaderHand.Leader;
         var archer = LeaderParameter.Archer;
         var shaman = LeaderParameter.Shaman;
         if (player0Leader == archer && player1Leader == shaman)
@@ -182,8 +182,8 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private void LoseForLeader()
     {
-        var player0Leader = PlayerManager.Players[0].LeaderHand.LeaderType;
-        var player1Leader = PlayerManager.Players[1].LeaderHand.LeaderType;
+        var player0Leader = PlayerManager.Players[0].LeaderHand.Leader;
+        var player1Leader = PlayerManager.Players[1].LeaderHand.Leader;
         var archer = LeaderParameter.Archer;
         var shaman = LeaderParameter.Shaman;
         if (player0Leader == shaman)
@@ -207,29 +207,35 @@ public class BattleManager : MonoBehaviour
 
     async private UniTask DelaySetHand(float delayTime)
     {
-        var isSetting = false;
-        for (float i = 0f; i < delayTime; i += Time.deltaTime)
+        foreach (var player in PlayerManager.Players)
         {
-            foreach (var player in PlayerManager.Players)
-            {
-                var isSettingLeaderHand = player.LeaderHand != null;
-                var isSettingsHand = player.PlayerHands.Count == MAX_HAND_COUNT;
-                if (isSettingLeaderHand && isSettingsHand)
-                {
-                    if (isSetting) return;
-                    isSetting = true;
-                    continue;
-                }
-                break;
-            }
-            await UniTask.NextFrame();
+            await UniTask.WaitUntil(() => player.LeaderHand != null);
+            await UniTask.WaitUntil(() => player.PlayerHands.Count == MAX_HAND_COUNT);
         }
         foreach (var player in PlayerManager.Players)
         {
             if (player.LeaderHand != null)
             {
                 var random = UnityEngine.Random.Range(0, 4);
-                player.AddLeaderHand();
+                player.AddLeaderHand(default);
+            }
+        }
+    }
+
+    async private void SetHand()
+    {
+        await UniTask.Delay(_handSelectTime);
+        foreach (var player in PlayerManager.Players)
+        {
+            if (player.LeaderHand == null)
+            {
+                var random = UnityEngine.Random.Range(0, 4);
+                player.AddLeaderHand(default);
+            }
+            if(player.PlayerHands.Count < MAX_HAND_COUNT)
+            {
+
+                player.AddHand(default);
             }
         }
     }
