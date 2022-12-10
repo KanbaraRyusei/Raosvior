@@ -5,16 +5,12 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     [SerializeField]
-    [Header("リーダー1カード")]
-    List<LeaderPlayerHand> _leaderPlayerHands1 = new List<LeaderPlayerHand>(4);
-
-    [SerializeField]
-    [Header("リーダー2カード")]
-    List<LeaderPlayerHand> _leaderPlayerHands2 = new List<LeaderPlayerHand>(4);
+    [Header("リーダーカード")]
+    List<LeaderPlayerHand> _leaderPlayerHands = new List<LeaderPlayerHand>(4);
 
     [SerializeField]
     [Header("じゃんけん1カード")]
-    List<PlayerHand> _playerRSPHands1 = new List<PlayerHand>(9);
+    List<PlayerHand> _rSPPlayerHands1 = new List<PlayerHand>(9);
 
     [SerializeField]
     [Header("じゃんけん2カード")]
@@ -23,41 +19,50 @@ public class CardManager : MonoBehaviour
     /// <summary>
     /// プレイヤーにリーダーカードを渡す関数
     /// </summary>
-    /// <param name="playerData"></param>
-    /// <param name="leader"></param>
-    public void SetLeaderHand(PlayerData playerData,LeaderParameter leader = 0)
+    public void SetLeaderHand(PlayerData player, LeaderParameter leader = 0)
+    {
+        var randomIndex = 0;
+        foreach (var hand in _leaderPlayerHands)
+        {
+            if (hand.Leader == leader)
+            {
+                player.AddLeaderHand(hand);
+            }
+        }
+        randomIndex = Random.Range(0, _leaderPlayerHands.Count);
+        player.AddLeaderHand(_leaderPlayerHands[randomIndex]);
+    }
+
+    public void SetRSPHand(PlayerData playerData, string handName = "")
     {
         var randomIndex = 0;
         if (playerData == PlayerManager.Players[0])
         {
-            foreach (var leaderHand in _leaderPlayerHands1)
+            foreach (var hand in _rSPPlayerHands1)
             {
-                if (leaderHand.Leader == leader)
+                if(hand.CardName == handName)
                 {
-                    PlayerManager.Players[0].AddLeaderHand(leaderHand);
+                    PlayerManager.Players[0].AddHand(hand);
+                    _rSPPlayerHands1.Remove(hand);
                 }
             }
-            randomIndex = Random.Range(0, _leaderPlayerHands1.Count);
-            PlayerManager.Players[0].AddLeaderHand(_leaderPlayerHands1[randomIndex]);
+            randomIndex = Random.Range(0, _rSPPlayerHands1.Count);
+            PlayerManager.Players[0].AddHand(_rSPPlayerHands1[randomIndex]);
+            _rSPPlayerHands1.Remove(_rSPPlayerHands1[randomIndex]);
         }
         else
         {
-            foreach (var leaderHand in _leaderPlayerHands2)
+            foreach (var hand in _rSPPlayerHands2)
             {
-                if (leaderHand.Leader == leader)
+                if (hand.CardName == handName)
                 {
-                    PlayerManager.Players[1].AddLeaderHand(leaderHand);
+                    PlayerManager.Players[1].AddHand(hand);
+                    _rSPPlayerHands2.Remove(hand);
                 }
             }
-            randomIndex = Random.Range(0, _leaderPlayerHands2.Count);
-            PlayerManager.Players[1].AddLeaderHand(_leaderPlayerHands2[randomIndex]);
+            randomIndex = Random.Range(0, _rSPPlayerHands2.Count);
+            PlayerManager.Players[1].AddHand(_rSPPlayerHands2[randomIndex]);
+            _rSPPlayerHands2.Remove(_rSPPlayerHands2[randomIndex]);
         }
-    }
-
-
-
-    public void SetRSPHand(PlayerData playerData)
-    {
-
     }
 }
