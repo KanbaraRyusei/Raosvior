@@ -9,11 +9,11 @@ public class CardManager : MonoBehaviour
     List<LeaderPlayerHand> _leaderPlayerHands = new List<LeaderPlayerHand>(4);
 
     [SerializeField]
-    [Header("じゃんけん1カード")]
+    [Header("プレイヤー用のじゃんけんカード")]
     List<PlayerHand> _rSPPlayerHands1 = new List<PlayerHand>(9);
 
     [SerializeField]
-    [Header("じゃんけん2カード")]
+    [Header("もう片方のプレイヤー用のじゃんけんカード")]
     List<PlayerHand> _rSPPlayerHands2 = new List<PlayerHand>(9);
 
     /// <summary>
@@ -38,16 +38,17 @@ public class CardManager : MonoBehaviour
         var randomIndex = 0;
         if (playerData == PlayerManager.Players[0])
         {
+            var player = PlayerManager.Players[0];
             foreach (var hand in _rSPPlayerHands1)
             {
                 if(hand.CardName == handName)
                 {
-                    PlayerManager.Players[0].AddHand(hand);
+                    player.AddHand(hand);
                     _rSPPlayerHands1.Remove(hand);
                 }
             }
             randomIndex = Random.Range(0, _rSPPlayerHands1.Count);
-            PlayerManager.Players[0].AddHand(_rSPPlayerHands1[randomIndex]);
+            player.AddHand(_rSPPlayerHands1[randomIndex]);
             _rSPPlayerHands1.Remove(_rSPPlayerHands1[randomIndex]);
         }
         else

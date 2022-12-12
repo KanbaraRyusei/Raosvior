@@ -72,6 +72,10 @@ public class BattleManager : MonoBehaviour
     [Header("介入処理フェーズ終了時間")]
     float _interventionTime = 20f;
 
+    [SerializeField]
+    [Header("カードマネージャー")]
+    CardManager _cardManager;
+
     const int MAX_HAND_COUNT = 5;
 
     private event Action EffectStock;
@@ -216,8 +220,11 @@ public class BattleManager : MonoBehaviour
         {
             if (player.LeaderHand != null)
             {
-                var random = UnityEngine.Random.Range(0, 4);
-                player.AddLeaderHand(default);
+                _cardManager.SetLeaderHand(player);
+            }
+            if(player.PlayerHands.Count < MAX_HAND_COUNT)
+            {
+
             }
         }
     }
