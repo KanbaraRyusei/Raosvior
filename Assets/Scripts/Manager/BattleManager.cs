@@ -38,7 +38,7 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField]
     [Header("カード選択フェーズ強制終了時間")]
-    float _cardSelectTime = 20f;
+    int _cardSelectTime = 20000;
 
     [SerializeField]
     [Header("バトル勝敗決定処理フェーズ終了時間")]
@@ -82,28 +82,41 @@ public class BattleManager : MonoBehaviour
 
     private void Awake()
     {
-        HandSelect();
+        AllPhase();
     }
 
-    /// <summary>
-    /// カードを選択
-    /// </summary>
-
-    async private void HandSelect()
+    async private void AllPhase()
     {
-        await DelaySetHand(_handSelectTime);
+        await HandSelect();
         PhaseManager.OnNextPhase();//カード選択フェーズへ
-        CardSelect();
+
+        while (true)
+        {
+            await CardSelect();
+            PhaseManager.OnNextPhase();//バトル勝敗決定処理フェーズへ
+            Battle();
+        }
     }
 
     /// <summary>
-    /// 出すカードを決める
+    /// 最初にプレイヤーがカードを選択するフェーズ用の関数
     /// </summary>
-    async private void CardSelect()
+    async private UniTask HandSelect()
     {
-        await DelaySetHand(_cardSelectTime);
-        PhaseManager.OnNextPhase();//バトル勝敗決定処理フェーズへ
-        Battle();
+        //一定時間たったらランダムでカードを付与
+        RandomSetHand();
+        //カードを選ぶまで待つ
+        await DelaySetHand(_handSelectTime);
+    }
+
+    /// <summary>
+    /// セットするカードを選択するフェーズ用の関数
+    /// </summary>
+    async private UniTask CardSelect()
+    {
+        RandomSelectRSPCard();
+        //カードをセットするまで待つ
+        await DelaySelectRSPCard();
     }
 
     /// <summary>
@@ -111,33 +124,33 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     private void Battle()
     {
-        var player1RSP = PlayerManager.Players[0].PlayerSetHand.Hand;
-        var player2RSP = PlayerManager.Players[1].PlayerSetHand.Hand;
+        var playerRSP = PlayerManager.Players[0].PlayerSetHand.Hand;
+        var anotherPlayerRSP = PlayerManager.Players[1].PlayerSetHand.Hand;
         var r = RSPParameter.Rock;
         var s = RSPParameter.Scissors;
         var p = RSPParameter.Paper;
-        var player1Win = player1RSP == r && player2RSP == s
-                      || player1RSP == s && player2RSP == p
-                      || player1RSP == p && player2RSP == r;
-        var drow = player1RSP == player2RSP;
+        var playerWin = playerRSP == r && anotherPlayerRSP == s ||
+                         playerRSP == s && anotherPlayerRSP == p ||
+                         playerRSP == p && anotherPlayerRSP == r;
+        var drow = playerRSP == anotherPlayerRSP;
 
-        if(player1Win)//プレイヤー0の勝利なら
+        if(playerWin)//プレイヤーの勝利なら
         {
-            Debug.Log("プレイヤー0の勝利");
+            Debug.Log("プレイヤーの勝利");
         }
         else if(drow)//引き分けなら
         {
             Debug.Log("引き分け");
         }
-        else//プレイヤー1の勝利なら
+        else//プレイヤーの敗北なら
         {
-            Debug.Log("プレイヤー0の敗北");
+            Debug.Log("プレイヤーの敗北");
         }
         PhaseManager.OnNextPhase();//勝者のカード効果フェーズへ
     }
 
     /// <summary>
-    /// リーダー効果発動用
+    /// リーダー効果発動用(勝ちの場合)
     /// </summary>
     private void WinForLeader()
     {
@@ -154,7 +167,7 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// リーダー効果発動用
+    /// リーダー効果発動用(引き分けの場合)
     /// </summary>
     async private void DrawForLeader()
     {
@@ -182,7 +195,7 @@ public class BattleManager : MonoBehaviour
     }
 
     /// <summary>
-    /// リーダー効果発動用
+    /// リーダー効果発動用(負けの場合)
     /// </summary>
     private void LoseForLeader()
     {
@@ -204,45 +217,42 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-
     /// <summary>
-    /// 最初の手札選択フェーズの待機用
+    /// プレイヤーが全てのカードを選ぶまで待機する関数
     /// </summary>
 
     async private UniTask DelaySetHand(float delayTime)
     {
+        //プレイヤーがカードを選ぶまで待つ
         foreach (var player in PlayerManager.Players)
         {
             await UniTask.WaitUntil(() => player.LeaderHand != null);
             await UniTask.WaitUntil(() => player.PlayerHands.Count == MAX_HAND_COUNT);
         }
+    }
+
+    /// <summary>
+    /// 一定時間経過後プレイヤーにカードがなかったら付与する関数
+    /// </summary>
+    async private void RandomSetHand()
+    {
+        //一定時間経過後
+        await UniTask.Delay(_handSelectTime);
         foreach (var player in PlayerManager.Players)
         {
+            //リーダーカードが無かったら
             if (player.LeaderHand != null)
             {
                 _cardManager.SetLeaderHand(player);
             }
-            if(player.PlayerHands.Count < MAX_HAND_COUNT)
+            //じゃんけんカードが5枚未満だったら
+            var handCount = player.PlayerHands.Count;
+            if (handCount < MAX_HAND_COUNT)
             {
-
-            }
-        }
-    }
-
-    async private void SetHand()
-    {
-        await UniTask.Delay(_handSelectTime);
-        foreach (var player in PlayerManager.Players)
-        {
-            if (player.LeaderHand == null)
-            {
-                var random = UnityEngine.Random.Range(0, 4);
-                player.AddLeaderHand(default);
-            }
-            if(player.PlayerHands.Count < MAX_HAND_COUNT)
-            {
-
-                player.AddHand(default);
+                for (int i = handCount; i < MAX_HAND_COUNT; i++)
+                {
+                    _cardManager.SetRSPHand(player);
+                }
             }
         }
     }
@@ -250,30 +260,30 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// カードの選択フェーズの待機用
     /// </summary>
-    async private UniTask DelayPlayerSetCard(float delayTime)
+    async private UniTask DelaySelectRSPCard()
     {
-        var isSetting = false;
-        for (float i = 0f; i < delayTime; i += Time.deltaTime)
-        {
-            foreach (var player in PlayerManager.Players)
-            {
-                if (player.PlayerSetHand != null)
-                {
-                    if (isSetting) return;
-                    isSetting = true;
-                    continue;
-                }
-                break;
-            }
-            await UniTask.NextFrame();
-        }
         //20秒経過時点で「技カード配置スペース」にカードがセットされていない場合
         //手札のカードをランダムに1枚選びセットする
         foreach (var player in PlayerManager.Players)
         {
-            if (player.PlayerSetHand != null)
+            await UniTask.WaitUntil(() => player.PlayerSetHand != null);
+        }
+    }
+
+    /// <summary>
+    /// 一定時間経過後プレイヤーにカードがなかったら付与する関数
+    /// </summary>
+    async private void RandomSelectRSPCard()
+    {
+        //20秒後
+        await UniTask.Delay(_cardSelectTime);
+        foreach (var player in PlayerManager.Players)
+        {
+            //カードがセットされていなかったら
+            if (player.PlayerSetHand == null)
             {
-                var random = UnityEngine.Random.Range(0, player.PlayerHands.Count);
+                var count = player.PlayerHands.Count;
+                var random = UnityEngine.Random.Range(0, count);
                 player.SetHand(player.PlayerHands[random]);
             }
         }
