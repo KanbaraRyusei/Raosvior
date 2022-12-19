@@ -95,6 +95,7 @@ public class BattleManager : MonoBehaviour
             await CardSelect();
             PhaseManager.OnNextPhase();//バトル勝敗決定処理フェーズへ
             Battle();
+            PhaseManager.OnNextPhase();//勝者のカード効果フェーズへ
         }
     }
 
@@ -144,9 +145,8 @@ public class BattleManager : MonoBehaviour
         }
         else//プレイヤーの敗北なら
         {
-            Debug.Log("プレイヤーの敗北");
+            Debug.Log("もう一人のプレイヤーの勝利");
         }
-        PhaseManager.OnNextPhase();//勝者のカード効果フェーズへ
     }
 
     /// <summary>
