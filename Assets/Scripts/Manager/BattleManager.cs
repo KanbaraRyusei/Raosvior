@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -42,11 +43,11 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField]
     [Header("バトル勝敗決定処理フェーズ終了時間")]
-    float _battleTime = 5f;
+    int _battleTime = 5000;
 
     [SerializeField]
     [Header("勝者のダメージ処理フェーズ終了時間")]
-    float _winnerDamegeProcessTime = 5f;
+    int _winnerDamegeProcessTime = 5000;
 
     [SerializeField]
     [Header("勝者のカード効果フェーズ終了時間")]
@@ -76,7 +77,16 @@ public class BattleManager : MonoBehaviour
     [Header("カードマネージャー")]
     CardManager _cardManager;
 
+    [SerializeField]
+    [Header("勝利したプレイヤー")]
+    PlayerData _winnerPlayer;
+
+    [SerializeField]
+    [Header("敗北したプレイヤー")]
+    PlayerData _loserPlayer;
+
     const int MAX_HAND_COUNT = 5;
+    const int DEFAULT_DAMEGE = 1;
 
     private event Action EffectStock;
 
@@ -94,8 +104,9 @@ public class BattleManager : MonoBehaviour
         {
             await CardSelect();
             PhaseManager.OnNextPhase();//バトル勝敗決定処理フェーズへ
-            Battle();
+            await Battle();
             PhaseManager.OnNextPhase();//勝者のカード効果フェーズへ
+            await WinnerDamageProcess();
         }
     }
 
@@ -104,10 +115,16 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     async private UniTask HandSelect()
     {
+        var cts = new CancellationTokenSource();
+        CancellationToken token = cts.Token;
+
         //一定時間たったらランダムでカードを付与
-        RandomSetHand();
+        RandomSetHand(token);
+
         //カードを選ぶまで待つ
-        await DelaySetHand(_handSelectTime);
+        await DelaySetHand();
+
+        cts.Cancel();
     }
 
     /// <summary>
@@ -115,15 +132,22 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     async private UniTask CardSelect()
     {
-        RandomSelectRSPCard();
+        var cts = new CancellationTokenSource();
+        CancellationToken token = cts.Token;
+
+        //一定時間たったらランダムでカードをセット
+        RandomSelectRSPCard(token);
+
         //カードをセットするまで待つ
         await DelaySelectRSPCard();
+
+        cts.Cancel();
     }
 
     /// <summary>
     /// バトルの勝敗を決定する
     /// </summary>
-    private void Battle()
+    async private UniTask Battle()
     {
         var playerRSP = PlayerManager.Players[0].PlayerSetHand.Hand;
         var anotherPlayerRSP = PlayerManager.Players[1].PlayerSetHand.Hand;
@@ -137,16 +161,46 @@ public class BattleManager : MonoBehaviour
 
         if(playerWin)//プレイヤーの勝利なら
         {
+            _winnerPlayer = PlayerManager.Players[0];
+            _loserPlayer = PlayerManager.Players[1];
             Debug.Log("プレイヤーの勝利");
         }
         else if(drow)//引き分けなら
         {
+            _winnerPlayer = null;
+            _loserPlayer = null;
             Debug.Log("引き分け");
         }
         else//プレイヤーの敗北なら
         {
+            _winnerPlayer = PlayerManager.Players[1];
+            _loserPlayer = PlayerManager.Players[0];
             Debug.Log("もう一人のプレイヤーの勝利");
         }
+        await UniTask.Delay(_battleTime);
+    }
+
+    /// <summary>
+    /// ダメージ処理
+    /// </summary>
+    async private UniTask WinnerDamageProcess()
+    {
+        if (_loserPlayer.LeaderHand.Leader == LeaderParameter.Shaman)
+        {
+            //チョキのカードを絞り込む
+            foreach (var RSP in _loserPlayer.PlayerHands)
+            {
+                //チョキのカードがあったら
+                if (RSP.Hand == RSPParameter.Scissors)
+                {
+                    PhaseManager.OnNextPhase(true);
+                }
+            }
+        }
+
+        _loserPlayer.ReceiveDamage(DEFAULT_DAMEGE);
+
+        await UniTask.Delay(_winnerDamegeProcessTime);
     }
 
     /// <summary>
@@ -221,7 +275,7 @@ public class BattleManager : MonoBehaviour
     /// プレイヤーが全てのカードを選ぶまで待機する関数
     /// </summary>
 
-    async private UniTask DelaySetHand(float delayTime)
+    async private UniTask DelaySetHand()
     {
         //プレイヤーがカードを選ぶまで待つ
         foreach (var player in PlayerManager.Players)
@@ -234,10 +288,11 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 一定時間経過後プレイヤーにカードがなかったら付与する関数
     /// </summary>
-    async private void RandomSetHand()
+    async private void RandomSetHand(CancellationToken token)
     {
         //一定時間経過後
-        await UniTask.Delay(_handSelectTime);
+        await UniTask.Delay(_handSelectTime, cancellationToken: token);
+
         foreach (var player in PlayerManager.Players)
         {
             //リーダーカードが無かったら
@@ -245,8 +300,10 @@ public class BattleManager : MonoBehaviour
             {
                 _cardManager.SetLeaderHand(player);
             }
+
             //じゃんけんカードが5枚未満だったら
             var handCount = player.PlayerHands.Count;
+
             if (handCount < MAX_HAND_COUNT)
             {
                 for (int i = handCount; i < MAX_HAND_COUNT; i++)
@@ -273,10 +330,10 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// 一定時間経過後プレイヤーにカードがなかったら付与する関数
     /// </summary>
-    async private void RandomSelectRSPCard()
+    async private void RandomSelectRSPCard(CancellationToken token)
     {
         //20秒後
-        await UniTask.Delay(_cardSelectTime);
+        await UniTask.Delay(_cardSelectTime, cancellationToken: token);
         foreach (var player in PlayerManager.Players)
         {
             //カードがセットされていなかったら
