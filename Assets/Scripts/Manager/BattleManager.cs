@@ -57,27 +57,27 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField]
     [Header("勝者のカード効果フェーズ終了時間")]
-    private float _winnerCardEffectTime = 5f;
+    private int _winnerCardEffectTime = 5000;
 
     [SerializeField]
     [Header("リーダーの効果フェーズ終了時間")]
-    private float _leaderEffectTime = 5f;
+    private int _leaderEffectTime = 5000;
 
     [SerializeField]
     [Header("リザーブ処理フェーズ終了時間")]
-    private float _useCardOnReserveTime = 5f;
+    private int _useCardOnReserveTime = 5000;
 
     [SerializeField]
     [Header("リフレッシュ処理フェーズ終了時間")]
-    private float _refreshTime = 5f;
+    private int _refreshTime = 5000;
 
     [SerializeField]
     [Header("決着処理フェーズ終了時間")]
-    private float _judgementTime = 5f;
+    private int _judgementTime = 5000;
 
     [SerializeField]
     [Header("介入処理フェーズ終了時間")]
-    private float _interventionTime = 20f;
+    private int _interventionTime = 2000;
 
     [SerializeField]
     [Header("カードマネージャー")]
@@ -102,7 +102,6 @@ public class BattleManager : MonoBehaviour
     private const int WIN_NUMBER = 2;
     private const int DRAW_NUMBER = 0;
 
-
     #endregion
 
     #region Events
@@ -126,8 +125,12 @@ public class BattleManager : MonoBehaviour
             await CardSelect();
             PhaseManager.OnNextPhase();//バトル勝敗決定処理フェーズへ
             await JudgmentForBattle();
-            PhaseManager.OnNextPhase();//勝者のカード効果フェーズへ
+            PhaseManager.OnNextPhase();//勝者のダメージ処理フェーズへ
             await WinnerDamageProcess();
+            PhaseManager.OnNextPhase();//勝者のカード効果処理フェーズへ
+            await WinnerCardEffect();
+            PhaseManager.OnNextPhase();//リーダーの効果処理フェーズへ
+            await LeaderEffect();
         }
     }
 
@@ -246,6 +249,8 @@ public class BattleManager : MonoBehaviour
 
     #endregion
 
+    #region Battle Method
+
     /// <summary>
     /// バトルの勝敗を決定する
     /// </summary>
@@ -276,6 +281,10 @@ public class BattleManager : MonoBehaviour
         await UniTask.Delay(_battleTime);
     }
 
+    #endregion
+
+    #region WinnerDamageProcess Method
+
     /// <summary>
     /// ダメージ処理
     /// </summary>
@@ -291,31 +300,47 @@ public class BattleManager : MonoBehaviour
                 if (RSP.Hand == RSPParameter.Scissors)
                 {
                     PhaseManager.OnNextPhase(true);
+                    //介入処理用の関数を呼び出す
+                    return;
                 }
             }
         }
-
-        _loser.ReceiveDamage(DEFAULT_DAMEGE);
+        else _loser.ReceiveDamage(DEFAULT_DAMEGE);
 
         await UniTask.Delay(_winnerDamegeProcessTime);
     }
 
-    ///// <summary>
-    ///// リーダー効果発動用(勝ちの場合)
-    ///// </summary>
-    //private void WinForLeader()
-    //{
-    //    var loserLeader = PlayerManager.Players[1].LeaderHand.Leader;
-    //    var shaman = LeaderParameter.Shaman;
-    //    if (loserLeader == shaman)
-    //    {
-    //        var isIntervetion = PlayerManager.Players[1].LeaderEffect();
-    //        if(isIntervetion)PhaseManager.OnNextPhase(true);
-    //    }
-    //    var leaderEffect = PlayerManager.Players[1].LeaderEffect();
-    //    //待機する予定
-    //    PlayerManager.Players[0].PlayerSetHand.HandEffect.Effect();
-    //}
+    #endregion
+
+    #region WinnerCardEffect Method
+
+    async private UniTask WinnerCardEffect()
+    {
+        _winner.PlayerSetHand.HandEffect.Effect();
+        await UniTask.Delay(_winnerCardEffectTime);
+    }
+
+    #endregion
+
+    #region LeaderEffect Method
+
+    /// <summary>
+    /// リーダー効果発動用(勝ちの場合)
+    /// </summary>
+    async private UniTask LeaderEffect()
+    {
+        var shaman = LeaderParameter.Shaman;
+        if (_loser.LeaderHand.Leader == shaman)
+        {
+            var isIntervetion = PlayerManager.Players[1].LeaderEffect();
+            if (isIntervetion) PhaseManager.OnNextPhase(true);
+        }
+        var leaderEffect = _winner.LeaderEffect();
+
+        await UniTask.Delay(_leaderEffectTime);
+    }
+
+    #endregion
 
     ///// <summary>
     ///// リーダー効果発動用(引き分けの場合)
