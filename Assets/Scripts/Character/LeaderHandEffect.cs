@@ -30,6 +30,14 @@ public abstract class LeaderHandEffect : MonoBehaviour
 
     #endregion
 
+    #region constants
+
+    protected RSPParameter ROCK = RSPParameter.Rock;
+    protected RSPParameter SCISSORS = RSPParameter.Scissors;
+    protected RSPParameter PAPER = RSPParameter.Paper;
+
+    #endregion
+
     #region public method
 
     /// <summary>

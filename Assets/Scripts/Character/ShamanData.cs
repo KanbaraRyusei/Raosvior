@@ -28,19 +28,11 @@ public class ShamanData : LeaderHandEffect
         var archer = LeaderParameter.Archer;
         var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
         var enemyRSP = _players[EnemyIndex].PlayerSetHand.Hand;
-        var r = RSPParameter.Rock;
-        var s = RSPParameter.Scissors;
-        var p = RSPParameter.Paper;
-        var draw = playerRSP == enemyRSP;
-        var lose =
-            //グー<パー
-            playerRSP == r && enemyRSP == p ||
-            //チョキ<グー
-            playerRSP == s && enemyRSP == r ||
-            //パー<チョキ
-            playerRSP == p && enemyRSP == s;
+
+        var value = RSPManager.Calculator(playerRSP, enemyRSP);
         //相手がアーチャーの引き分けor負けだったら
-        if (draw && enemyLeader == archer || lose)
+        var draw = value == RSPManager.DRAW && enemyLeader == archer;
+        if (draw || value == RSPManager.LOSE)
         {
             //チョキのカードを絞り込む
             foreach (var RSP in _players[PlayerIndex].PlayerHands)

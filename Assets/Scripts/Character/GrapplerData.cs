@@ -25,9 +25,7 @@ public class GrapplerData : LeaderHandEffect
         ChangePlayersIndex(player);
         var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
         var enemyRSP = _players[EnemyIndex].PlayerSetHand.Hand;
-        var r = RSPParameter.Rock;
-        var s = RSPParameter.Scissors;
-        if (playerRSP == r && enemyRSP == s)//グーで勝利したら
+        if (playerRSP == ROCK && enemyRSP == SCISSORS)//グーで勝利したら
         {
             //効果をもう一度発動
             _players[PlayerIndex].PlayerSetHand.HandEffect.Effect();

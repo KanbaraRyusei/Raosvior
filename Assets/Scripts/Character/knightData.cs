@@ -26,9 +26,7 @@ public class KnightData : LeaderHandEffect
         ChangePlayersIndex(player);
         var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
         var enemyRSP = _players[EnemyIndex].PlayerSetHand.Hand;
-        var r = RSPParameter.Rock;
-        var p = RSPParameter.Paper;
-        if (playerRSP == p && enemyRSP == r)//パーで勝利したら
+        if (playerRSP == PAPER && enemyRSP == ROCK)//パーで勝利したら
         {
             // 相手のリザーブの数だけシールドトークンを獲得
             var count = _players[EnemyIndex].PlayerReserve.Count;

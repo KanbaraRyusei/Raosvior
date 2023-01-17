@@ -25,25 +25,15 @@ public class ArcherData : LeaderHandEffect
         ChangePlayersIndex(player);
         var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
         var enemyRSP = _players[EnemyIndex].PlayerSetHand.Hand;
-        var r = RSPParameter.Rock;
-        var s = RSPParameter.Scissors;
-        var p = RSPParameter.Paper;
-        var draw = playerRSP == enemyRSP;
-        var lose =
-            //グー<パー
-            playerRSP == r && enemyRSP == p ||
-            //チョキ<グー
-            playerRSP == s && enemyRSP == r ||
-            //パー<チョキ
-            playerRSP == p && enemyRSP == s;
 
-        if (draw)//引き分けなら
+        var value = RSPManager.Calculator(playerRSP, enemyRSP);
+        if (value == RSPManager.DRAW)//引き分けなら
         {
             //エネミーに1ダメージ与える。
             _players[EnemyIndex]
                 .ReceiveDamage(ConstParameter.ONE);
         }
-        else if(lose)//負けなら
+        else if(value == RSPManager.LOSE)//負けなら
         {
             //プレイヤーがもう1ダメージを受ける。
             _players[PlayerIndex]
