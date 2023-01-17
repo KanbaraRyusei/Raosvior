@@ -97,10 +97,6 @@ public class BattleManager : MonoBehaviour
 
     private const int MAX_HAND_COUNT = 5;
     private const int DEFAULT_DAMEGE = 1;
-    private const int RSP_OFFSET = 3;
-    private const int RSP_REMAINDER = 3;
-    private const int WIN_NUMBER = 2;
-    private const int DRAW_NUMBER = 0;
 
     #endregion
 
@@ -258,15 +254,15 @@ public class BattleManager : MonoBehaviour
     {
         var clientRSP = PlayerManager.Players[0].PlayerSetHand.Hand;
         var otherRSP = PlayerManager.Players[1].PlayerSetHand.Hand;
-        var judg = (clientRSP - otherRSP + RSP_OFFSET) % RSP_REMAINDER;
+        var judg = RSPManager.Calculator(clientRSP, otherRSP);
 
-        if(judg == WIN_NUMBER)//クライアントの勝利なら
+        if(judg == RSPManager.WIN)//クライアントの勝利なら
         {
             _winner = PlayerManager.Players[0];
             _loser = PlayerManager.Players[1];
             Debug.Log("クライアントの勝利");
         }
-        else if(judg == DRAW_NUMBER)//引き分けなら
+        else if(judg == RSPManager.DRAW)//引き分けなら
         {
             _winner = null;
             _loser = null;
@@ -329,10 +325,12 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     async private UniTask LeaderEffect()
     {
+        _winner.LeaderEffect();
+        _loser.LeaderEffect();
         var shaman = LeaderParameter.Shaman;
         if (_loser.LeaderHand.Leader == shaman)
         {
-            var isIntervetion = PlayerManager.Players[1].LeaderEffect();
+            var isIntervetion = _loser.LeaderEffect();
             if (isIntervetion) PhaseManager.OnNextPhase(true);
         }
         var leaderEffect = _winner.LeaderEffect();
@@ -369,15 +367,4 @@ public class BattleManager : MonoBehaviour
     //        PlayerManager.Players[1].LeaderEffect();
     //    }
     //}
-
-    /// <summary>
-    /// 介入処理フェーズの待機用
-    /// </summary>
-    async private UniTask DelayShaman(float delayTime)
-    {
-        for (float i = 0f; i < delayTime; i += Time.deltaTime)
-        {
-            await UniTask.NextFrame();
-        }
-    }
 }
