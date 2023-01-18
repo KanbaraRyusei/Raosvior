@@ -64,6 +64,7 @@ public class PlayerData : IHandCollection, ILifeChange
     /// 上限が決まっているため、要素数を指定して少し軽くした
     /// </summary>
     private List<PlayerHand> _playerHands = new List<PlayerHand>(5);
+
     /// <summary>
     /// プレイヤーのリザーブ
     /// 上限が決まっているため、要素数を指定して少し軽くした
@@ -96,6 +97,11 @@ public class PlayerData : IHandCollection, ILifeChange
 
     #endregion
 
+    public bool LeaderEffect()
+    {
+        return _leaderHand.HandEffect.CardEffect(this);
+    }
+
     #region IHandCollection interface
 
     public void SetHand(PlayerHand playerHand)
@@ -119,6 +125,17 @@ public class PlayerData : IHandCollection, ILifeChange
     {
         _playerHands.Remove(playerHand);// 手札からカードを削除
         _playerReserve.Add(playerHand);// リザーブにカードを追加
+    }
+
+    public void SetLeaderHand(LeaderPlayerHand leader)
+    {
+        _leaderHand = leader;
+    }
+
+    public void ResetHand()
+    {
+        _playerHands = _playerReserve;
+        _playerReserve.Clear();
     }
 
     #endregion
@@ -151,16 +168,6 @@ public class PlayerData : IHandCollection, ILifeChange
     public void GetShield(int num)
     {
         _shield += num;// シールドを追加 上限がないため余計な処理はない
-    }
-
-    public void AddLeaderHand(LeaderPlayerHand leader)
-    {
-        _leaderHand = leader;
-    }
-
-    public bool LeaderEffect()
-    {
-        return _leaderHand.HandEffect.CardEffect(this);
     }
 
     #endregion
