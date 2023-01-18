@@ -10,7 +10,7 @@ public static class PhaseManager
     /// <summary>
     /// 現在のフェーズを公開するプロパティ
     /// </summary>
-    public static PhaseParameter CurrentPhasePropety { get; private set;}
+    public static PhaseParameter CurrentPhaseProperty { get; private set;}
 
     #endregion
 
@@ -35,14 +35,14 @@ public static class PhaseManager
         {
             _oldPhase = _currentPhase;// 前のフェーズを保存
             _currentPhase = PhaseParameter.CardSelect;// 最初のフェーズに戻る
-            CurrentPhasePropety = _currentPhase;// 外部に現在のフェーズを公開する
+            CurrentPhaseProperty = _currentPhase;// 外部に現在のフェーズを公開する
             return;
         }
         if(isIntervetion)// もし介入処理があったら
         {
             _oldPhase = _currentPhase;// 前のフェーズを保存
             _currentPhase = PhaseParameter.Intervention;// 介入フェーズにする
-            CurrentPhasePropety = _currentPhase;// 外部に現在のフェーズを公開する
+            CurrentPhaseProperty = _currentPhase;// 外部に現在のフェーズを公開する
             return;
         }
         if(_currentPhase == PhaseParameter.Intervention)// もし介入処理だったら
@@ -52,7 +52,7 @@ public static class PhaseManager
         }
         _oldPhase = _currentPhase;// 前のフェーズを保存
         _currentPhase++;// 現在のフェーズを次のフェーズに進める
-        CurrentPhasePropety = _currentPhase;// 外部に現在のフェーズを公開する
+        CurrentPhaseProperty = _currentPhase;// 外部に現在のフェーズを公開する
     }
 
     #endregion
