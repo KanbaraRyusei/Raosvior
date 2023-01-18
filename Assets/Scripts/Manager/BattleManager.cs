@@ -25,19 +25,41 @@ public class BattleManager : MonoBehaviour
     //勝者のダメージ処理フェーズ...ダメージ処理
     //勝者のカード効果処理フェーズ...じゃんけんカードの処理(ダメージでも回復でもなければストック)
     //キャラクターのカード効果処理フェーズ...キャラクターのカードの処理(ダメージでも回復でもなければストック)
+    //効果ストック処理フェーズ...ストックした処理を行う
 
     //HPが0になっていたらゲームエンド
+    //リザーブ処理フェーズ...使ったじゃんけんカードをリザーブに送る
+    //リフレッシュ処理フェーズ...じゃんけんカードがなかったらリザーブを手持ちに戻す
+    //決着処理フェーズ...プレイヤーのライフが残っていたら、ゲームを継続する。
 
-    //リザーブ処理フェーズ...カードをリザーブに送る
-    //リフレッシュ処理フェーズ...ストックした処理を行う
-    //決着処理フェーズ...プレイヤーのライフが残っていたら、ゲームを継続する。じゃんけんカードがなかったらリザーブを手持ちに戻す
     ///ターン終了(カード選択フェーズに戻る)
 
     //介入処理フェーズ...介入処理がある場合に
 
     #endregion
 
+    #region Public Property
+
+    /// <summary>
+    /// 現在のターン
+    /// </summary>
+    public int CurrentTurn { get; private set; }
+
+    #endregion
+    
     #region Inspector Member
+
+    [SerializeField]
+    [Header("カードマネージャー")]
+    private CardManager _cardManager;
+
+    [SerializeField]
+    [Header("勝利したプレイヤー")]
+    private PlayerData _winner;
+
+    [SerializeField]
+    [Header("敗北したプレイヤー")]
+    private PlayerData _loser;
 
     [SerializeField]
     [Header("手札選択フェーズ強制終了時間")]
@@ -79,18 +101,6 @@ public class BattleManager : MonoBehaviour
     [Header("介入処理フェーズ終了時間")]
     private int _interventionTime = 2000;
 
-    [SerializeField]
-    [Header("カードマネージャー")]
-    private CardManager _cardManager;
-
-    [SerializeField]
-    [Header("勝利したプレイヤー")]
-    private PlayerData _winner;
-
-    [SerializeField]
-    [Header("敗北したプレイヤー")]
-    private PlayerData _loser;
-
     #endregion
 
     #region Constans
@@ -102,7 +112,7 @@ public class BattleManager : MonoBehaviour
 
     #region Events
 
-    private event Action EffectStock;
+    private event Action OnStockEffect;
 
     #endregion
 
@@ -114,20 +124,31 @@ public class BattleManager : MonoBehaviour
     async private void AllPhase()
     {
         await HandSelect();
-        PhaseManager.OnNextPhase();//カード選択フェーズへ
 
         while (true)
         {
+            CurrentTurn++;
+            PhaseManager.OnNextPhase();//カード選択フェーズへ
             await CardSelect();
             PhaseManager.OnNextPhase();//バトル勝敗決定処理フェーズへ
-            await JudgmentForBattle();
+            await Battle();
             PhaseManager.OnNextPhase();//勝者のダメージ処理フェーズへ
             await WinnerDamageProcess();
             PhaseManager.OnNextPhase();//勝者のカード効果処理フェーズへ
             await WinnerCardEffect();
             PhaseManager.OnNextPhase();//リーダーの効果処理フェーズへ
-            await LeaderEffect();
+            if (await LeaderEffect()) break;
+            PhaseManager.OnNextPhase();//効果ストック処理フェーズへ
+            await StockEffect();
+            PhaseManager.OnNextPhase();//リザーブ処理フェーズへ
+            await UseCardOnReserve();
+            PhaseManager.OnNextPhase();//リフレッシュ処理フェーズへ
+            await Refresh();
+            PhaseManager.OnNextPhase();//決着処理フェーズへ
+            await Judgement();
         }
+
+        GameEnd();
     }
 
     #region HandSelect Methods
@@ -250,7 +271,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// バトルの勝敗を決定する
     /// </summary>
-    async private UniTask JudgmentForBattle()
+    async private UniTask Battle()
     {
         var clientRSP = PlayerManager.Players[0].PlayerSetHand.Hand;
         var otherRSP = PlayerManager.Players[1].PlayerSetHand.Hand;
@@ -323,7 +344,7 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// リーダー効果発動用(勝ちの場合)
     /// </summary>
-    async private UniTask LeaderEffect()
+    async private UniTask<bool> LeaderEffect()
     {
         _winner.LeaderEffect();
         _loser.LeaderEffect();
@@ -333,38 +354,97 @@ public class BattleManager : MonoBehaviour
             var isIntervetion = _loser.LeaderEffect();
             if (isIntervetion) PhaseManager.OnNextPhase(true);
         }
+        await UniTask.WaitUntil(() =>
+            PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
         var leaderEffect = _winner.LeaderEffect();
 
         await UniTask.Delay(_leaderEffectTime);
+
+        //どっちかのプレイヤーが0になったら
+        var client = PlayerManager.Players[0];
+        var other = PlayerManager.Players[1];
+        if (client.Life <= 0 || other.Life <= 0) return true;
+        return false;
     }
 
     #endregion
 
-    ///// <summary>
-    ///// リーダー効果発動用(引き分けの場合)
-    ///// </summary>
-    //async private void DrawForLeader()
-    //{
-    //    var player0Leader = PlayerManager.Players[0].LeaderHand.Leader;
-    //    var player1Leader = PlayerManager.Players[1].LeaderHand.Leader;
-    //    var archer = LeaderParameter.Archer;
-    //    var shaman = LeaderParameter.Shaman;
-    //    if (player0Leader == archer && player1Leader == shaman)
-    //    {
-    //        var isIntervetion = PlayerManager.Players[1].LeaderEffect();
-    //        PhaseManager.OnNextPhase(isIntervetion);
-    //        await DelayShaman(_interventionTime);
-    //    }
-    //    else if (player1Leader == archer && player0Leader == shaman)
-    //    {
-    //        var isIntervetion = PlayerManager.Players[0].LeaderEffect();
-    //        PhaseManager.OnNextPhase(isIntervetion);
-    //        await DelayShaman(_interventionTime);
-    //    }
-    //    else
-    //    {
-    //        PlayerManager.Players[0].LeaderEffect();
-    //        PlayerManager.Players[1].LeaderEffect();
-    //    }
-    //}
+    #region StockEffect Method
+
+    async public UniTask StockEffect()
+    {
+        OnStockEffect?.Invoke();
+        await UniTask.NextFrame();
+        await UniTask.WaitUntil(() => PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
+    }
+
+    #endregion
+
+    #region UseCardOnReserve
+
+    async private UniTask UseCardOnReserve()
+    {
+        foreach (var player in PlayerManager.Players)
+        {
+            player.SetCardOnReserve();
+        }
+        await UniTask.Delay(_useCardOnReserveTime);
+    }
+
+    #endregion
+
+    #region Refresh
+
+    async private UniTask Refresh()
+    {
+        foreach (var player in PlayerManager.Players)
+        {
+            var count = player.PlayerHands.Count;
+            if (count == 0) player.ResetHand();
+        }
+
+        await UniTask.Delay(_refreshTime);
+    }
+
+    #endregion
+
+    #region Judgement
+
+    async private UniTask Judgement()
+    {
+        _winner = null;
+        _loser = null;
+        await UniTask.Delay(_judgementTime);
+    }
+
+    #endregion
+
+    #region GameEnd Method
+
+    private void GameEnd()
+    {
+        //どっちかのプレイヤーが0になったら
+        var client = PlayerManager.Players[0];
+        var other = PlayerManager.Players[1];
+        if (client.Life > 0 && other.Life <= 0)
+        {
+            _winner = client;
+            _loser = other;
+            Debug.Log("クライアントの勝利");
+        }
+        else if(client.Life <= 0 && other.Life > 0)
+        {
+            _winner = other;
+            _loser = client;
+            Debug.Log("クライアントの敗北");
+        }
+        else
+        {
+            _winner = null;
+            _loser = null;
+            Debug.Log("引き分け");
+        }
+    }
+
+    #endregion
 }
