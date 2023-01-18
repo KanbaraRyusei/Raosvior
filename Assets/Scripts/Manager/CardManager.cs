@@ -32,11 +32,11 @@ public class CardManager : MonoBehaviour
         {
             if (hand.Leader == leader)
             {
-                player.AddLeaderHand(hand);
+                player.SetLeaderHand(hand);
             }
         }
         randomIndex = Random.Range(0, _leaderHands.Count);
-        player.AddLeaderHand(_leaderHands[randomIndex]);
+        player.SetLeaderHand(_leaderHands[randomIndex]);
     }
 
     /// <summary>
