@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,4 +26,15 @@ public interface IHandCollection
     /// </summary>
     /// <param name="playerHand"></param>
     void OnReserveHand(PlayerHand playerHand);
+
+    /// <summary>
+    /// リーダーカードをセットする関数
+    /// </summary>
+    /// <param name="leader"></param>
+    public void SetLeaderHand(LeaderPlayerHand leader);
+
+    /// <summary>
+    /// 手札を場にセットする関数
+    /// </summary>
+    public void ResetHand();
 }
