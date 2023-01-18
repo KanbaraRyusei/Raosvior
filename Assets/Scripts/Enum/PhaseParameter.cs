@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// フェーズのパラメータ
@@ -24,6 +24,9 @@ public enum PhaseParameter
 
     [Tooltip("キャラクターの効果処理フェーズ")]
     CharacterEffect,
+
+    [Tooltip("効果ストック処理フェーズ")]
+    StockEffect,
 
     [Tooltip("リザーブ処理フェーズ")]
     UseCardOnReserve,
