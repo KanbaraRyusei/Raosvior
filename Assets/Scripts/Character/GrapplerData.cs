@@ -20,7 +20,7 @@ public class GrapplerData : LeaderHandEffect
 
     #region public method
 
-    public override bool CardEffect(PlayerData player)
+    public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
         var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
@@ -30,7 +30,6 @@ public class GrapplerData : LeaderHandEffect
             //効果をもう一度発動
             _players[PlayerIndex].PlayerSetHand.HandEffect.Effect();
         }
-        return false;
     }
 
     #endregion

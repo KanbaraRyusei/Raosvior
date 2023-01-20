@@ -14,11 +14,6 @@ public class LeaderPlayerHand : ScriptableObject
     #region public property
 
     /// <summary>
-    /// カードの手の読み取り専用プロパティ
-    /// </summary>
-    public LeaderParameter Leader => _leader;
-
-    /// <summary>
     /// リーダーカードの名前の読み取り専用プロパティ
     /// </summary>
     public string CardName => _cardName;
@@ -38,10 +33,6 @@ public class LeaderPlayerHand : ScriptableObject
     #endregion
 
     #region private property
-
-    [SerializeField]
-    [Header("リーダーのジョブ")]
-    private LeaderParameter _leader = LeaderParameter.Shaman;
 
     [SerializeField]
     [Header("カード名")]

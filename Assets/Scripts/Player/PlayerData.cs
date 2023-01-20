@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// プレイヤーのデータを持つクラス
@@ -97,9 +98,9 @@ public class PlayerData : IHandCollection, ILifeChange
 
     #endregion
 
-    public bool LeaderEffect()
+    public void LeaderEffect()
     {
-        return _leaderHand.HandEffect.CardEffect(this);
+        _leaderHand.HandEffect.CardEffect(this);
     }
 
     #region IHandCollection interface
@@ -147,8 +148,14 @@ public class PlayerData : IHandCollection, ILifeChange
         _life += heal;// ライフを回復 上限がないため余計な処理はない
     }
 
-    public void ReceiveDamage(int damage)
+    async public void ReceiveDamage(int damage)
     {
+        if(_leaderHand.HandEffect.LeaderType == LeaderParameter.Shaman)
+        {
+            LeaderEffect();
+            await UniTask.WaitUntil(() =>
+                PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
+        }
         if(_shield > ConstParameter.ZERO)// シールドがあるかどうか判定
         {
             if(_shield - damage >= ConstParameter.ZERO)// シールドの数がダメージより大きかったら

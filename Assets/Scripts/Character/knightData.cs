@@ -21,7 +21,7 @@ public class KnightData : LeaderHandEffect
 
     #region public method
 
-    public override bool CardEffect(PlayerData player)
+    public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
         var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
@@ -32,7 +32,6 @@ public class KnightData : LeaderHandEffect
             var count = _players[EnemyIndex].PlayerReserve.Count;
             _players[PlayerIndex].GetShield(count);
         }
-        return false;
     }
 
     #endregion

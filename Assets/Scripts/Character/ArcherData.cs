@@ -20,7 +20,7 @@ public class ArcherData : LeaderHandEffect
 
     #region public method
 
-    public override bool CardEffect(PlayerData player)
+    public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
         var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
@@ -39,7 +39,6 @@ public class ArcherData : LeaderHandEffect
             _players[PlayerIndex]
                 .ReceiveDamage(ConstParameter.ONE);
         }
-        return false;
     }
 
     #endregion

@@ -174,8 +174,8 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     async private void RandomSetHand(CancellationToken token)
     {
-            //一定時間経過後
-            await UniTask.Delay(_handSelectTime, cancellationToken: token);
+        //一定時間経過後
+        await UniTask.Delay(_handSelectTime, cancellationToken: token);
 
         foreach (var player in PlayerManager.Players)
         {
@@ -244,6 +244,7 @@ public class BattleManager : MonoBehaviour
             //カードがセットされていなかったら
             if (player.PlayerSetHand == null)
             {
+                //ランダムでセット
                 var count = player.PlayerHands.Count;
                 var random = UnityEngine.Random.Range(0, count);
                 player.SetHand(player.PlayerHands[random]);
@@ -307,23 +308,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     async private UniTask WinnerDamageProcess()
     {
-        //敗北者のリーダーカードがシャーマンだったら
-        if (_loser.LeaderHand.Leader == LeaderParameter.Shaman)
-        {
-            //チョキのカードを絞り込む
-            foreach (var RSP in _loser.PlayerHands)
-            {
-                //チョキのカードがあったら
-                if (RSP.Hand == RSPParameter.Scissors)
-                {
-                    PhaseManager.OnNextPhase(true);
-                    //介入処理用の関数を呼び出す
-                    return;
-                }
-            }
-        }
-        else _loser.ReceiveDamage(DEFAULT_DAMEGE);
-
+        _loser.ReceiveDamage(DEFAULT_DAMEGE);
         await UniTask.Delay(_winnerDamegeProcessTime);
     }
 
@@ -342,28 +327,22 @@ public class BattleManager : MonoBehaviour
     #region LeaderEffect Method
 
     /// <summary>
-    /// リーダー効果発動用(勝ちの場合)
+    /// リーダー効果発動用
     /// </summary>
     async private UniTask<bool> LeaderEffect()
     {
         _winner.LeaderEffect();
         _loser.LeaderEffect();
-        var shaman = LeaderParameter.Shaman;
-        if (_loser.LeaderHand.Leader == shaman)
-        {
-            var isIntervetion = _loser.LeaderEffect();
-            if (isIntervetion) PhaseManager.OnNextPhase(true);
-        }
+
         await UniTask.WaitUntil(() =>
             PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
-        var leaderEffect = _winner.LeaderEffect();
-
-        await UniTask.Delay(_leaderEffectTime);
 
         //どっちかのプレイヤーが0になったら
         var client = PlayerManager.Players[0];
         var other = PlayerManager.Players[1];
         if (client.Life <= 0 || other.Life <= 0) return true;
+
+        await UniTask.Delay(_leaderEffectTime);
         return false;
     }
 

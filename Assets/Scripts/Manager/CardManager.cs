@@ -26,16 +26,15 @@ public class CardManager : MonoBehaviour
     /// /// <param name="playerData">プレイヤー</param>
     /// <param name="leader">カードの種類(nullならランダム)</param>
     public void SetLeaderHand(PlayerData player, LeaderParameter leader = 0)
-    {
-        var randomIndex = 0;
+    { 
         foreach (var hand in _leaderHands)
         {
-            if (hand.Leader == leader)
+            if (hand.HandEffect.LeaderType == leader)
             {
                 player.SetLeaderHand(hand);
             }
         }
-        randomIndex = Random.Range(0, _leaderHands.Count);
+        var randomIndex = Random.Range(0, _leaderHands.Count);
         player.SetLeaderHand(_leaderHands[randomIndex]);
     }
 

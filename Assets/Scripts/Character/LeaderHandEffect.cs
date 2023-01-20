@@ -43,7 +43,7 @@ public abstract class LeaderHandEffect : MonoBehaviour
     /// <summary>
     /// じゃんけんの勝敗がついたときに呼び出される
     /// </summary>
-    public abstract bool CardEffect(PlayerData player);
+    public abstract void CardEffect(PlayerData player);
 
     #endregion
 
