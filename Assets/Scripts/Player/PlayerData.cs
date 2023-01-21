@@ -153,6 +153,7 @@ public class PlayerData : IHandCollection, ILifeChange
         if(_leaderHand.HandEffect.LeaderType == LeaderParameter.Shaman)
         {
             LeaderEffect();
+            await UniTask.NextFrame();
             await UniTask.WaitUntil(() =>
                 PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
         }

@@ -331,18 +331,23 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     async private UniTask<bool> LeaderEffect()
     {
-        _winner.LeaderEffect();
-        _loser.LeaderEffect();
+        var winnerLeaderType = _winner.LeaderHand.HandEffect.LeaderType;
+        var loserLeaderType = _loser.LeaderHand.HandEffect.LeaderType;
+        var shaman = LeaderParameter.Shaman;
+        if (winnerLeaderType != shaman) _winner.LeaderEffect();
+        if (loserLeaderType != shaman) _loser.LeaderEffect();
+
+        await UniTask.NextFrame();
 
         await UniTask.WaitUntil(() =>
             PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
+
+        await UniTask.Delay(_leaderEffectTime);
 
         //どっちかのプレイヤーが0になったら
         var client = PlayerManager.Players[0];
         var other = PlayerManager.Players[1];
         if (client.Life <= 0 || other.Life <= 0) return true;
-
-        await UniTask.Delay(_leaderEffectTime);
         return false;
     }
 
