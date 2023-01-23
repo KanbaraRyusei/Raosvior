@@ -6,18 +6,20 @@ using UnityEngine;
 /// 炸裂する矢(グー)
 /// 勝利した時相手がシールドトークンを所持しているならさらに1ダメージを与える。
 /// </summary>
-public class RockCardExplodingArrow : HandEffect
+public class RockCardExplodingArrow : RSPHandEffect
 {
     [SerializeField]
     [Header("この効果がついているカード")]
     PlayerHand _playerHand;
 
-    IReadOnlyList<PlayerData> _players = PlayerManager.Players;
     int _player = 0;
     int _enemy = 1;
 
     public override  void Effect()
-    { 
+    {
+        ChangePlayersIndex(HandCollection);
+
+
         _players[_enemy].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
 
         //相手がシールドトークンを所持しているなら

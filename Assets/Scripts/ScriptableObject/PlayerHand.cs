@@ -29,7 +29,7 @@ public class PlayerHand : ScriptableObject
     /// <summary>
     /// カードの効果の読み取り専用プロパティ
     /// </summary>
-    public HandEffect HandEffect => _handEffect;
+    public RSPHandEffect HandEffect => _handEffect;
 
     public Image CardImage => _cardImage;
 
@@ -52,7 +52,7 @@ public class PlayerHand : ScriptableObject
 
     [SerializeField]
     [Header("効果")]
-    private HandEffect _handEffect;
+    private RSPHandEffect _handEffect;
 
     [SerializeField]
     [Header("カードの画像")]

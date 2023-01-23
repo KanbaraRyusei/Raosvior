@@ -31,10 +31,10 @@ public interface IHandCollection
     /// リーダーカードをセットする関数
     /// </summary>
     /// <param name="leader"></param>
-    public void SetLeaderHand(LeaderPlayerHand leader);
+    void SetLeaderHand(LeaderPlayerHand leader);
 
     /// <summary>
     /// 手札を場にセットする関数
     /// </summary>
-    public void ResetHand();
+    void ResetHand();
 }

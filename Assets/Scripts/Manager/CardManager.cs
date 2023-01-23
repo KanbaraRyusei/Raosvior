@@ -14,11 +14,11 @@ public class CardManager : MonoBehaviour
 
     [SerializeField]
     [Header("プレイヤー用のじゃんけんカード")]
-    List<PlayerHand> _rSPHands = new List<PlayerHand>(9);
+    List<PlayerHand> _CliantRSPHands = new List<PlayerHand>(9);
 
     [SerializeField]
     [Header("もう片方のプレイヤー用のじゃんけんカード")]
-    List<PlayerHand> _anotherRSPHands = new List<PlayerHand>(9);
+    List<PlayerHand> _otherRSPHands = new List<PlayerHand>(9);
 
     /// <summary>
     /// プレイヤーにリーダーカードを渡す関数
@@ -31,10 +31,12 @@ public class CardManager : MonoBehaviour
         {
             if (hand.HandEffect.LeaderType == leader)
             {
+                hand.HandEffect.SetPlayerData(player);
                 player.SetLeaderHand(hand);
             }
         }
         var randomIndex = Random.Range(0, _leaderHands.Count);
+        _leaderHands[randomIndex].HandEffect.SetPlayerData(player);
         player.SetLeaderHand(_leaderHands[randomIndex]);
     }
 
@@ -49,31 +51,32 @@ public class CardManager : MonoBehaviour
         if (playerData == PlayerManager.Players[0])
         {
             var player = PlayerManager.Players[0];
-            foreach (var hand in _rSPHands)
+            foreach (var hand in _CliantRSPHands)
             {
                 if(hand.CardName == handName)
                 {
+                    hand.HandEffect.SetPlayerData(playerData);
                     player.AddHand(hand);
-                    _rSPHands.Remove(hand);
+                    _CliantRSPHands.Remove(hand);
                 }
             }
-            randomIndex = Random.Range(0, _rSPHands.Count);
-            player.AddHand(_rSPHands[randomIndex]);
-            _rSPHands.Remove(_rSPHands[randomIndex]);
+            randomIndex = Random.Range(0, _CliantRSPHands.Count);
+            player.AddHand(_CliantRSPHands[randomIndex]);
+            _CliantRSPHands.Remove(_CliantRSPHands[randomIndex]);
         }
         else
         {
-            foreach (var hand in _anotherRSPHands)
+            foreach (var hand in _otherRSPHands)
             {
                 if (hand.CardName == handName)
                 {
                     PlayerManager.Players[1].AddHand(hand);
-                    _anotherRSPHands.Remove(hand);
+                    _otherRSPHands.Remove(hand);
                 }
             }
-            randomIndex = Random.Range(0, _anotherRSPHands.Count);
-            PlayerManager.Players[1].AddHand(_anotherRSPHands[randomIndex]);
-            _anotherRSPHands.Remove(_anotherRSPHands[randomIndex]);
+            randomIndex = Random.Range(0, _otherRSPHands.Count);
+            PlayerManager.Players[1].AddHand(_otherRSPHands[randomIndex]);
+            _otherRSPHands.Remove(_otherRSPHands[randomIndex]);
         }
     }
 
@@ -83,31 +86,31 @@ public class CardManager : MonoBehaviour
         if (playerData == PlayerManager.Players[0])
         {
             var player = PlayerManager.Players[0];
-            foreach (var hand in _rSPHands)
+            foreach (var hand in _CliantRSPHands)
             {
                 if (hand.CardName == handName)
                 {
                     player.AddHand(hand);
-                    _rSPHands.Remove(hand);
+                    _CliantRSPHands.Remove(hand);
                 }
             }
-            randomIndex = Random.Range(0, _rSPHands.Count);
-            player.AddHand(_rSPHands[randomIndex]);
-            _rSPHands.Remove(_rSPHands[randomIndex]);
+            randomIndex = Random.Range(0, _CliantRSPHands.Count);
+            player.AddHand(_CliantRSPHands[randomIndex]);
+            _CliantRSPHands.Remove(_CliantRSPHands[randomIndex]);
         }
         else
         {
-            foreach (var hand in _anotherRSPHands)
+            foreach (var hand in _otherRSPHands)
             {
                 if (hand.CardName == handName)
                 {
                     PlayerManager.Players[1].AddHand(hand);
-                    _anotherRSPHands.Remove(hand);
+                    _otherRSPHands.Remove(hand);
                 }
             }
-            randomIndex = Random.Range(0, _anotherRSPHands.Count);
-            PlayerManager.Players[1].AddHand(_anotherRSPHands[randomIndex]);
-            _anotherRSPHands.Remove(_anotherRSPHands[randomIndex]);
+            randomIndex = Random.Range(0, _otherRSPHands.Count);
+            PlayerManager.Players[1].AddHand(_otherRSPHands[randomIndex]);
+            _otherRSPHands.Remove(_otherRSPHands[randomIndex]);
         }
     }
 }

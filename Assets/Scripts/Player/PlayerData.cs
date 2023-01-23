@@ -5,9 +5,9 @@ using Cysharp.Threading.Tasks;
 /// <summary>
 /// プレイヤーのデータを持つクラス
 /// </summary>
-public class PlayerData : IHandCollection, ILifeChange
+public class PlayerData : IHandCollection, ILifeChange,IUseHand,IPlayerParameter
 {
-    #region public property
+    #region public property (IPlayerParameter interface)
 
     /// <summary>
     /// プレイヤーのライフの読み取り専用プロパティ
@@ -98,10 +98,14 @@ public class PlayerData : IHandCollection, ILifeChange
 
     #endregion
 
+    #region IUsehand interface
+
     public void LeaderEffect()
     {
         _leaderHand.HandEffect.CardEffect(this);
     }
+
+    #endregion
 
     #region IHandCollection interface
 

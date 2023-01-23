@@ -320,6 +320,8 @@ public class BattleManager : MonoBehaviour
     {
         _winner.PlayerSetHand.HandEffect.Effect();
         await UniTask.Delay(_winnerCardEffectTime);
+        await UniTask.WaitUntil(() =>
+            PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
     }
 
     #endregion
@@ -337,12 +339,9 @@ public class BattleManager : MonoBehaviour
         if (winnerLeaderType != shaman) _winner.LeaderEffect();
         if (loserLeaderType != shaman) _loser.LeaderEffect();
 
-        await UniTask.NextFrame();
-
+        await UniTask.Delay(_leaderEffectTime);
         await UniTask.WaitUntil(() =>
             PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
-
-        await UniTask.Delay(_leaderEffectTime);
 
         //どっちかのプレイヤーが0になったら
         var client = PlayerManager.Players[0];

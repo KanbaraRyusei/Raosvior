@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// リーダーのデータの基底クラス
+/// ハンドの基底クラス
 /// </summary>
-public abstract class LeaderHandEffect : MonoBehaviour
+public abstract class HandEffect : MonoBehaviour
 {
-    #region public propterty
-
-    public LeaderParameter LeaderType { get; protected set; }
-
-    #endregion
-
     #region protected property
 
     // プレイヤーを参照するList用のインデックス
     protected int PlayerIndex { get; private set; }
     protected int EnemyIndex { get; private set; }
+
+    protected IHandCollection HandCollection { get; private set; }
+    protected ILifeChange LifeChange { get; private set; }
 
     #endregion
 
@@ -27,23 +24,17 @@ public abstract class LeaderHandEffect : MonoBehaviour
     /// プレイヤーを参照するList
     /// </summary>
     protected IReadOnlyList<PlayerData> _players = PlayerManager.Players;
+    protected IReadOnlyList<IHandCollection> _handCollections = PlayerManager.HandCollections;
+    protected IReadOnlyList<ILifeChange> _lifeChanges = PlayerManager.LifeChanges;
 
     #endregion
 
-    #region constants
+    #region
 
-    protected RSPParameter ROCK = RSPParameter.Rock;
-    protected RSPParameter SCISSORS = RSPParameter.Scissors;
-    protected RSPParameter PAPER = RSPParameter.Paper;
-
-    #endregion
-
-    #region public method
-
-    /// <summary>
-    /// じゃんけんの勝敗がついたときに呼び出される
-    /// </summary>
-    public abstract void CardEffect(PlayerData player);
+    public void SetPlayerData(PlayerData playerData)
+    {
+        LifeChange = playerData;
+    }
 
     #endregion
 
@@ -52,9 +43,9 @@ public abstract class LeaderHandEffect : MonoBehaviour
     /// <summary>
     /// プレイヤーを切り替えるメソッド
     /// </summary>
-    protected void ChangePlayersIndex(PlayerData player)
+    protected void ChangePlayersIndex(IHandCollection player)
     {
-        if(_players[ConstParameter.ZERO] == player)
+        if (_handCollections[ConstParameter.ZERO] == player)
         {
             PlayerIndex = ConstParameter.ZERO;
             EnemyIndex = ConstParameter.ONE;
@@ -63,7 +54,7 @@ public abstract class LeaderHandEffect : MonoBehaviour
         {
             PlayerIndex = ConstParameter.ONE;
             EnemyIndex = ConstParameter.ZERO;
-        }     
+        }
     }
 
     #endregion
