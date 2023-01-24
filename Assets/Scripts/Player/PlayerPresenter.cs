@@ -10,7 +10,7 @@ public class PlayerPresenter : MonoBehaviour
 
     private void Awake()
     {
-        _playerData = PlayerManager.Players[0];
+        //_playerData = PlayerManager.Players[0];
     }
 
     private void Start()

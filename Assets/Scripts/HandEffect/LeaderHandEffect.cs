@@ -7,12 +7,6 @@ using UnityEngine;
 /// </summary>
 public abstract class LeaderHandEffect : HandEffect
 {
-    #region public propterty
-
-    public LeaderParameter LeaderType { get; protected set; }
-
-    #endregion
-
     #region constants
 
     protected RSPParameter ROCK = RSPParameter.Rock;

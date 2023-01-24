@@ -16,17 +16,13 @@ public class PaperCardDrainShield : RSPHandEffect
     [Header("この効果がついているカード")]
     PlayerHand _playerHand;
 
-    int _playerIndex = 0;
-    int _enemyIndex = 1;
     int _addShild = 0;
-
 
     public override void Effect()
     {
-        ChangePlayersIndex(HandCollection);
+        ChangePlayersIndex(Player);
 
-
-        _players[_enemyIndex].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
+        LifeChanges[EnemyIndex].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
 
         //相手のカードを自分のシールドトークンにしたいので
         //ここで相手の手札を選ぶ

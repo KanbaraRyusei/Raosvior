@@ -15,13 +15,12 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
     [Header("この効果がついているカード")]
     PlayerHand _playerHand;
 
-    int _player = 0;
-    int _enemy = 1;
+
     int _addDamege = 0;
 
     public override void Effect()
     {
-        ChangePlayersIndex(HandCollection);
+        ChangePlayersIndex(Player);
 
 
         //自分のシールドを破壊する枚数を決めれるようにする

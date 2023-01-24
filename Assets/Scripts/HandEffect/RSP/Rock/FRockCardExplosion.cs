@@ -12,21 +12,17 @@ public class FRockCardExplosion : RSPHandEffect
     [Header("この効果がついているカード")]
     PlayerHand _playerHand;
 
-    int _playerIndex = 0;
-    int _enemyIndex = 1;
-
     public override void Effect()
     {
-        ChangePlayersIndex(HandCollection);
+        ChangePlayersIndex(Player);
 
-
-        _players[_enemyIndex].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
+        LifeChanges[EnemyIndex].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
         //自分のリザーフにカードが3枚以上あれば
-        if (_players[_playerIndex].PlayerReserve.Count >= ConstParameter.THREE)
+        if (PlayerParameters[PlayerIndex].PlayerReserve.Count >= ConstParameter.THREE)
         {
             //さらに2ダメージを与える。
-            _players[_enemyIndex].ReceiveDamage(ConstParameter.TWO);
+            LifeChanges[EnemyIndex].ReceiveDamage(ConstParameter.TWO);
         }
-        _players[_playerIndex].OnReserveHand(_playerHand);//このカードを捨てる  
+        HandCollections[PlayerIndex].OnReserveHand(_playerHand);//このカードを捨てる  
     }
 }

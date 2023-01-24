@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ハンドの基底クラス
+/// 全てのハンドの効果の基底クラス
 /// </summary>
 public abstract class HandEffect : MonoBehaviour
 {
@@ -13,19 +13,17 @@ public abstract class HandEffect : MonoBehaviour
     protected int PlayerIndex { get; private set; }
     protected int EnemyIndex { get; private set; }
 
-    protected IHandCollection HandCollection { get; private set; }
-    protected ILifeChange LifeChange { get; private set; }
+    protected IPlayerParameter Player { get; private set; }
 
     #endregion
 
     #region protected member
 
-    /// <summary>
-    /// プレイヤーを参照するList
-    /// </summary>
-    protected IReadOnlyList<PlayerData> _players = PlayerManager.Players;
-    protected IReadOnlyList<IHandCollection> _handCollections = PlayerManager.HandCollections;
-    protected IReadOnlyList<ILifeChange> _lifeChanges = PlayerManager.LifeChanges;
+    // プレイヤーのインターフェースをを参照するList
+    protected IReadOnlyList<IPlayerParameter> PlayerParameters => PlayerManager.PlayerParameters;
+    protected IReadOnlyList<IUseHand> UseHands => PlayerManager.UseHands;
+    protected IReadOnlyList<IHandCollection> HandCollections => PlayerManager.HandCollections;
+    protected IReadOnlyList<ILifeChange> LifeChanges => PlayerManager.LifeChanges;
 
     #endregion
 
@@ -33,7 +31,7 @@ public abstract class HandEffect : MonoBehaviour
 
     public void SetPlayerData(PlayerData playerData)
     {
-        LifeChange = playerData;
+        Player = playerData;
     }
 
     #endregion
@@ -43,17 +41,17 @@ public abstract class HandEffect : MonoBehaviour
     /// <summary>
     /// プレイヤーを切り替えるメソッド
     /// </summary>
-    protected void ChangePlayersIndex(IHandCollection player)
+    protected void ChangePlayersIndex(IPlayerParameter player)
     {
-        if (_handCollections[ConstParameter.ZERO] == player)
+        if (PlayerParameters[0] == player)
         {
-            PlayerIndex = ConstParameter.ZERO;
-            EnemyIndex = ConstParameter.ONE;
+            PlayerIndex = 0;
+            EnemyIndex = 1;
         }
         else
         {
-            PlayerIndex = ConstParameter.ONE;
-            EnemyIndex = ConstParameter.ZERO;
+            PlayerIndex = 1;
+            EnemyIndex = 0;
         }
     }
 

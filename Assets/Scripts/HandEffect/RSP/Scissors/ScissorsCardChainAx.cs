@@ -9,16 +9,11 @@ using UnityEngine;
 /// </summary>
 public class ScissorsCardChainAx : RSPHandEffect
 {
-    [SerializeField]
-    [Header("この効果がついているカード")]
-    PlayerHand _playerHand;
-
-    int _playerIndex = 0;
-    int _enemyIndex = 1;
-
     public override void Effect()
     {
+        ChangePlayersIndex(Player);
         //このカードを手札に戻すのでカードを捨てるか選択できるようにする
         PhaseManager.OnNextPhase(true);
+        
     }
 }

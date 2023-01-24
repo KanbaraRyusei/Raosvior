@@ -9,26 +9,17 @@ using UnityEngine;
 /// </summary>
 public class GrapplerData : LeaderHandEffect
 {
-    #region unity method
-
-    private void Awake()
-    {
-        LeaderType = LeaderParameter.Grappler;
-    }
-
-    #endregion
-
     #region public method
 
     public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
-        var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
-        var enemyRSP = _players[EnemyIndex].PlayerSetHand.Hand;
+        var playerRSP = PlayerParameters[PlayerIndex].PlayerSetHand.Hand;
+        var enemyRSP = PlayerParameters[EnemyIndex].PlayerSetHand.Hand;
         if (playerRSP == ROCK && enemyRSP == SCISSORS)//グーで勝利したら
         {
             //効果をもう一度発動
-            _players[PlayerIndex].PlayerSetHand.HandEffect.Effect();
+            PlayerParameters[PlayerIndex].PlayerSetHand.HandEffect.Effect();
         }
     }
 

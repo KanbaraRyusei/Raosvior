@@ -12,24 +12,21 @@ public class RockCardExplodingArrow : RSPHandEffect
     [Header("この効果がついているカード")]
     PlayerHand _playerHand;
 
-    int _player = 0;
-    int _enemy = 1;
-
     public override  void Effect()
     {
-        ChangePlayersIndex(HandCollection);
+        ChangePlayersIndex(Player);
 
 
-        _players[_enemy].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
+        LifeChanges[EnemyIndex].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
 
         //相手がシールドトークンを所持しているなら
-        if (_players[_enemy].Shield > ConstParameter.ZERO)
+        if (PlayerParameters[EnemyIndex].Shield > ConstParameter.ZERO)
         {
             //さらに1ダメージを与える
-            _players[_enemy].ReceiveDamage(ConstParameter.ONE);
+            LifeChanges[EnemyIndex].ReceiveDamage(ConstParameter.ONE);
         }
 
-        _players[_player].OnReserveHand(_playerHand);//このカードを捨てる
+        HandCollections[PlayerIndex].OnReserveHand(_playerHand);//このカードを捨てる
         PhaseManager.OnNextPhase();
     }
 }

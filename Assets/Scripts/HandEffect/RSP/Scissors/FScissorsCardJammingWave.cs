@@ -12,17 +12,14 @@ public class FScissorsCardJammingWave : RSPHandEffect
     [Header("この効果がついているカード")]
     PlayerHand _playerHand;
 
-    int _playerIndex = 0;
-    int _enemyIndex = 1;
-
     public override void Effect()
     {
-        ChangePlayersIndex(HandCollection);
+        ChangePlayersIndex(Player);
 
-        var allShield = _players[_enemyIndex].Shield;
-        _players[_enemyIndex].GetShield(-allShield);//相手のシールドを全て破壊
-        _players[_enemyIndex].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
-        _players[_playerIndex].OnReserveHand(_playerHand);//このカードを捨てる  
+        var allShield = PlayerParameters[EnemyIndex].Shield;
+        LifeChanges[EnemyIndex].GetShield(-allShield);//相手のシールドを全て破壊
+        LifeChanges[EnemyIndex].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
+        HandCollections[PlayerIndex].OnReserveHand(_playerHand);//このカードを捨てる  
         PhaseManager.OnNextPhase();
     }
 }

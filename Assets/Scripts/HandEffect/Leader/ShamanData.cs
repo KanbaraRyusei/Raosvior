@@ -10,32 +10,22 @@ using UnityEngine;
 /// </summary>
 public class ShamanData : LeaderHandEffect
 {
-    #region unity method
-
-    private void Awake()
-    {
-        LeaderType = LeaderParameter.Shaman;
-    }
-
-    #endregion
-
     #region public method
 
     public override void CardEffect(PlayerData player)
     {
         ChangePlayersIndex(player);
-        var enemyLeader = _players[EnemyIndex].LeaderHand.HandEffect.LeaderType;
-        var archer = LeaderParameter.Archer;
-        var playerRSP = _players[PlayerIndex].PlayerSetHand.Hand;
-        var enemyRSP = _players[EnemyIndex].PlayerSetHand.Hand;
+        var enemyLeader = PlayerParameters[EnemyIndex].LeaderHand.HandEffect.GetType();
+        var playerRSP = PlayerParameters[PlayerIndex].PlayerSetHand.Hand;
+        var enemyRSP = PlayerParameters[EnemyIndex].PlayerSetHand.Hand;
 
         var value = RSPManager.Calculator(playerRSP, enemyRSP);
         //相手がアーチャーの引き分けor負けだったら
-        var draw = value == RSPManager.DRAW && enemyLeader == archer;
+        var draw = value == RSPManager.DRAW && enemyLeader == typeof(ArcherData);
         if (draw || value == RSPManager.LOSE)
         {
             //チョキのカードを絞り込む
-            foreach (var RSP in _players[PlayerIndex].PlayerHands)
+            foreach (var RSP in PlayerParameters[PlayerIndex].PlayerHands)
             {
                 //チョキのカードがあったら
                 if (RSP.Hand == RSPParameter.Scissors)

@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 /// <summary>
 /// プレイヤーのデータを持つクラス
 /// </summary>
-public class PlayerData : IHandCollection, ILifeChange,IUseHand,IPlayerParameter
+public class PlayerData : IPlayerParameter,IUseHand,IHandCollection, ILifeChange
 {
     #region public property (IPlayerParameter interface)
 
@@ -154,7 +154,7 @@ public class PlayerData : IHandCollection, ILifeChange,IUseHand,IPlayerParameter
 
     async public void ReceiveDamage(int damage)
     {
-        if(_leaderHand.HandEffect.LeaderType == LeaderParameter.Shaman)
+        if(_leaderHand.HandEffect.GetType() == typeof(ShamanData))
         {
             LeaderEffect();
             await UniTask.NextFrame();
