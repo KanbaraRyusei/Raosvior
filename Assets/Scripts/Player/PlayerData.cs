@@ -77,6 +77,8 @@ public class PlayerData : IPlayerParameter,IUseHand,IHandCollection, ILifeChange
     /// </summary>
     private PlayerHand _playerSetHand;
 
+    private PlayerInterface _playerInterface;
+
     #endregion
 
     #region constructor
@@ -102,7 +104,13 @@ public class PlayerData : IPlayerParameter,IUseHand,IHandCollection, ILifeChange
 
     public void LeaderEffect()
     {
-        _leaderHand.HandEffect.CardEffect(this);
+        if(_playerInterface == null)
+        {
+            var playerInterface = new PlayerInterface();
+            playerInterface.SetInterface(this);
+            _playerInterface = playerInterface;
+        }
+        _leaderHand.HandEffect.CardEffect(_playerInterface);
     }
 
     #endregion
@@ -152,7 +160,7 @@ public class PlayerData : IPlayerParameter,IUseHand,IHandCollection, ILifeChange
         _life += heal;// ライフを回復 上限がないため余計な処理はない
     }
 
-    async public void ReceiveDamage(int damage)
+    async public void ReceiveDamage(int damage = 1)
     {
         if(_leaderHand.HandEffect.GetType() == typeof(ShamanData))
         {

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -8,25 +9,16 @@ using UnityEngine;
 /// </summary>
 public class RockCardExplodingArrow : RSPHandEffect
 {
-    [SerializeField]
-    [Header("この効果がついているカード")]
-    PlayerHand _playerHand;
-
-    public override  void Effect()
+    async public override UniTask Effect()
     {
-        ChangePlayersIndex(Player);
-
-
-        LifeChanges[EnemyIndex].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
+        ChangePlayersIndex(Player); 
 
         //相手がシールドトークンを所持しているなら
-        if (PlayerParameters[EnemyIndex].Shield > ConstParameter.ZERO)
+        if (Players[EnemyIndex].PlayerParameter.Shield > 0)
         {
             //さらに1ダメージを与える
-            LifeChanges[EnemyIndex].ReceiveDamage(ConstParameter.ONE);
+            Players[EnemyIndex].LifeChange.ReceiveDamage();
         }
-
-        HandCollections[PlayerIndex].OnReserveHand(_playerHand);//このカードを捨てる
-        PhaseManager.OnNextPhase();
+        await UniTask.NextFrame();
     }
 }

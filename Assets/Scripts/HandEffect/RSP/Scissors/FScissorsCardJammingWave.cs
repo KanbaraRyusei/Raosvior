@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -8,18 +9,11 @@ using UnityEngine;
 /// </summary>
 public class FScissorsCardJammingWave : RSPHandEffect
 {
-    [SerializeField]
-    [Header("この効果がついているカード")]
-    PlayerHand _playerHand;
-
-    public override void Effect()
+    async public override UniTask Effect()
     {
         ChangePlayersIndex(Player);
-
-        var allShield = PlayerParameters[EnemyIndex].Shield;
-        LifeChanges[EnemyIndex].GetShield(-allShield);//相手のシールドを全て破壊
-        LifeChanges[EnemyIndex].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
-        HandCollections[PlayerIndex].OnReserveHand(_playerHand);//このカードを捨てる  
-        PhaseManager.OnNextPhase();
+        var allShield = Players[EnemyIndex].PlayerParameter.Shield;
+        Players[EnemyIndex].LifeChange.GetShield(-allShield);//相手のシールドを全て破壊
+        await UniTask.NextFrame();
     }
 }

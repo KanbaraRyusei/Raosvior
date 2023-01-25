@@ -13,25 +13,22 @@ public abstract class HandEffect : MonoBehaviour
     protected int PlayerIndex { get; private set; }
     protected int EnemyIndex { get; private set; }
 
-    protected IPlayerParameter Player { get; private set; }
+    protected PlayerInterface Player { get; private set; }
 
     #endregion
 
     #region protected member
 
     // プレイヤーのインターフェースをを参照するList
-    protected IReadOnlyList<IPlayerParameter> PlayerParameters => PlayerManager.PlayerParameters;
-    protected IReadOnlyList<IUseHand> UseHands => PlayerManager.UseHands;
-    protected IReadOnlyList<IHandCollection> HandCollections => PlayerManager.HandCollections;
-    protected IReadOnlyList<ILifeChange> LifeChanges => PlayerManager.LifeChanges;
+    protected IReadOnlyList<PlayerInterface> Players => PlayerManager.Players;
 
     #endregion
 
     #region
 
-    public void SetPlayerData(PlayerData playerData)
+    public void SetPlayerData(PlayerInterface player)
     {
-        Player = playerData;
+        Player = player;
     }
 
     #endregion
@@ -41,9 +38,9 @@ public abstract class HandEffect : MonoBehaviour
     /// <summary>
     /// プレイヤーを切り替えるメソッド
     /// </summary>
-    protected void ChangePlayersIndex(IPlayerParameter player)
+    protected void ChangePlayersIndex(PlayerInterface player)
     {
-        if (PlayerParameters[0] == player)
+        if (Players[0].HandCollection == player)
         {
             PlayerIndex = 0;
             EnemyIndex = 1;

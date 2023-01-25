@@ -11,110 +11,113 @@ using UnityEngine;
 /// </summary>
 public class BattleManager : MonoBehaviour
 {
-    //#region Memo
+    #region Memo
 
-    ////手札選択フェーズ(試合開始前)...キャラクターとじゃんけんのカードを選択
+    //手札選択フェーズ(試合開始前)...キャラクターとじゃんけんのカードを選択
 
-    /////ターン開始///  
-    ////カード選択フェーズ(メインフェーズ)...じゃんけんカードの選択、リザーブのチェック、リーダー効果確認
+    ///ターン開始///  
+    //カード選択フェーズ(メインフェーズ)...じゃんけんカードの選択、リザーブのチェック、リーダー効果確認
 
-    ////20秒経過したらじゃんけんカードをセット
-    ////待機
+    //20秒経過したらじゃんけんカードをセット
+    //待機
 
-    ////バトル勝敗決定処理フェーズ(バトルフェーズ)...勝敗を決める
-    ////勝者のダメージ処理フェーズ...ダメージ処理
-    ////勝者のカード効果処理フェーズ...じゃんけんカードの処理(ダメージでも回復でもなければストック)
-    ////キャラクターのカード効果処理フェーズ...キャラクターのカードの処理(ダメージでも回復でもなければストック)
-    ////効果ストック処理フェーズ...ストックした処理を行う
+    //バトル勝敗決定処理フェーズ(バトルフェーズ)...勝敗を決める
+    //勝者のダメージ処理フェーズ...ダメージ処理
+    //勝者のカード効果処理フェーズ...じゃんけんカードの処理(ダメージでも回復でもなければストック)
+    //キャラクターのカード効果処理フェーズ...キャラクターのカードの処理(ダメージでも回復でもなければストック)
+    //効果ストック処理フェーズ...ストックした処理を行う
 
-    ////HPが0になっていたらゲームエンド
-    ////リザーブ処理フェーズ...使ったじゃんけんカードをリザーブに送る
-    ////リフレッシュ処理フェーズ...じゃんけんカードがなかったらリザーブを手持ちに戻す
-    ////決着処理フェーズ...プレイヤーのライフが残っていたら、ゲームを継続する。
+    //HPが0になっていたらゲームエンド
+    //リザーブ処理フェーズ...使ったじゃんけんカードをリザーブに送る
+    //リフレッシュ処理フェーズ...じゃんけんカードがなかったらリザーブを手持ちに戻す
+    //決着処理フェーズ...プレイヤーのライフが残っていたら、ゲームを継続する。
 
-    /////ターン終了(カード選択フェーズに戻る)
+    ///ターン終了(カード選択フェーズに戻る)
 
-    ////介入処理フェーズ...介入処理がある場合に
+    //介入処理フェーズ...介入処理がある場合に
 
-    //#endregion
+    #endregion
 
-    //#region Public Property
+    #region Public Property
 
-    ///// <summary>
-    ///// 現在のターン
-    ///// </summary>
-    //public int CurrentTurn { get; private set; }
+    /// <summary>
+    /// 現在のターン
+    /// </summary>
+    public int CurrentTurn { get; private set; }
 
-    //#endregion
-    
-    //#region Inspector Member
+    #endregion
 
-    //[SerializeField]
-    //[Header("カードマネージャー")]
-    //private CardManager _cardManager;
+    #region Inspector Member
 
-    //[SerializeField]
-    //[Header("勝利したプレイヤー")]
-    //private PlayerData _winner;
+    [SerializeField]
+    [Header("カードマネージャー")]
+    private CardManager _cardManager;
 
-    //[SerializeField]
-    //[Header("敗北したプレイヤー")]
-    //private PlayerData _loser;
+    [SerializeField]
+    [Header("勝利したプレイヤー")]
+    private PlayerInterface _winner;
 
-    //[SerializeField]
-    //[Header("手札選択フェーズ強制終了時間")]
-    //private int _handSelectTime = 30000;
+    [SerializeField]
+    [Header("敗北したプレイヤー")]
+    private PlayerInterface _loser;
 
-    //[SerializeField]
-    //[Header("カード選択フェーズ強制終了時間")]
-    //private int _cardSelectTime = 20000;
+    [SerializeField]
+    [Header("手札選択フェーズ強制終了時間")]
+    private int _handSelectTime = 30000;
 
-    //[SerializeField]
-    //[Header("バトル勝敗決定処理フェーズ終了時間")]
-    //private int _battleTime = 5000;
+    [SerializeField]
+    [Header("カード選択フェーズ強制終了時間")]
+    private int _cardSelectTime = 20000;
 
-    //[SerializeField]
-    //[Header("勝者のダメージ処理フェーズ終了時間")]
-    //private int _winnerDamegeProcessTime = 5000;
+    [SerializeField]
+    [Header("バトル勝敗決定処理フェーズ終了時間")]
+    private int _battleTime = 5000;
 
-    //[SerializeField]
-    //[Header("勝者のカード効果フェーズ終了時間")]
-    //private int _winnerCardEffectTime = 5000;
+    [SerializeField]
+    [Header("勝者のダメージ処理フェーズ終了時間")]
+    private int _winnerDamegeProcessTime = 5000;
 
-    //[SerializeField]
-    //[Header("リーダーの効果フェーズ終了時間")]
-    //private int _leaderEffectTime = 5000;
+    [SerializeField]
+    [Header("勝者のカード効果フェーズ終了時間")]
+    private int _winnerCardEffectTime = 5000;
 
-    //[SerializeField]
-    //[Header("リザーブ処理フェーズ終了時間")]
-    //private int _useCardOnReserveTime = 5000;
+    [SerializeField]
+    [Header("リーダーの効果フェーズ終了時間")]
+    private int _leaderEffectTime = 5000;
 
-    //[SerializeField]
-    //[Header("リフレッシュ処理フェーズ終了時間")]
-    //private int _refreshTime = 5000;
+    [Header("効果ストック処理フェーズ終了時間")]
+    private int _stockEffectTime = 5000;
 
-    //[SerializeField]
-    //[Header("決着処理フェーズ終了時間")]
-    //private int _judgementTime = 5000;
+    [SerializeField]
+    [Header("リザーブ処理フェーズ終了時間")]
+    private int _useCardOnReserveTime = 5000;
 
-    //[SerializeField]
-    //[Header("介入処理フェーズ終了時間")]
-    //private int _interventionTime = 2000;
+    [SerializeField]
+    [Header("リフレッシュ処理フェーズ終了時間")]
+    private int _refreshTime = 5000;
 
-    //#endregion
+    [SerializeField]
+    [Header("決着処理フェーズ終了時間")]
+    private int _judgementTime = 5000;
 
-    //#region Constans
+    [SerializeField]
+    [Header("介入処理フェーズ終了時間")]
+    private int _interventionTime = 2000;
 
-    //private const int MAX_HAND_COUNT = 5;
-    //private const int DEFAULT_DAMEGE = 1;
+    #endregion
 
-    //#endregion
+    #region Constans
 
-    //#region Events
+    private const int MAX_HAND_COUNT = 5;
+    private const int DEFAULT_DAMEGE = 1;
 
-    //private event Action OnStockEffect;
+    #endregion
 
-    //#endregion
+    #region Events
+
+    private event Action OnStockEffect;
+
+    #endregion
 
     //private void Awake()
     //{
@@ -151,283 +154,284 @@ public class BattleManager : MonoBehaviour
     //    GameEnd();
     //}
 
-    //#region HandSelect Methods
+    #region HandSelect Methods
 
-    ///// <summary>
-    ///// 最初にプレイヤーがカードを選択するフェーズ用の関数
-    ///// </summary>
-    //async private UniTask HandSelect()
-    //{
-    //    var cts = new CancellationTokenSource();
+    /// <summary>
+    /// 最初にプレイヤーがカードを選択するフェーズ用の関数
+    /// </summary>
+    async private UniTask HandSelect()
+    {
+        var cts = new CancellationTokenSource();
 
-    //    //一定時間たったらランダムでカードを付与
-    //    RandomSetHand(cts.Token);
+        //一定時間たったらランダムでカードを付与
+        RandomSetHand(cts.Token);
 
-    //    //カードを選ぶまで待つ
-    //    await DelaySetHand();
+        //カードを選ぶまで待つ
+        await DelaySetHand();
 
-    //    cts.Cancel();
-    //}
+        cts.Cancel();
+    }
 
-    ///// <summary>
-    ///// 一定時間経過後プレイヤーにカードがなかったら付与する関数
-    ///// </summary>
-    //async private void RandomSetHand(CancellationToken token)
-    //{
-    //    //一定時間経過後
-    //    await UniTask.Delay(_handSelectTime, cancellationToken: token);
+    /// <summary>
+    /// 一定時間経過後プレイヤーにカードがなかったら付与する関数
+    /// </summary>
+    async private void RandomSetHand(CancellationToken token)
+    {
+        //一定時間経過後
+        await UniTask.Delay(_handSelectTime, cancellationToken: token);
 
-    //    foreach (var player in PlayerManager.Players)
-    //    {
-    //        //リーダーカードが無かったら
-    //        if (player.LeaderHand != null)
-    //        {
-    //            _cardManager.SetLeaderHand(player);
-    //        }
+        foreach (var player in PlayerManager.Players)
+        {
+            //リーダーカードが無かったら
+            if (player.PlayerParameter.LeaderHand != null)
+            {
+                _cardManager.SetLeaderHand(player);
+            }
 
-    //        //じゃんけんカードが5枚未満だったら
-    //        var handCount = player.PlayerHands.Count;
+            //じゃんけんカードが5枚未満だったら
+            var handCount =
+                player.PlayerParameter.PlayerHands.Count;
 
-    //        if (handCount < MAX_HAND_COUNT)
-    //        {
-    //            for (int i = handCount; i < MAX_HAND_COUNT; i++)
-    //            {
-    //                _cardManager.SetRSPHand(player);
-    //            }
-    //        }
-    //    }
-    //}
+            for (int count = handCount; count < MAX_HAND_COUNT; count++)
+            {
+                _cardManager.SetRSPHand(player);
+            }
+        }
+    }
 
-    ///// <summary>
-    ///// プレイヤーが全てのカードを選ぶまで待機する関数
-    ///// </summary>
+    /// <summary>
+    /// プレイヤーが全てのカードを選ぶまで待機する関数
+    /// </summary>
 
-    //async private UniTask DelaySetHand()
-    //{
-    //    //プレイヤーがカードを選ぶまで待つ
-    //    foreach (var player in PlayerManager.Players)
-    //    {
-    //        await UniTask.WaitUntil(() => player.LeaderHand != null);
-    //        await UniTask.WaitUntil(() => player.PlayerHands.Count == MAX_HAND_COUNT);
-    //    }
-    //}
+    async private UniTask DelaySetHand()
+    {
+        //プレイヤーがカードを選ぶまで待つ
+        foreach (var player in PlayerManager.Players)
+        {
+            await UniTask.WaitUntil(() =>
+                player.PlayerParameter.LeaderHand != null);
+            await UniTask.WaitUntil(() =>
+                player.PlayerParameter.PlayerHands.Count == MAX_HAND_COUNT);
+        }
+    }
 
-    //#endregion
+    #endregion
 
-    //#region CardSelect Methods
+    #region CardSelect Methods
 
-    ///// <summary>
-    ///// セットするカードを選択するフェーズ用の関数
-    ///// </summary>
-    //async private UniTask CardSelect()
-    //{
-    //    var cts = new CancellationTokenSource();
+    /// <summary>
+    /// セットするカードを選択するフェーズ用の関数
+    /// </summary>
+    async private UniTask CardSelect()
+    {
+        var cts = new CancellationTokenSource();
 
-    //    //一定時間たったらランダムでカードをセット
-    //    RandomSelectRSPCard(cts.Token);
+        //一定時間たったらランダムでカードをセット
+        RandomSelectRSPCard(cts.Token);
 
-    //    //カードをセットするまで待つ
-    //    await DelaySelectRSPCard();
+        //カードをセットするまで待つ
+        await DelaySelectRSPCard();
 
-    //    cts.Cancel();
-    //}
+        cts.Cancel();
+    }
 
-    ///// <summary>
-    ///// 一定時間経過後プレイヤーにカードがなかったら付与する関数
-    ///// </summary>
-    //async private void RandomSelectRSPCard(CancellationToken token)
-    //{
-    //    //20秒後
-    //    await UniTask.Delay(_cardSelectTime, cancellationToken: token);
-    //    foreach (var player in PlayerManager.Players)
-    //    {
-    //        //カードがセットされていなかったら
-    //        if (player.PlayerSetHand == null)
-    //        {
-    //            //ランダムでセット
-    //            var count = player.PlayerHands.Count;
-    //            var random = UnityEngine.Random.Range(0, count);
-    //            player.SetHand(player.PlayerHands[random]);
-    //        }
-    //    }
-    //}
+    /// <summary>
+    /// 一定時間経過後プレイヤーにカードがなかったら付与する関数
+    /// </summary>
+    async private void RandomSelectRSPCard(CancellationToken token)
+    {
+        //20秒後
+        await UniTask.Delay(_cardSelectTime, cancellationToken: token);
 
-    ///// <summary>
-    ///// カードの選択フェーズの待機用
-    ///// </summary>
-    //async private UniTask DelaySelectRSPCard()
-    //{
-    //    //20秒経過時点で「技カード配置スペース」にカードがセットされていない場合
-    //    //手札のカードをランダムに1枚選びセットする
-    //    foreach (var player in PlayerManager.Players)
-    //    {
-    //        await UniTask.WaitUntil(() => player.PlayerSetHand != null);
-    //    }
-    //}
+        foreach (var player in PlayerManager.Players)
+        {
+            //カードがセットされていなかったら
+            if (player.PlayerParameter.PlayerSetHand == null)
+            {
+                //ランダムでセット
+                var count = player.PlayerParameter.PlayerHands.Count;
+                var random = UnityEngine.Random.Range(0, count);
+                player
+                    .HandCollection
+                    .SetHand (player.PlayerParameter.PlayerHands[random]);
+            }
+        }
+    }
 
-    //#endregion
+    /// <summary>
+    /// カードの選択フェーズの待機用
+    /// </summary>
+    async private UniTask DelaySelectRSPCard()
+    {
+        //20秒経過時点で「技カード配置スペース」にカードがセットされていない場合
+        //手札のカードをランダムに1枚選びセットする
+        foreach (var player in PlayerManager.Players)
+        {
+            await UniTask.WaitUntil(() =>
+                player.PlayerParameter.PlayerSetHand != null);
+        }
+    }
 
-    //#region Battle Method
+    #endregion
 
-    ///// <summary>
-    ///// バトルの勝敗を決定する
-    ///// </summary>
-    //async private UniTask Battle()
-    //{
-    //    var clientRSP = PlayerManager.Players[0].PlayerSetHand.Hand;
-    //    var otherRSP = PlayerManager.Players[1].PlayerSetHand.Hand;
-    //    var judg = RSPManager.Calculator(clientRSP, otherRSP);
+    #region Battle Method
 
-    //    if(judg == RSPManager.WIN)//クライアントの勝利なら
-    //    {
-    //        _winner = PlayerManager.Players[0];
-    //        _loser = PlayerManager.Players[1];
-    //        Debug.Log("クライアントの勝利");
-    //    }
-    //    else if(judg == RSPManager.DRAW)//引き分けなら
-    //    {
-    //        _winner = null;
-    //        _loser = null;
-    //        Debug.Log("引き分け");
-    //    }
-    //    else//クライアントの敗北なら
-    //    {
-    //        _winner = PlayerManager.Players[1];
-    //        _loser = PlayerManager.Players[0];
-    //        Debug.Log("クライアントの敗北");
-    //    }
-    //    await UniTask.Delay(_battleTime);
-    //}
+    /// <summary>
+    /// バトルの勝敗を決定する
+    /// </summary>
+    async private UniTask Battle()
+    {
+        var clientRSP = PlayerManager.Players[0].PlayerParameter.PlayerSetHand.Hand;
+        var otherRSP = PlayerManager.Players[1].PlayerParameter.PlayerSetHand.Hand;
+        var judg = RSPManager.Calculator(clientRSP, otherRSP);
 
-    //#endregion
+        if (judg == RSPManager.WIN)//クライアントの勝利なら
+        {
+            _winner = PlayerManager.Players[0];
+            _loser = PlayerManager.Players[1];
+            Debug.Log("クライアントの勝利");
+        }
+        else if (judg == RSPManager.DRAW)//引き分けなら
+        {
+            _winner = null;
+            _loser = null;
+            Debug.Log("引き分け");
+        }
+        else//クライアントの敗北なら
+        {
+            _winner = PlayerManager.Players[1];
+            _loser = PlayerManager.Players[0];
+            Debug.Log("クライアントの敗北");
+        }
+        await UniTask.Delay(_battleTime);
+    }
 
-    //#region WinnerDamageProcess Method
+    #endregion
 
-    ///// <summary>
-    ///// ダメージ処理
-    ///// </summary>
-    //async private UniTask WinnerDamageProcess()
-    //{
-    //    _loser.ReceiveDamage(DEFAULT_DAMEGE);
-    //    await UniTask.Delay(_winnerDamegeProcessTime);
-    //}
+    #region WinnerDamageProcess Method
 
-    //#endregion
+    /// <summary>
+    /// ダメージ処理
+    /// </summary>
+    async private UniTask WinnerDamageProcess()
+    {
+        _loser.LifeChange.ReceiveDamage(DEFAULT_DAMEGE);
+        await UniTask.Delay(_winnerDamegeProcessTime);
+    }
 
-    //#region WinnerCardEffect Method
+    #endregion
 
-    //async private UniTask WinnerCardEffect()
-    //{
-    //    _winner.PlayerSetHand.HandEffect.Effect();
-    //    await UniTask.Delay(_winnerCardEffectTime);
-    //    await UniTask.WaitUntil(() =>
-    //        PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
-    //}
+    #region WinnerCardEffect Method
 
-    //#endregion
+    async private UniTask WinnerCardEffect()
+    {
+        await _winner.PlayerParameter.PlayerSetHand.HandEffect.Effect();
+        await UniTask.Delay(_winnerCardEffectTime);
+        await UniTask.WaitUntil(() =>
+            PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
+    }
 
-    //#region LeaderEffect Method
+    #endregion
 
-    ///// <summary>
-    ///// リーダー効果発動用
-    ///// </summary>
-    //async private UniTask<bool> LeaderEffect()
-    //{
-    //    var winnerLeaderType = _winner.LeaderHand.HandEffect.LeaderType;
-    //    var loserLeaderType = _loser.LeaderHand.HandEffect.LeaderType;
-    //    var shaman = LeaderParameter.Shaman;
-    //    if (winnerLeaderType != shaman) _winner.LeaderEffect();
-    //    if (loserLeaderType != shaman) _loser.LeaderEffect();
+    #region LeaderEffect Method
 
-    //    await UniTask.Delay(_leaderEffectTime);
-    //    await UniTask.WaitUntil(() =>
-    //        PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
+    /// <summary>
+    /// リーダー効果発動用
+    /// </summary>
+    async private UniTask<bool> LeaderEffect()
+    {
+        var winnerLeaderType = _winner.PlayerParameter.LeaderHand.HandEffect.GetType();
+        var loserLeaderType = _loser.PlayerParameter.LeaderHand.HandEffect.GetType();
+        if (winnerLeaderType != typeof(ShamanData)) _winner.UseHand.LeaderEffect();
+        if (loserLeaderType != typeof(ShamanData)) _loser.UseHand.LeaderEffect();
 
-    //    //どっちかのプレイヤーが0になったら
-    //    var client = PlayerManager.Players[0];
-    //    var other = PlayerManager.Players[1];
-    //    if (client.Life <= 0 || other.Life <= 0) return true;
-    //    return false;
-    //}
+        await UniTask.Delay(_leaderEffectTime);
+        await UniTask.WaitUntil(() =>
+            PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
 
-    //#endregion
+        //どっちかのプレイヤーが0になったら
+        var client = PlayerManager.Players[0].PlayerParameter;
+        var other = PlayerManager.Players[1].PlayerParameter;
+        if (client.Life <= 0 || other.Life <= 0) return true;
+        return false;
+    }
 
-    //#region StockEffect Method
+    #endregion
 
-    //async public UniTask StockEffect()
-    //{
-    //    OnStockEffect?.Invoke();
-    //    await UniTask.NextFrame();
-    //    await UniTask.WaitUntil(() => PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
-    //}
+    #region StockEffect Method
 
-    //#endregion
+    async public UniTask StockEffect()
+    {
+        OnStockEffect?.Invoke();
+        await UniTask.Delay(_stockEffectTime);
+        await UniTask.WaitUntil(() => PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
+    }
 
-    //#region UseCardOnReserve
+    #endregion
 
-    //async private UniTask UseCardOnReserve()
-    //{
-    //    foreach (var player in PlayerManager.Players)
-    //    {
-    //        player.SetCardOnReserve();
-    //    }
-    //    await UniTask.Delay(_useCardOnReserveTime);
-    //}
+    #region UseCardOnReserve
 
-    //#endregion
+    async private UniTask UseCardOnReserve()
+    {
+        foreach (var player in PlayerManager.Players)
+            player.HandCollection.SetCardOnReserve();
+        await UniTask.Delay(_useCardOnReserveTime);
+    }
 
-    //#region Refresh
+    #endregion
 
-    //async private UniTask Refresh()
-    //{
-    //    foreach (var player in PlayerManager.Players)
-    //    {
-    //        var count = player.PlayerHands.Count;
-    //        if (count == 0) player.ResetHand();
-    //    }
+    #region Refresh
 
-    //    await UniTask.Delay(_refreshTime);
-    //}
+    async private UniTask Refresh()
+    {
+        foreach (var player in PlayerManager.Players)
+        {
+            var count = player.PlayerParameter.PlayerHands.Count;
+            if (count == 0) player.HandCollection.ResetHand();
+        }
 
-    //#endregion
+        await UniTask.Delay(_refreshTime);
+    }
 
-    //#region Judgement
+    #endregion
 
-    //async private UniTask Judgement()
-    //{
-    //    _winner = null;
-    //    _loser = null;
-    //    await UniTask.Delay(_judgementTime);
-    //}
+    #region Judgement
 
-    //#endregion
+    async private UniTask InitForJudgement()
+    {
+        _winner = null;
+        _loser = null;
+        await UniTask.Delay(_judgementTime);
+    }
 
-    //#region GameEnd Method
+    #endregion
 
-    //private void GameEnd()
-    //{
-    //    //どっちかのプレイヤーが0になったら
-    //    var client = PlayerManager.Players[0];
-    //    var other = PlayerManager.Players[1];
-    //    if (client.Life > 0 && other.Life <= 0)
-    //    {
-    //        _winner = client;
-    //        _loser = other;
-    //        Debug.Log("クライアントの勝利");
-    //    }
-    //    else if(client.Life <= 0 && other.Life > 0)
-    //    {
-    //        _winner = other;
-    //        _loser = client;
-    //        Debug.Log("クライアントの敗北");
-    //    }
-    //    else
-    //    {
-    //        _winner = null;
-    //        _loser = null;
-    //        Debug.Log("引き分け");
-    //    }
-    //}
+    #region GameEnd Method
 
-    //#endregion
+    private void GameEnd()
+    {
+        //どっちかのプレイヤーが0になったら
+        var client = PlayerManager.Players[0].PlayerParameter;
+        var other = PlayerManager.Players[1].PlayerParameter;
+        if (client.Life > 0 && other.Life <= 0)
+        {
+            _winner = PlayerManager.Players[0];
+            _loser = PlayerManager.Players[1];
+            Debug.Log("クライアントの勝利");
+        }
+        else if (client.Life <= 0 && other.Life > 0)
+        {
+            _winner = PlayerManager.Players[1];
+            _loser = PlayerManager.Players[0];
+            Debug.Log("クライアントの敗北");
+        }
+        else
+        {
+            _winner = null;
+            _loser = null;
+            Debug.Log("引き分け");
+        }
+    }
+
+    #endregion
 }

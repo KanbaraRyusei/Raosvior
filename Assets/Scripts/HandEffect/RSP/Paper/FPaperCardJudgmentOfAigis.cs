@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -9,22 +10,14 @@ using UnityEngine;
 /// </summary>
 public class FPaperCardJudgmentOfAigis : RSPHandEffect
 {
-    public int AddDamege => _addDamege;
-
-    [SerializeField]
-    [Header("この効果がついているカード")]
-    PlayerHand _playerHand;
-
-
-    int _addDamege = 0;
-
-    public override void Effect()
+    async public override UniTask Effect()
     {
         ChangePlayersIndex(Player);
-
 
         //自分のシールドを破壊する枚数を決めれるようにする
 
         PhaseManager.OnNextPhase(true);
+
+        await UniTask.NextFrame();
     }
 }

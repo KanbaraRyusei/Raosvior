@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -8,21 +9,19 @@ using UnityEngine;
 /// </summary>
 public class FRockCardExplosion : RSPHandEffect
 {
-    [SerializeField]
-    [Header("この効果がついているカード")]
-    PlayerHand _playerHand;
+    const int RESERVE_COUNT = 3;
+    const int ADD_DAMEGE = 2;
 
-    public override void Effect()
+    async public override UniTask Effect()
     {
         ChangePlayersIndex(Player);
 
-        LifeChanges[EnemyIndex].ReceiveDamage(ConstParameter.ONE);//相手にダメージを与える
         //自分のリザーフにカードが3枚以上あれば
-        if (PlayerParameters[PlayerIndex].PlayerReserve.Count >= ConstParameter.THREE)
+        if (Players[PlayerIndex].PlayerParameter.PlayerReserve.Count >= RESERVE_COUNT)
         {
             //さらに2ダメージを与える。
-            LifeChanges[EnemyIndex].ReceiveDamage(ConstParameter.TWO);
+            Players[EnemyIndex].LifeChange.ReceiveDamage(ADD_DAMEGE);
         }
-        HandCollections[PlayerIndex].OnReserveHand(_playerHand);//このカードを捨てる  
+        await UniTask.NextFrame();
     }
 }

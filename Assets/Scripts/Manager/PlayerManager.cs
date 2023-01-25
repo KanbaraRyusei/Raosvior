@@ -5,29 +5,23 @@ using UnityEngine;
 public static class PlayerManager
 {
     //PlayerのInterfaceを参照できる
-    public static IReadOnlyList<IPlayerParameter> PlayerParameters => _playerParameters;
-    public static IReadOnlyList<IUseHand> UseHands => _useHands;
-    public static IReadOnlyList<IHandCollection> HandCollections => _handCollections;
-    public static IReadOnlyList<ILifeChange> LifeChanges => _lifeChanges;
+    public static IReadOnlyList<PlayerInterface> Players => _players;
 
-    private static List<IPlayerParameter> _playerParameters = new List<IPlayerParameter>(2);
-    private static List<IUseHand> _useHands = new List<IUseHand>(2);
-    private static List<IHandCollection> _handCollections = new List<IHandCollection>(2);// 2人対戦のため
-    private static List<ILifeChange> _lifeChanges = new List<ILifeChange>(2);
+    private static List<PlayerInterface> _players = new List<PlayerInterface>(2);// 2人対戦のため
 
     public static void Register(PlayerData playerData)
     {
-        _playerParameters.Add(playerData);
-        _useHands.Add(playerData);
-        _handCollections.Add(playerData);
-        _lifeChanges.Add(playerData);
+        var player = new PlayerInterface();
+        _players.Add(player);
+        player.SetInterface(playerData);
     }
 
     public static void Release(PlayerData playerData)
     {
-        _playerParameters.Remove(playerData);
-        _useHands.Remove(playerData);
-        _handCollections.Remove(playerData);
-        _lifeChanges.Remove(playerData);
+        foreach (var player in _players)
+        {
+            var isPlayer = player.PlayerParameter == playerData;
+            if (isPlayer) _players.Remove(player);
+        }
     }
 }

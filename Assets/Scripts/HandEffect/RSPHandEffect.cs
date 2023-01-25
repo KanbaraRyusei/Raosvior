@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -13,6 +14,6 @@ public abstract class RSPHandEffect : HandEffect
     /// <summary>
     /// カードの効果を発動させる関数
     /// </summary>
-    public abstract void Effect();
+    public abstract UniTask Effect();
 
 }

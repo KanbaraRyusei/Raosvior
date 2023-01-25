@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -9,11 +10,13 @@ using UnityEngine;
 /// </summary>
 public class ScissorsCardChainAx : RSPHandEffect
 {
-    public override void Effect()
+    async public override UniTask Effect()
     {
         ChangePlayersIndex(Player);
         //このカードを手札に戻すのでカードを捨てるか選択できるようにする
         PhaseManager.OnNextPhase(true);
-        
+        await UniTask.NextFrame();
+        await UniTask.WaitUntil(() =>
+            PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
     }
 }

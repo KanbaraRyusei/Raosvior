@@ -12,16 +12,16 @@ public class KnightData : LeaderHandEffect
 {
     #region public method
 
-    public override void CardEffect(PlayerData player)
+    public override void CardEffect(PlayerInterface player)
     {
         ChangePlayersIndex(player);
-        var playerRSP = PlayerParameters[PlayerIndex].PlayerSetHand.Hand;
-        var enemyRSP = PlayerParameters[EnemyIndex].PlayerSetHand.Hand;
+        var playerRSP = Players[PlayerIndex].PlayerParameter.PlayerSetHand.Hand;
+        var enemyRSP = Players[EnemyIndex].PlayerParameter.PlayerSetHand.Hand;
         if (playerRSP == PAPER && enemyRSP == ROCK)//パーで勝利したら
         {
             // 相手のリザーブの数だけシールドトークンを獲得
-            var count = PlayerParameters[EnemyIndex].PlayerReserve.Count;
-            LifeChanges[PlayerIndex].GetShield(count);
+            var count = Players[EnemyIndex].PlayerParameter.PlayerReserve.Count;
+            Players[PlayerIndex].LifeChange.GetShield(count);
         }
     }
 

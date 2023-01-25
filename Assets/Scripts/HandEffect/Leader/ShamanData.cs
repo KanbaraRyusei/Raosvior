@@ -12,12 +12,12 @@ public class ShamanData : LeaderHandEffect
 {
     #region public method
 
-    public override void CardEffect(PlayerData player)
+    public override void CardEffect(PlayerInterface player)
     {
         ChangePlayersIndex(player);
-        var enemyLeader = PlayerParameters[EnemyIndex].LeaderHand.HandEffect.GetType();
-        var playerRSP = PlayerParameters[PlayerIndex].PlayerSetHand.Hand;
-        var enemyRSP = PlayerParameters[EnemyIndex].PlayerSetHand.Hand;
+        var enemyLeader = Players[EnemyIndex].PlayerParameter.LeaderHand.HandEffect.GetType();
+        var playerRSP = Players[PlayerIndex].PlayerParameter .PlayerSetHand.Hand;
+        var enemyRSP = Players[EnemyIndex].PlayerParameter.PlayerSetHand.Hand;
 
         var value = RSPManager.Calculator(playerRSP, enemyRSP);
         //相手がアーチャーの引き分けor負けだったら
@@ -25,7 +25,7 @@ public class ShamanData : LeaderHandEffect
         if (draw || value == RSPManager.LOSE)
         {
             //チョキのカードを絞り込む
-            foreach (var RSP in PlayerParameters[PlayerIndex].PlayerHands)
+            foreach (var RSP in Players[PlayerIndex].PlayerParameter.PlayerHands)
             {
                 //チョキのカードがあったら
                 if (RSP.Hand == RSPParameter.Scissors)

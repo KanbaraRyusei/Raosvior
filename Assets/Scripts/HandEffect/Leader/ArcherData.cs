@@ -11,24 +11,26 @@ public class ArcherData : LeaderHandEffect
 {
     #region public method
 
-    public override void CardEffect(PlayerData player)
+    public override void CardEffect(PlayerInterface player)
     {
-        ChangePlayersIndex(player);
-        var playerRSP = PlayerParameters[PlayerIndex].PlayerSetHand.Hand;
-        var enemyRSP = PlayerParameters[EnemyIndex].PlayerSetHand.Hand;
+        ChangePlayersIndex(player as PlayerInterface);
+        var playerRSP = Players[PlayerIndex].PlayerParameter.PlayerSetHand.Hand;
+        var enemyRSP = Players[EnemyIndex].PlayerParameter.PlayerSetHand.Hand;
 
         var value = RSPManager.Calculator(playerRSP, enemyRSP);
         if (value == RSPManager.DRAW)//引き分けなら
         {
             //エネミーに1ダメージ与える。
-            LifeChanges[EnemyIndex]
-                .ReceiveDamage(ConstParameter.ONE);
+            Players[EnemyIndex]
+                .LifeChange
+                .ReceiveDamage();
         }
         else if(value == RSPManager.LOSE)//負けなら
         {
             //プレイヤーがもう1ダメージを受ける。
-            LifeChanges[PlayerIndex]
-                .ReceiveDamage(ConstParameter.ONE);
+            Players[PlayerIndex]
+                .LifeChange
+                .ReceiveDamage();
         }
     }
 
