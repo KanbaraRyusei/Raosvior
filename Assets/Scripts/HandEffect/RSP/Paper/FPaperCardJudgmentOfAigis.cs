@@ -16,7 +16,7 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
 
         //自分のシールドを破壊する枚数を決めれるようにする
 
-        PhaseManager.OnNextPhase(true);
+        PhaseManager.OnNextPhase(this);
 
         await UniTask.NextFrame();
     }

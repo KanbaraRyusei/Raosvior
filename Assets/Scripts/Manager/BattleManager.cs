@@ -119,40 +119,40 @@ public class BattleManager : MonoBehaviour
 
     #endregion
 
-    //private void Awake()
-    //{
-    //    AllPhase();
-    //}
+    private void Awake()
+    {
+        AllPhase();
+    }
 
-    //async private void AllPhase()
-    //{
-    //    await HandSelect();
+    async private void AllPhase()
+    {
+        await HandSelect();
 
-    //    while (true)
-    //    {
-    //        CurrentTurn++;
-    //        PhaseManager.OnNextPhase();//カード選択フェーズへ
-    //        await CardSelect();
-    //        PhaseManager.OnNextPhase();//バトル勝敗決定処理フェーズへ
-    //        await Battle();
-    //        PhaseManager.OnNextPhase();//勝者のダメージ処理フェーズへ
-    //        await WinnerDamageProcess();
-    //        PhaseManager.OnNextPhase();//勝者のカード効果処理フェーズへ
-    //        await WinnerCardEffect();
-    //        PhaseManager.OnNextPhase();//リーダーの効果処理フェーズへ
-    //        if (await LeaderEffect()) break;
-    //        PhaseManager.OnNextPhase();//効果ストック処理フェーズへ
-    //        await StockEffect();
-    //        PhaseManager.OnNextPhase();//リザーブ処理フェーズへ
-    //        await UseCardOnReserve();
-    //        PhaseManager.OnNextPhase();//リフレッシュ処理フェーズへ
-    //        await Refresh();
-    //        PhaseManager.OnNextPhase();//決着処理フェーズへ
-    //        await Judgement();
-    //    }
+        while (true)
+        {
+            CurrentTurn++;
+            PhaseManager.OnNextPhase();//カード選択フェーズへ
+            await CardSelect();
+            PhaseManager.OnNextPhase();//バトル勝敗決定処理フェーズへ
+            await Battle();
+            PhaseManager.OnNextPhase();//勝者のダメージ処理フェーズへ
+            await WinnerDamageProcess();
+            PhaseManager.OnNextPhase();//勝者のカード効果処理フェーズへ
+            await WinnerCardEffect();
+            PhaseManager.OnNextPhase();//リーダーの効果処理フェーズへ
+            if (await LeaderEffect()) break;
+            PhaseManager.OnNextPhase();//効果ストック処理フェーズへ
+            await StockEffect();
+            PhaseManager.OnNextPhase();//リザーブ処理フェーズへ
+            await UseCardOnReserve();
+            PhaseManager.OnNextPhase();//リフレッシュ処理フェーズへ
+            await Refresh();
+            PhaseManager.OnNextPhase();//決着処理フェーズへ
+            await InitForJudgement();
+        }
 
-    //    GameEnd();
-    //}
+        GameEnd();
+    }
 
     #region HandSelect Methods
 
@@ -342,8 +342,8 @@ public class BattleManager : MonoBehaviour
     {
         var winnerLeaderType = _winner.PlayerParameter.LeaderHand.HandEffect.GetType();
         var loserLeaderType = _loser.PlayerParameter.LeaderHand.HandEffect.GetType();
-        if (winnerLeaderType != typeof(ShamanData)) _winner.UseHand.LeaderEffect();
-        if (loserLeaderType != typeof(ShamanData)) _loser.UseHand.LeaderEffect();
+        if (winnerLeaderType != typeof(ShamanData)) _winner.PlayerParameter.LeaderHand.HandEffect.CardEffect();
+        if (loserLeaderType != typeof(ShamanData)) _loser.PlayerParameter.LeaderHand.HandEffect.CardEffect();
 
         await UniTask.Delay(_leaderEffectTime);
         await UniTask.WaitUntil(() =>

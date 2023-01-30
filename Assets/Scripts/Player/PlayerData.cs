@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 /// <summary>
 /// プレイヤーのデータを持つクラス
 /// </summary>
-public class PlayerData : IPlayerParameter,IUseHand,IHandCollection, ILifeChange
+public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
 {
     #region public property (IPlayerParameter interface)
 
@@ -100,21 +100,6 @@ public class PlayerData : IPlayerParameter,IUseHand,IHandCollection, ILifeChange
 
     #endregion
 
-    #region IUsehand interface
-
-    public void LeaderEffect()
-    {
-        if(_playerInterface == null)
-        {
-            var playerInterface = new PlayerInterface();
-            playerInterface.SetInterface(this);
-            _playerInterface = playerInterface;
-        }
-        _leaderHand.HandEffect.CardEffect(_playerInterface);
-    }
-
-    #endregion
-
     #region IHandCollection interface
 
     public void SetHand(PlayerHand playerHand)
@@ -164,7 +149,7 @@ public class PlayerData : IPlayerParameter,IUseHand,IHandCollection, ILifeChange
     {
         if(_leaderHand.HandEffect.GetType() == typeof(ShamanData))
         {
-            LeaderEffect();
+            _leaderHand.HandEffect.CardEffect();
             await UniTask.NextFrame();
             await UniTask.WaitUntil(() =>
                 PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);

@@ -12,9 +12,9 @@ public class KnightData : LeaderHandEffect
 {
     #region public method
 
-    public override void CardEffect(PlayerInterface player)
+    public override void CardEffect()
     {
-        ChangePlayersIndex(player);
+        ChangePlayersIndex(Player);
         var playerRSP = Players[PlayerIndex].PlayerParameter.PlayerSetHand.Hand;
         var enemyRSP = Players[EnemyIndex].PlayerParameter.PlayerSetHand.Hand;
         if (playerRSP == PAPER && enemyRSP == ROCK)//パーで勝利したら

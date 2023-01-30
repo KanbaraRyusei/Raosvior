@@ -9,12 +9,16 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     [SerializeField]
-    [Header("リーダーカード")]
-    List<LeaderPlayerHand> _leaderHands = new List<LeaderPlayerHand>(4);
+    [Header("プレイヤー用のリーダーカード")]
+    List<LeaderPlayerHand> _cliantLeaderHands = new List<LeaderPlayerHand>(4);
+
+    [SerializeField]
+    [Header("もう片方のプレイヤー用のリーダーカード")]
+    List<LeaderPlayerHand> _otherLeaderHands = new List<LeaderPlayerHand>(4);
 
     [SerializeField]
     [Header("プレイヤー用のじゃんけんカード")]
-    List<PlayerHand> _CliantRSPHands = new List<PlayerHand>(9);
+    List<PlayerHand> _cliantRSPHands = new List<PlayerHand>(9);
 
     [SerializeField]
     [Header("もう片方のプレイヤー用のじゃんけんカード")]
@@ -25,19 +29,39 @@ public class CardManager : MonoBehaviour
     /// </summary>
     /// /// <param name="playerData">プレイヤー</param>
     /// <param name="leader">カードの種類(nullならランダム)</param>
-    public void SetLeaderHand(PlayerInterface player, string name = "")
+    public void SetLeaderHand(PlayerInterface playerData, string name = "")
     {
-        foreach (var hand in _leaderHands)
+        var randomIndex = 0;
+        if (playerData == PlayerManager.Players[0])
         {
-            if (hand.CardName == name)
+            var player = PlayerManager.Players[0];
+            foreach (var hand in _cliantLeaderHands)
             {
-                hand.HandEffect.SetPlayerData(player);
-                player.HandCollection.SetLeaderHand(hand);
+                if (hand.CardName == name)
+                {
+                    hand.HandEffect.SetPlayerData(player);
+                    player.HandCollection.SetLeaderHand(hand);
+                }
             }
+            randomIndex = Random.Range(0, _cliantLeaderHands.Count);
+            _cliantLeaderHands[randomIndex].HandEffect.SetPlayerData(player);
+            player.HandCollection.SetLeaderHand(_cliantLeaderHands[randomIndex]);
         }
-        var randomIndex = Random.Range(0, _leaderHands.Count);
-        _leaderHands[randomIndex].HandEffect.SetPlayerData(player);
-        player.HandCollection.SetLeaderHand(_leaderHands[randomIndex]);
+        else
+        {
+            var player = PlayerManager.Players[1];
+            foreach (var hand in _otherLeaderHands)
+            {
+                if (hand.CardName == name)
+                {
+                    hand.HandEffect.SetPlayerData(player);
+                    player.HandCollection.SetLeaderHand(hand);
+                }
+            }
+            randomIndex = Random.Range(0, _otherLeaderHands.Count);
+            _otherLeaderHands[randomIndex].HandEffect.SetPlayerData(player);
+            player.HandCollection.SetLeaderHand(_otherLeaderHands[randomIndex]);
+        }
     }
 
     /// <summary>
@@ -51,18 +75,18 @@ public class CardManager : MonoBehaviour
         if (playerData == PlayerManager.Players[0])
         {
             var player = PlayerManager.Players[0];
-            foreach (var hand in _CliantRSPHands)
+            foreach (var hand in _cliantRSPHands)
             {
                 if (hand.CardName == handName)
                 {
                     hand.HandEffect.SetPlayerData(playerData);
                     player.HandCollection.AddHand(hand);
-                    _CliantRSPHands.Remove(hand);
+                    _cliantRSPHands.Remove(hand);
                 }
             }
-            randomIndex = Random.Range(0, _CliantRSPHands.Count);
-            PlayerManager.Players[0].HandCollection.AddHand(_CliantRSPHands[randomIndex]);
-            _CliantRSPHands.Remove(_CliantRSPHands[randomIndex]);
+            randomIndex = Random.Range(0, _cliantRSPHands.Count);
+            PlayerManager.Players[0].HandCollection.AddHand(_cliantRSPHands[randomIndex]);
+            _cliantRSPHands.Remove(_cliantRSPHands[randomIndex]);
         }
         else
         {

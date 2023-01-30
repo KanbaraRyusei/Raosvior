@@ -12,6 +12,11 @@ public static class PhaseManager
     /// </summary>
     public static PhaseParameter CurrentPhaseProperty { get; private set;}
 
+    public static IntervetionParameter IntervetionProperty { get; private set; }
+
+    public static bool IsCliant { get; private set; }
+
+
     #endregion
 
     #region private member
@@ -29,7 +34,7 @@ public static class PhaseManager
     /// 介入処理があるときのみ引数にtrueを渡す
     /// </summary>
     /// <param name="isIntervetion"></param>
-    public static void OnNextPhase(bool isIntervetion = false)
+    public static void OnNextPhase(HandEffect handEffect = null)
     {
         if(_currentPhase == PhaseParameter.Judgement)// もし決着判定だったら
         {
@@ -38,8 +43,32 @@ public static class PhaseManager
             CurrentPhaseProperty = _currentPhase;// 外部に現在のフェーズを公開する
             return;
         }
-        if(isIntervetion)// もし介入処理があったら
+        if(handEffect != null)// もし介入処理があったら
         {
+            var player =
+                handEffect.Player.PlayerParameter.PlayerSetHand.HandEffect.Player.PlayerParameter;
+            if (player == PlayerManager.Players[0].PlayerParameter) IsCliant = true;
+            else IsCliant = false;
+
+            var type = handEffect.Player.PlayerParameter.PlayerSetHand.GetType();
+            if (type == typeof(FPaperCardJudgmentOfAigis))
+                IntervetionProperty = IntervetionParameter.FPaperCardJudgmentOfAigis;
+
+            else if(type == typeof(PaperCardDrainShield))
+                IntervetionProperty = IntervetionParameter.PaperCardDrainShield;
+
+            else if(type == typeof(ScissorsCardChainAx))
+                IntervetionProperty = IntervetionParameter.ScissorsCardChainAx;
+
+            else
+            {
+                IntervetionProperty = IntervetionParameter.LeaderCardShaman;
+                player =
+                    handEffect.Player.PlayerParameter.LeaderHand.HandEffect.Player.PlayerParameter;
+                if (player == PlayerManager.Players[0].PlayerParameter) IsCliant = true;
+                else IsCliant = false;
+            }
+
             _oldPhase = _currentPhase;// 前のフェーズを保存
             _currentPhase = PhaseParameter.Intervention;// 介入フェーズにする
             CurrentPhaseProperty = _currentPhase;// 外部に現在のフェーズを公開する

@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class PlayerPresenter : MonoBehaviour
 {
-    PlayerData _playerData;
+    public PlayerData PlayerData { get; private set; }
 
     [SerializeField]
-    PlayerView _playerView;
+    private PlayerView _playerView;
 
     private void Awake()
     {
@@ -15,22 +15,22 @@ public class PlayerPresenter : MonoBehaviour
 
     private void Start()
     {
-        _playerData.ObserveEveryValueChanged(x => _playerData.Life)
+        PlayerData.ObserveEveryValueChanged(x => PlayerData.Life)
             .Subscribe(x => _playerView.ChangeLifeText(x)).AddTo(this);
 
-        _playerData.ObserveEveryValueChanged(x => _playerData.Shield)
+        PlayerData.ObserveEveryValueChanged(x => PlayerData.Shield)
             .Subscribe(x => _playerView.ChangeShieldText(x)).AddTo(this);
 
-        _playerData.ObserveEveryValueChanged(x => _playerData.PlayerReserve.Count)
+        PlayerData.ObserveEveryValueChanged(x => PlayerData.PlayerReserve.Count)
             .Subscribe(x => _playerView.ChangeReserveText(x)).AddTo(this);
 
-        for (int i = 0; i < _playerData.PlayerHands.Count; i++)
+        for (int i = 0; i < PlayerData.PlayerHands.Count; i++)
         {
-            _playerData.ObserveEveryValueChanged(x => _playerData.PlayerHands[i])
+            PlayerData.ObserveEveryValueChanged(x => PlayerData.PlayerHands[i])
                 .Subscribe(x => _playerView.ChangeHandsImage(x.CardImage, i)).AddTo(this);
         }
 
-        _playerData.ObserveEveryValueChanged(x => _playerData.PlayerSetHand.CardImage)
+        PlayerData.ObserveEveryValueChanged(x => PlayerData.PlayerSetHand.CardImage)
             .Subscribe(x => _playerView.ChangeSetHandImage(x)).AddTo(this);
     }
 }

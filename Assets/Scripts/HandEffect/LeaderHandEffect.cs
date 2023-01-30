@@ -20,7 +20,7 @@ public abstract class LeaderHandEffect : HandEffect
     /// <summary>
     /// じゃんけんの勝敗がついたときに呼び出される
     /// </summary>
-    public abstract void CardEffect(PlayerInterface player);
+    public abstract void CardEffect();
 
     #endregion
 }

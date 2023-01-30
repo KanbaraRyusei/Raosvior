@@ -12,9 +12,9 @@ public class ShamanData : LeaderHandEffect
 {
     #region public method
 
-    public override void CardEffect(PlayerInterface player)
+    public override void CardEffect()
     {
-        ChangePlayersIndex(player);
+        ChangePlayersIndex(Player);
         var enemyLeader = Players[EnemyIndex].PlayerParameter.LeaderHand.HandEffect.GetType();
         var playerRSP = Players[PlayerIndex].PlayerParameter .PlayerSetHand.Hand;
         var enemyRSP = Players[EnemyIndex].PlayerParameter.PlayerSetHand.Hand;
@@ -30,7 +30,7 @@ public class ShamanData : LeaderHandEffect
                 //チョキのカードがあったら
                 if (RSP.Hand == RSPParameter.Scissors)
                 {
-                    PhaseManager.OnNextPhase(true);
+                    PhaseManager.OnNextPhase(this);
                     return;
                 }
             }

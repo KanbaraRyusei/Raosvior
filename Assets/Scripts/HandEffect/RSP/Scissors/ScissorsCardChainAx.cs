@@ -14,8 +14,7 @@ public class ScissorsCardChainAx : RSPHandEffect
     {
         ChangePlayersIndex(Player);
         //このカードを手札に戻すのでカードを捨てるか選択できるようにする
-        PhaseManager.OnNextPhase(true);
-        await UniTask.NextFrame();
+        PhaseManager.OnNextPhase(this);
         await UniTask.WaitUntil(() =>
             PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
     }

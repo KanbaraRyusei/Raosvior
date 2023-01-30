@@ -18,7 +18,7 @@ public class PaperCardDrainShield : RSPHandEffect
 
         //相手のカードを自分のシールドトークンにしたいので
         //ここで相手の手札を選ぶ
-        PhaseManager.OnNextPhase(true);
+        PhaseManager.OnNextPhase(this);
 
         await UniTask.NextFrame();
     }

@@ -7,13 +7,17 @@ using UnityEngine;
 /// </summary>
 public abstract class HandEffect : MonoBehaviour
 {
+    #region Public Property
+
+    public PlayerInterface Player { get; private set; }
+
+    #endregion
+
     #region protected property
 
     // プレイヤーを参照するList用のインデックス
     protected int PlayerIndex { get; private set; }
     protected int EnemyIndex { get; private set; }
-
-    protected PlayerInterface Player { get; private set; }
 
     #endregion
 

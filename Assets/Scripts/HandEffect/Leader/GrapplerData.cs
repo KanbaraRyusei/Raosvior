@@ -11,9 +11,9 @@ public class GrapplerData : LeaderHandEffect
 {
     #region public method
 
-    public override void CardEffect(PlayerInterface player)
+    public override void CardEffect()
     {
-        ChangePlayersIndex(player);
+        ChangePlayersIndex(Player);
         var playerRSP = Players[PlayerIndex].PlayerParameter.PlayerSetHand.Hand;
         var enemyRSP = Players[EnemyIndex].PlayerParameter.PlayerSetHand.Hand;
         if (playerRSP == ROCK && enemyRSP == SCISSORS)//グーで勝利したら
