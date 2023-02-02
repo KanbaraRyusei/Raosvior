@@ -14,6 +14,6 @@ public abstract class RSPHandEffect : HandEffect
     /// <summary>
     /// カードの効果を発動させる関数
     /// </summary>
-    public abstract UniTask Effect();
+    public abstract void Effect();
 
 }

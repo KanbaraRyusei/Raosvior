@@ -12,7 +12,7 @@ public class FRockCardExplosion : RSPHandEffect
     const int RESERVE_COUNT = 3;
     const int ADD_DAMEGE = 2;
 
-    async public override UniTask Effect()
+    public override void Effect()
     {
         ChangePlayersIndex(Player);
 
@@ -22,6 +22,5 @@ public class FRockCardExplosion : RSPHandEffect
             //さらに2ダメージを与える。
             Players[EnemyIndex].LifeChange.ReceiveDamage(ADD_DAMEGE);
         }
-        await UniTask.NextFrame();
     }
 }

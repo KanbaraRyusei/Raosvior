@@ -9,7 +9,7 @@ using UnityEngine;
 /// </summary>
 public class RockCardExplodingArrow : RSPHandEffect
 {
-    async public override UniTask Effect()
+    public override void Effect()
     {
         ChangePlayersIndex(Player); 
 
@@ -19,6 +19,5 @@ public class RockCardExplodingArrow : RSPHandEffect
             //さらに1ダメージを与える
             Players[EnemyIndex].LifeChange.ReceiveDamage();
         }
-        await UniTask.NextFrame();
     }
 }

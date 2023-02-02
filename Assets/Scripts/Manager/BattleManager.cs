@@ -325,7 +325,7 @@ public class BattleManager : MonoBehaviour
 
     async private UniTask WinnerCardEffect()
     {
-        await _winner.PlayerParameter.PlayerSetHand.HandEffect.Effect();
+        _winner.PlayerParameter.PlayerSetHand.HandEffect.Effect();
         await UniTask.Delay(_winnerCardEffectTime);
         await UniTask.WaitUntil(() =>
             PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);

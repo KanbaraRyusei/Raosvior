@@ -12,15 +12,12 @@ using UnityEngine;
 /// </summary>
 public class PaperCardDrainShield : RSPHandEffect
 {
-    async public override UniTask Effect()
+    public override void Effect()
     {
         ChangePlayersIndex(Player);
 
         //相手のカードを自分のシールドトークンにしたいので
         //ここで相手の手札を選ぶ
         PhaseManager.OnNextPhase(this);
-
-        await UniTask.NextFrame();
     }
-
 }

@@ -37,5 +37,9 @@ public class ShamanData : LeaderHandEffect
         }
     }
 
+    public void Intervention()
+    {
+                
+    }
     #endregion
 }

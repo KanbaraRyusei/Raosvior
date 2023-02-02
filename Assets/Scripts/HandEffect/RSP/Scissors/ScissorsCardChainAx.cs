@@ -10,12 +10,10 @@ using UnityEngine;
 /// </summary>
 public class ScissorsCardChainAx : RSPHandEffect
 {
-    async public override UniTask Effect()
+    public override void Effect()
     {
         ChangePlayersIndex(Player);
         //このカードを手札に戻すのでカードを捨てるか選択できるようにする
         PhaseManager.OnNextPhase(this);
-        await UniTask.WaitUntil(() =>
-            PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
     }
 }
