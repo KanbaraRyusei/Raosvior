@@ -57,12 +57,12 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
             
         PhaseManager.OnNextPhase();
 
-        Init();
+        Invoke("Init",1f);
     }
 
     async public void LimitSelectTime(CancellationToken token)
     {
-        await UniTask.Delay(2000, cancellationToken: token);
+        await UniTask.Delay(20000, cancellationToken: token);
 
         var currentPhase = PhaseManager.CurrentPhaseProperty;
         var interventionPhase = PhaseParameter.Intervention;

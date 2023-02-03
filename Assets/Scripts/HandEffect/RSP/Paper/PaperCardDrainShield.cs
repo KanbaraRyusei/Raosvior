@@ -12,6 +12,10 @@ using UnityEngine;
 /// </summary>
 public class PaperCardDrainShield : RSPHandEffect
 {
+    public bool IsDecide { get; private set; }
+
+    public int EnemyHandCount => Players[EnemyIndex].PlayerParameter.PlayerHands.Count;
+
     public override void Effect()
     {
         ChangePlayersIndex(Player);
@@ -19,5 +23,10 @@ public class PaperCardDrainShield : RSPHandEffect
         //相手のカードを自分のシールドトークンにしたいので
         //ここで相手の手札を選ぶ
         PhaseManager.OnNextPhase(this);
+    }
+
+    public void SelectEnemyHand()
+    {
+        
     }
 }

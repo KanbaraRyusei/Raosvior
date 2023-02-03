@@ -94,7 +94,7 @@ public class CardPresenter : MonoBehaviour
 
             case IntervetionParameter.ScissorsCardChainAx:
 
-                ScissorsCardChainAx();
+                ScissorsCardChainAxAsync();
 
                 break;
         }
@@ -102,6 +102,11 @@ public class CardPresenter : MonoBehaviour
 
     private void LeaderCardShaman()
     {
+        var shaman = _playerPresenter
+                        .PlayerData
+                        .LeaderHand
+                        .HandEffect as ShamanData;
+
         var scissorsHands =
                     _playerPresenter
                         .PlayerData
@@ -110,21 +115,18 @@ public class CardPresenter : MonoBehaviour
 
         _handView.SelectCardForLeaderCardShaman(scissorsHands);
 
-        var shaman = _playerPresenter
-                        .PlayerData
-                        .LeaderHand
-                        .HandEffect as ShamanData;
     }
 
     async private void FPaperCardJudgmentOfAigis()
     {
         var judgmentOfAigis =
-                            _playerPresenter
-                                .PlayerData
-                                .PlayerSetHand
-                                .HandEffect as FPaperCardJudgmentOfAigis;
+            _playerPresenter
+                .PlayerData
+                .PlayerSetHand
+                .HandEffect as FPaperCardJudgmentOfAigis;
 
         var shildCount = _playerPresenter.PlayerData.Shield;
+
         _handView
             .SelectCardForFPaperCardJudgmentOfAigis
                 (shildCount,
@@ -142,38 +144,43 @@ public class CardPresenter : MonoBehaviour
                     (judgmentOfAigis.AddBreakCount,
                         judgmentOfAigis.RemoveBreakCount,
                         judgmentOfAigis.DecideBreakCount);
-
-        var currentPhase = PhaseManager.CurrentPhaseProperty;
-        var interventionPhase = PhaseParameter.Intervention;
-        if (currentPhase == interventionPhase) judgmentOfAigis.DecideBreakCount();
     }
 
     private void PaperCardDrainShield()
     {
-        int enemyHandsCount;
-        if (_playerPresenter.PlayerData != PlayerManager.Players[0].PlayerParameter)
-        {
-            enemyHandsCount = PlayerManager.Players[0].PlayerParameter.PlayerHands.Count;
-        }
-        else enemyHandsCount = PlayerManager.Players[1].PlayerParameter.PlayerHands.Count;
-
-        _handView.SelectCardForPaperCardDrainShield(enemyHandsCount);
-
         var paperCardDrainShield =
             _playerPresenter
                 .PlayerData
                 .PlayerSetHand
                 .HandEffect as PaperCardDrainShield;
+
+        _handView.SelectCardForPaperCardDrainShield
+                    (paperCardDrainShield.EnemyHandCount);
+
+
     }
 
-    private void ScissorsCardChainAx()
+    async private void ScissorsCardChainAxAsync()
     {
-        _handView.SelectCardForScissorsCardChainAx();
-
         var scissorsCardChainAx =
             _playerPresenter
                 .PlayerData
                 .PlayerSetHand
                 .HandEffect as ScissorsCardChainAx;
+
+        _handView.SelectCardForScissorsCardChainAx
+                    (scissorsCardChainAx.CardBack,
+                        scissorsCardChainAx.NotCardBack);
+
+        var cts = new CancellationTokenSource();
+        scissorsCardChainAx.LimitSelectTime(cts.Token);
+
+        await UniTask.WaitUntil(() => scissorsCardChainAx.IsDecide);
+
+        cts.Cancel();
+
+        _handView.InactiveCardBackButton
+                    (scissorsCardChainAx.CardBack,
+                        scissorsCardChainAx.NotCardBack);
     }
 }

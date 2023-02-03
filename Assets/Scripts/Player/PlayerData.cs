@@ -77,7 +77,7 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
     /// </summary>
     private PlayerHand _playerSetHand;
 
-    private PlayerInterface _playerInterface;
+    private List<RSPShildTokenData> _rspShildTokenDatas = new List<RSPShildTokenData>();
 
     #endregion
 
@@ -110,8 +110,11 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
 
     public void SetCardOnReserve()
     {
-        _playerReserve.Add(_playerSetHand);// セットされているカードをリザーブに送る
-        _playerSetHand = null;// セットされていたカードを消す
+        if (_playerSetHand != null)
+        {
+            _playerReserve.Add(_playerSetHand);// セットされているカードをリザーブに送る
+            _playerSetHand = null;// セットされていたカードを消す
+        }
     }
 
     public void AddHand(PlayerHand playerHand)
@@ -123,6 +126,12 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
     {
         _playerHands.Remove(playerHand);// 手札からカードを削除
         _playerReserve.Add(playerHand);// リザーブにカードを追加
+    }
+
+    public void CardBack()
+    {
+        _playerHands.Add(_playerSetHand);
+        _playerSetHand = null;// セットされていたカードを消す
     }
 
     public void SetLeaderHand(LeaderPlayerHand leader)
@@ -168,11 +177,27 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
             }
         }
         _life -= damage;// ライフを減らす
+
+        foreach (var data in _rspShildTokenDatas)
+        {
+            if(_shield < data.Number)
+            {
+                
+                _rspShildTokenDatas.Remove(data);
+            }
+        }
     }
 
-    public void GetShield(int num)
+    public void GetShield(int num,PlayerHand playerHand = null)
     {
         _shield += num;// シールドを追加 上限がないため余計な処理はない
+
+        if (playerHand != null)
+        {
+            var newData = new RSPShildTokenData();
+            newData.SetRSPShildTokenData(num, playerHand);
+            _rspShildTokenDatas.Add(newData);
+        }
     }
 
     #endregion

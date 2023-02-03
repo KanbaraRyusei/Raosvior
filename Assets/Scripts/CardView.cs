@@ -18,6 +18,14 @@ public class CardView : MonoBehaviour
     [Header("シールド破壊数決定ボタン")]
     Button _desideBreakCountButton;
 
+    [SerializeField]
+    [Header("カードを戻すボタン")]
+    Button _cardBackButton;
+
+    [SerializeField]
+    [Header("カードを戻さないボタン")]
+    Button _notCardBackButton;
+
     /// <summary>
     /// 手札選択フェーズの手札を表示する関数
     /// </summary>
@@ -42,6 +50,8 @@ public class CardView : MonoBehaviour
     {
 
     }
+
+    #region FPaperCardJudgmentOfAigis
 
     /// <summary>
     /// 自身のシールド数を表示する関数
@@ -71,20 +81,39 @@ public class CardView : MonoBehaviour
         _desideBreakCountButton.gameObject.SetActive(false);
     }
 
+    #endregion
+
     /// <summary>
     /// 敵のカードを裏向きで表示する関数
     /// </summary>
     /// <param name="enemyHands"></param>
     public void SelectCardForPaperCardDrainShield(int enemyHandCount)
     {
-
+        
     }
+
+    #region ScissorsCardChainAx
 
     /// <summary>
     /// カードを戻せるかどうかの選択ボタンを表示する関数
     /// </summary>
-    public void SelectCardForScissorsCardChainAx()
+    public void SelectCardForScissorsCardChainAx(UnityAction cardBackMethod, UnityAction notCardBackMethod)
     {
+        _cardBackButton.onClick.AddListener(cardBackMethod);
+        _notCardBackButton.onClick.AddListener(notCardBackMethod);
 
+        _cardBackButton.gameObject.SetActive(true);
+        _notCardBackButton.gameObject.SetActive(true);
     }
+
+    public void InactiveCardBackButton(UnityAction cardBackMethod, UnityAction notCardBackMethod)
+    {
+        _cardBackButton.gameObject.SetActive(false);
+        _notCardBackButton.gameObject.SetActive(false);
+
+        _cardBackButton.onClick.RemoveListener(cardBackMethod);
+        _notCardBackButton.onClick.RemoveListener(notCardBackMethod);
+    }
+
+    #endregion
 }

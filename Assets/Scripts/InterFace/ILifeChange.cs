@@ -21,5 +21,5 @@ public interface ILifeChange
     /// プレイヤーのシールドを増やす関数
     /// </summary>
     /// <param name="num"></param>
-    void GetShield(int num);
+    void GetShield(int num,PlayerHand playerHand = null);
 }

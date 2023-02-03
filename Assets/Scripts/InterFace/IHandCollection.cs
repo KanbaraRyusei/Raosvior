@@ -28,6 +28,11 @@ public interface IHandCollection
     void OnReserveHand(PlayerHand playerHand);
 
     /// <summary>
+    /// セットしたカードを手札に戻す関数
+    /// </summary>
+    void CardBack();
+
+    /// <summary>
     /// リーダーカードをセットする関数
     /// </summary>
     /// <param name="leader"></param>
