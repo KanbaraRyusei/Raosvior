@@ -22,6 +22,12 @@ public interface IHandCollection
     void AddHand(PlayerHand playerHand);
 
     /// <summary>
+    /// 手札のカードを消す関数
+    /// </summary>
+    /// <param name="playerHand"></param>
+    void RemoveHand(PlayerHand playerHand);
+
+    /// <summary>
     /// 手札をリザーブに送る関数
     /// </summary>
     /// <param name="playerHand"></param>

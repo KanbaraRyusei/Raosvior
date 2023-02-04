@@ -9,8 +9,14 @@ using UnityEngine;
 /// </summary>
 public class FRockCardExplosion : RSPHandEffect
 {
+    #region Constants
+
     const int RESERVE_COUNT = 3;
     const int ADD_DAMEGE = 2;
+
+    #endregion
+
+    #region Public Method
 
     public override void Effect()
     {
@@ -23,4 +29,6 @@ public class FRockCardExplosion : RSPHandEffect
             Players[EnemyIndex].LifeChange.ReceiveDamage(ADD_DAMEGE);
         }
     }
+
+    #endregion
 }

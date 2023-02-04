@@ -11,7 +11,13 @@ using UnityEngine;
 /// </summary>
 public class ScissorsCardChainAx : RSPHandEffect
 {
+    #region Public Property
+
     public bool IsDecide { get; private set; }
+
+    #endregion
+
+    #region Public Methods
 
     public override void Effect()
     {
@@ -25,16 +31,12 @@ public class ScissorsCardChainAx : RSPHandEffect
         Players[PlayerIndex].HandCollection.CardBack();
         IsDecide = true;
 
-        PhaseManager.OnNextPhase();
-
         Invoke("Init", 1f);
     }
 
     public void NotCardBack()
     {
         IsDecide = true;
-
-        PhaseManager.OnNextPhase();
 
         Invoke("Init", 1f);
     }
@@ -48,8 +50,14 @@ public class ScissorsCardChainAx : RSPHandEffect
         if (currentPhase == interventionPhase) NotCardBack();
     }
 
+    #endregion
+
+    #region Private Method
+
     private void Init()
     {
         IsDecide = false;
     }
+
+    #endregion
 }

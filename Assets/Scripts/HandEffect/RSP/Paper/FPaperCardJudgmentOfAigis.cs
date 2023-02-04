@@ -11,8 +11,19 @@ using UnityEngine;
 /// </summary>
 public class FPaperCardJudgmentOfAigis : RSPHandEffect
 {
-    public int BreakCount { get; private set; }
+    #region Public Property
+
     public bool IsDecide { get; private set; }
+
+    #endregion
+
+    #region Private Member
+
+    private int _breakCount;
+
+    #endregion
+
+    #region Public Methods
 
     public override void Effect()
     {
@@ -29,8 +40,8 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
     public void AddBreakCount()
     {
         var shildCount = Players[PlayerIndex].PlayerParameter.Shield;
-        if (BreakCount >= shildCount) return;
-        BreakCount++;
+        if (_breakCount >= shildCount) return;
+        _breakCount++;
     }
 
     /// <summary>
@@ -38,8 +49,8 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
     /// </summary>
     public void RemoveBreakCount()
     {
-        if (BreakCount <= 0) return;
-        BreakCount--;
+        if (_breakCount <= 0) return;
+        _breakCount--;
     }
 
     /// <summary>
@@ -49,13 +60,11 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
     {
         IsDecide = true;
 
-        if (BreakCount > 0)
+        if (_breakCount > 0)
         {
-            Players[EnemyIndex].LifeChange.GetShield(-BreakCount);
-            Players[EnemyIndex].LifeChange.ReceiveDamage(BreakCount);
+            Players[EnemyIndex].LifeChange.GetShield(-_breakCount);
+            Players[EnemyIndex].LifeChange.ReceiveDamage(_breakCount);
         }
-            
-        PhaseManager.OnNextPhase();
 
         Invoke("Init",1f);
     }
@@ -69,9 +78,15 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
         if (currentPhase == interventionPhase) DecideBreakCount();
     }
 
+    #endregion
+
+    #region Private Method
+
     private void Init()
     {
-        BreakCount = 0;
+        _breakCount = 0;
         IsDecide = false;
     }
+
+    #endregion
 }

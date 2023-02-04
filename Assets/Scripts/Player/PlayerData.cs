@@ -122,6 +122,11 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
         _playerHands.Add(playerHand);// 手札にカードを加える
     }
 
+    public void RemoveHand(PlayerHand playerHand)
+    {
+        _playerHands.Remove(playerHand);// 手札のカードを消す
+    }
+
     public void OnReserveHand(PlayerHand playerHand)
     {
         _playerHands.Remove(playerHand);// 手札からカードを削除
@@ -162,6 +167,10 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
             await UniTask.NextFrame();
             await UniTask.WaitUntil(() =>
                 PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
+
+            var shaman =_leaderHand.HandEffect as ShamanData;
+            if (shaman.IsReducing) damage--;
+
         }
         if(_shield > ConstParameter.ZERO)// シールドがあるかどうか判定
         {
@@ -182,20 +191,25 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
         {
             if(_shield < data.Number)
             {
-                
+                var isEnemy = PlayerManager.Players[0].HandCollection != this;
+                if (isEnemy)
+                PlayerManager.Players[0].HandCollection.AddHand(data.RSPHand);
+                else
+                PlayerManager.Players[1].HandCollection.AddHand(data.RSPHand);
+
                 _rspShildTokenDatas.Remove(data);
             }
         }
     }
 
-    public void GetShield(int num,PlayerHand playerHand = null)
+    public void GetShield(int num = 1,PlayerHand playerHand = null)
     {
         _shield += num;// シールドを追加 上限がないため余計な処理はない
 
         if (playerHand != null)
         {
             var newData = new RSPShildTokenData();
-            newData.SetRSPShildTokenData(num, playerHand);
+            newData.SetRSPShildTokenData(playerHand, num);
             _rspShildTokenDatas.Add(newData);
         }
     }

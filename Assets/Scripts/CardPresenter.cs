@@ -5,10 +5,17 @@ using UnityEngine;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using UnityEngine.Events;
 
 public class CardPresenter : MonoBehaviour
 {
+    #region Static Property
+
     private PhaseParameter CurrentPhase => PhaseManager.CurrentPhaseProperty;
+
+    #endregion
+
+    #region Inspector Member
 
     [SerializeField]
     [Header("ハンドのビュー")]
@@ -17,6 +24,10 @@ public class CardPresenter : MonoBehaviour
     [SerializeField]
     [Header("プレイヤーのプレゼンター")]
     private PlayerPresenter _playerPresenter;
+
+    #endregion
+
+    #region Unity Method
 
     private void Awake()
     {
@@ -28,6 +39,10 @@ public class CardPresenter : MonoBehaviour
             }
             ).AddTo(this);
     }
+
+    #endregion
+
+    #region Private Methods
 
     private void DisplayViewByPhase(PhaseParameter phase)
     {
@@ -64,60 +79,93 @@ public class CardPresenter : MonoBehaviour
 
             case PhaseParameter.Intervention:
 
-                DisplayViewByIntervetion();
+                var player = _playerPresenter.PlayerData;
+                var client = PlayerManager.Players[0].PlayerParameter;
+
+                var isClient = player == client && PhaseManager.IsCliant;
+                var isOther = player != client && !PhaseManager.IsCliant;
+
+                if (isClient) DisplayViewByIntervetion();     
+                else if(isOther) DisplayViewByIntervetion();
 
                 break;
         }
     }
 
-    private void DisplayViewByIntervetion()
+    async private void DisplayViewByIntervetion()
     {
         switch (PhaseManager.IntervetionProperty)
         {
             case IntervetionParameter.LeaderCardShaman:
 
-                LeaderCardShaman();
+                await LeaderCardShaman();
 
                 break;
 
             case IntervetionParameter.FPaperCardJudgmentOfAigis:
 
-                FPaperCardJudgmentOfAigis();
+                await FPaperCardJudgmentOfAigis();
 
                 break;
 
             case IntervetionParameter.PaperCardDrainShield:
 
-                PaperCardDrainShield();
+                await PaperCardDrainShield();
 
                 break;
 
             case IntervetionParameter.ScissorsCardChainAx:
 
-                ScissorsCardChainAxAsync();
+                await ScissorsCardChainAxAsync();
 
                 break;
         }
+
+        PhaseManager.OnNextPhase();
     }
 
-    private void LeaderCardShaman()
+    async private UniTask LeaderCardShaman()
     {
         var shaman = _playerPresenter
                         .PlayerData
                         .LeaderHand
                         .HandEffect as ShamanData;
 
+        var chainAx = typeof(ScissorsCardChainAx);
+        var jammingWave = typeof(FScissorsCardJammingWave);
         var scissorsHands =
                     _playerPresenter
                         .PlayerData
                         .PlayerHands
-                        .Where(x => x.HandEffect.GetType() == typeof(ScissorsCardChainAx) || x.HandEffect.GetType() == typeof(FScissorsCardJammingWave));
+                        .Where(hand => 
+                                hand.HandEffect.GetType() == chainAx ||
+                                hand.HandEffect.GetType() == jammingWave);
 
-        _handView.SelectCardForLeaderCardShaman(scissorsHands);
+        PlayerInterface player;
+        if (PhaseManager.IsCliant) player = PlayerManager.Players[1];
+        else player = PlayerManager.Players[0];
 
+        var methods = new List<UnityAction>();
+
+        foreach (var scissorsHand in scissorsHands)
+            methods.Add(() => shaman.SelectScissorsHand(scissorsHand));
+
+        _handView.SelectCardForLeaderCardShaman
+                    (methods, shaman.DontSelectScissorsHand, shaman.DecideScissorsHand,scissorsHands);
+
+        var cts = new CancellationTokenSource();
+
+        shaman.LimitSelectTime(cts.Token);
+
+        await UniTask.WaitUntil(() => shaman.IsDecide);
+
+        cts.Cancel();
+
+        _handView.InactiveScissorsHandButton
+                    (methods, shaman.DontSelectScissorsHand,shaman.DecideScissorsHand);
     }
 
-    async private void FPaperCardJudgmentOfAigis()
+    async private UniTask FPaperCardJudgmentOfAigis()
     {
         var judgmentOfAigis =
             _playerPresenter
@@ -146,7 +194,7 @@ public class CardPresenter : MonoBehaviour
                         judgmentOfAigis.DecideBreakCount);
     }
 
-    private void PaperCardDrainShield()
+    async private UniTask PaperCardDrainShield()
     {
         var paperCardDrainShield =
             _playerPresenter
@@ -154,13 +202,31 @@ public class CardPresenter : MonoBehaviour
                 .PlayerSetHand
                 .HandEffect as PaperCardDrainShield;
 
+
+        PlayerInterface player;
+        if(PhaseManager.IsCliant)player = PlayerManager.Players[1];
+        else player = PlayerManager.Players[0];
+
+        var methods = new List<UnityAction>();
+
+        foreach (var enemyHand in player.PlayerParameter.PlayerHands)
+            methods.Add(() => paperCardDrainShield.SelectEnemyHand(enemyHand));
+
         _handView.SelectCardForPaperCardDrainShield
-                    (paperCardDrainShield.EnemyHandCount);
+                    (methods,paperCardDrainShield.DecideEnemyHand);
 
+        var cts = new CancellationTokenSource();
 
+        paperCardDrainShield.LimitSelectTime(cts.Token);
+
+        await UniTask.WaitUntil(() => paperCardDrainShield.IsDecide);
+
+        cts.Cancel();
+
+        _handView.InactiveEnemyHandButton(methods, paperCardDrainShield.DecideEnemyHand);
     }
 
-    async private void ScissorsCardChainAxAsync()
+    async private UniTask ScissorsCardChainAxAsync()
     {
         var scissorsCardChainAx =
             _playerPresenter
@@ -183,4 +249,6 @@ public class CardPresenter : MonoBehaviour
                     (scissorsCardChainAx.CardBack,
                         scissorsCardChainAx.NotCardBack);
     }
+
+    #endregion
 }

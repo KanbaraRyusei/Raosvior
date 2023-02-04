@@ -3,15 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 手札がシールドトークンになった時の番号と手札を登録できるスクリプト
+/// </summary>
 [Serializable]
 public class RSPShildTokenData
 {
-    public int Number { get; private set; }
-    public PlayerHand RSPHand { get; private set; }
+    #region Public Property
 
-    public void SetRSPShildTokenData(int number, PlayerHand rspHand)
+    public PlayerHand RSPHand { get; private set; }
+    public int Number { get; private set; }
+
+    #endregion
+
+    #region Public Method
+
+    public void SetRSPShildTokenData(PlayerHand rspHand,int number)
     {
-        Number = number;
         RSPHand = rspHand;
+        Number = number;
     }
+
+    #endregion
 }

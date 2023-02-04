@@ -7,6 +7,9 @@ using UnityEngine;
 /// </summary>
 public enum PhaseParameter
 {
+    [Tooltip("リーダーカード選択フェーズ")]
+    LeaderSelect,
+
     [Tooltip("手札選択フェーズ")]
     HandSelect,
 

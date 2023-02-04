@@ -9,10 +9,15 @@ using UnityEngine;
 /// </summary>
 public class FScissorsCardJammingWave : RSPHandEffect
 {
+    #region Public Method
+
     public override void Effect()
     {
         ChangePlayersIndex(Player);
         var allShield = Players[EnemyIndex].PlayerParameter.Shield;
         Players[EnemyIndex].LifeChange.GetShield(-allShield);//相手のシールドを全て破壊
+        Players[EnemyIndex].LifeChange.ReceiveDamage();
     }
+
+    #endregion
 }

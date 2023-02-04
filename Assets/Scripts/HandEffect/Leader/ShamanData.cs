@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -10,6 +12,19 @@ using UnityEngine;
 /// </summary>
 public class ShamanData : LeaderHandEffect
 {
+    #region Public Property
+
+    public bool IsDecide { get; private set; }
+    public bool IsReducing { get; private set; }
+
+    #endregion
+
+    #region Private Member
+
+    private PlayerHand _playerHand;
+
+    #endregion
+
     #region public method
 
     public override void CardEffect()
@@ -37,9 +52,47 @@ public class ShamanData : LeaderHandEffect
         }
     }
 
-    public void Intervention()
+    public void SelectScissorsHand(PlayerHand playerHand)
     {
-                
+        _playerHand  = playerHand;     
     }
+
+    public void DontSelectScissorsHand()
+    {
+        IsDecide = true;
+        IsReducing = false;
+
+        Invoke("Init", 1f);
+    }
+
+    public void DecideScissorsHand()
+    {
+        Players[PlayerIndex].HandCollection.OnReserveHand(_playerHand);
+
+        IsDecide = true;
+        IsReducing = true;
+
+        Invoke("Init", 1f);
+    }
+
+    async public void LimitSelectTime(CancellationToken token)
+    {
+        await UniTask.Delay(20000, cancellationToken: token);
+
+        var currentPhase = PhaseManager.CurrentPhaseProperty;
+        var interventionPhase = PhaseParameter.Intervention;
+        if (currentPhase == interventionPhase)DontSelectScissorsHand();
+    }
+
+    #endregion
+
+    #region Private Method
+
+    private void Init()
+    {
+        IsDecide = false;
+        IsReducing = false;
+    }
+
     #endregion
 }

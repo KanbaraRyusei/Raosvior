@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 介入用のパラメータ
+/// </summary>
 public enum IntervetionParameter
 {
     [Tooltip("シャーマンのリーダーカード")]

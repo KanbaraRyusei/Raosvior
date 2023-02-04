@@ -4,10 +4,20 @@ using UnityEngine;
 
 public static class PlayerManager
 {
+    #region Public Property
+
     //PlayerのInterfaceを参照できる
     public static IReadOnlyList<PlayerInterface> Players => _players;
 
-    private static List<PlayerInterface> _players = new List<PlayerInterface>(2);// 2人対戦のため
+    #endregion
+
+    #region Private Member
+
+    private static List<PlayerInterface> _players = new List<PlayerInterface>();
+
+    #endregion
+
+    #region Public Methods
 
     public static void Register(PlayerData playerData)
     {
@@ -24,4 +34,6 @@ public static class PlayerManager
             if (isPlayer) _players.Remove(player);
         }
     }
+
+    #endregion
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -12,9 +13,19 @@ using UnityEngine;
 /// </summary>
 public class PaperCardDrainShield : RSPHandEffect
 {
+    #region Public Property
+
     public bool IsDecide { get; private set; }
 
-    public int EnemyHandCount => Players[EnemyIndex].PlayerParameter.PlayerHands.Count;
+    #endregion
+
+    #region Private Member
+
+    private PlayerHand _enemyHand;
+
+    #endregion
+
+    #region Public Methods
 
     public override void Effect()
     {
@@ -25,8 +36,39 @@ public class PaperCardDrainShield : RSPHandEffect
         PhaseManager.OnNextPhase(this);
     }
 
-    public void SelectEnemyHand()
+    public void SelectEnemyHand(PlayerHand enemyHand)
     {
-        
+        _enemyHand = enemyHand;
     }
+
+    public void DecideEnemyHand()
+    {
+        if(_enemyHand == null) _enemyHand = Players[EnemyIndex].PlayerParameter.PlayerHands[0];
+        
+        Players[EnemyIndex].HandCollection.RemoveHand(_enemyHand);
+        Players[PlayerIndex].LifeChange.GetShield(playerHand: _enemyHand);
+
+        Invoke("Init", 1f);
+    }
+
+    async public void LimitSelectTime(CancellationToken token)
+    {
+        await UniTask.Delay(20000, cancellationToken: token);
+
+        var currentPhase = PhaseManager.CurrentPhaseProperty;
+        var interventionPhase = PhaseParameter.Intervention;
+        if (currentPhase == interventionPhase) DecideEnemyHand();
+    }
+
+    #endregion
+
+    #region Private Method
+
+    private void Init()
+    {
+        IsDecide = false;
+        _enemyHand = null;
+    }
+
+    #endregion
 }

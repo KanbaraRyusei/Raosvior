@@ -9,6 +9,8 @@ using UnityEngine;
 /// </summary>
 public class RockCardExplodingArrow : RSPHandEffect
 {
+    #region Public Method
+
     public override void Effect()
     {
         ChangePlayersIndex(Player); 
@@ -20,4 +22,6 @@ public class RockCardExplodingArrow : RSPHandEffect
             Players[EnemyIndex].LifeChange.ReceiveDamage();
         }
     }
+
+    #endregion
 }
