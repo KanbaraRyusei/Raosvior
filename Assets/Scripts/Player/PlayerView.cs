@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlayerView : MonoBehaviour
 {
+    #region Inspector Member
+
     [SerializeField]
     [Header("ライフのテキスト")]
     Text _lifeText;
@@ -24,6 +26,10 @@ public class PlayerView : MonoBehaviour
     [SerializeField]
     [Header("手札の画像")]
     Image[] _playerHands;
+
+    #endregion
+
+    #region Public Methods
 
     public void ChangeLifeText(int value)// テキストに引数を代入
     {
@@ -50,4 +56,5 @@ public class PlayerView : MonoBehaviour
         _playerSetHand = img;
     }
 
+    #endregion
 }

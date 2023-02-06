@@ -9,7 +9,7 @@ using System;
 [CreateAssetMenu(menuName = "ScriptableObjects/CreatePlayerHandAsset")]
 public class PlayerHand : ScriptableObject
 {
-    #region Public property
+    #region Public Property
 
     /// <summary>
     /// カードの手の読み取り専用プロパティ
@@ -48,12 +48,12 @@ public class PlayerHand : ScriptableObject
 
     [SerializeField]
     [Header("カード名")]
-    private string _cardName = "None";
+    private string _cardName = "";
 
     [SerializeField]
     [Header("効果名")]
     [Multiline]
-    private string _cardEffect = "None";
+    private string _cardEffect = "";
 
     [SerializeField]
     [Header("効果")]

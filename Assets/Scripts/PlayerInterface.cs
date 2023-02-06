@@ -8,17 +8,9 @@ public class PlayerInterface
 {
     #region Public Properties
 
-    public IPlayerParameter PlayerParameter => _playerParameter;
-    public IHandCollection HandCollection => _handCollection;
-    public ILifeChange LifeChange => _lifeChange;
-
-    #endregion
-
-    #region Private Member
-
-    private IPlayerParameter _playerParameter;
-    private IHandCollection _handCollection;
-    private ILifeChange _lifeChange;
+    public IPlayerParameter PlayerParameter { get; private set; }
+    public IHandCollection HandCollection { get; private set; }
+    public ILifeChange LifeChange { get; private set; }
 
     #endregion
 
@@ -26,19 +18,19 @@ public class PlayerInterface
 
     public void SetInterface(PlayerData player)
     {
-        _playerParameter = player;
-        _handCollection = player;
-        _lifeChange = player;
+        PlayerParameter = player;
+        HandCollection = player;
+        LifeChange = player;
     }
 
     public void SetPlayerParameter(IPlayerParameter player) =>
-        _playerParameter = player;
+        PlayerParameter = player;
 
     public void SetHandCollection(IHandCollection player) =>
-        _handCollection = player;
+        HandCollection = player;
 
     public void SetLifeChange(ILifeChange player) =>
-        _lifeChange = player;
+        LifeChange = player;
 
     #endregion
 }

@@ -38,7 +38,7 @@ public class CardView : MonoBehaviour
 
     [SerializeField]
     [Header("カードを選択するボタンを格納するリスト")]
-    private List<Button> _handButtons = new List<Button>();
+    private Button[] _handButtons = new Button[4];
 
     [SerializeField]
     [Header("カードを選択するボタンを格納する親オブジェクト")]
@@ -96,8 +96,8 @@ public class CardView : MonoBehaviour
     /// </summary>
     /// <param name="scissorsHands"></param>
     public void SelectCardForLeaderCardShaman
-        (IReadOnlyList<UnityAction> methods, UnityAction cancelMethod,
-        UnityAction decideMethod,IEnumerable<PlayerHand> scissorsHands)
+        (IReadOnlyList<UnityAction> methods, UnityAction cancelMethod, 
+        UnityAction decideMethod, IEnumerable<PlayerHand> scissorsHands)
     {
         foreach (var method in methods)
         {
@@ -190,7 +190,7 @@ public class CardView : MonoBehaviour
     /// </summary>
     /// <param name="enemyHands"></param>
     public void SelectCardForPaperCardDrainShield
-        (IReadOnlyList<UnityAction> methods,UnityAction decideMethod)
+        (IReadOnlyList<UnityAction> methods, UnityAction decideMethod)
     {
         foreach (var method in methods)
         {
@@ -268,7 +268,7 @@ public class CardView : MonoBehaviour
             var enemyHand = Instantiate(_rspHandButtonPrefab);
             enemyHand.gameObject.SetActive(false);
             enemyHand.transform.SetParent(transform);
-            _handButtons.Add(enemyHand);
+            _handButtons[i] = enemyHand;
         }
     }
 

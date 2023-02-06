@@ -7,7 +7,7 @@ using Cysharp.Threading.Tasks;
 /// </summary>
 public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
 {
-    #region public property (IPlayerParameter interface)
+    #region Public Property (IPlayerParameter Interface)
 
     /// <summary>
     /// プレイヤーのライフの読み取り専用プロパティ
@@ -43,7 +43,7 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
 
     #endregion
 
-    #region private member
+    #region Private Member
 
     /// <summary>
     /// プレイヤーのライフ
@@ -90,7 +90,7 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
 
     #endregion
 
-    #region constructor
+    #region Constructor
 
     public PlayerData()
     {
@@ -99,7 +99,7 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
 
     #endregion
 
-    #region private method
+    #region Private Method
 
     private void Init()// 初期化する関数
     {
@@ -109,7 +109,7 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
 
     #endregion
 
-    #region IHandCollection interface
+    #region IHandCollection Interface
 
     public void SetHand(PlayerHand playerHand)
     {
@@ -161,7 +161,7 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
 
     #endregion
 
-    #region ILifeChange interface
+    #region ILifeChange Interface
 
     public void HealLife(int heal)
     {
@@ -211,7 +211,7 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
         }
     }
 
-    public void GetShield(int num,PlayerHand playerHand = null)
+    public void GetShield(int num, PlayerHand playerHand = null)
     {
         _shield += num;// シールドを追加 上限がないため余計な処理はない
 

@@ -10,19 +10,19 @@ public class CardManager : MonoBehaviour
 {
     [SerializeField]
     [Header("プレイヤー用のリーダーカード")]
-    List<LeaderPlayerHand> _cliantLeaderHands = new List<LeaderPlayerHand>(4);
+    private LeaderPlayerHand[] _cliantLeaderHands = new LeaderPlayerHand[4];
 
     [SerializeField]
     [Header("もう片方のプレイヤー用のリーダーカード")]
-    List<LeaderPlayerHand> _otherLeaderHands = new List<LeaderPlayerHand>(4);
+    private LeaderPlayerHand[] _otherLeaderHands = new LeaderPlayerHand[4];
 
     [SerializeField]
     [Header("プレイヤー用のじゃんけんカード")]
-    List<PlayerHand> _cliantRSPHands = new List<PlayerHand>(9);
+    private List<PlayerHand> _cliantRSPHands = new List<PlayerHand>(9);
 
     [SerializeField]
     [Header("もう片方のプレイヤー用のじゃんけんカード")]
-    List<PlayerHand> _otherRSPHands = new List<PlayerHand>(9);
+    private List<PlayerHand> _otherRSPHands = new List<PlayerHand>(9);
 
     /// <summary>
     /// プレイヤーにリーダーカードを渡す関数
@@ -43,7 +43,7 @@ public class CardManager : MonoBehaviour
                     player.HandCollection.SetLeaderHand(hand);
                 }
             }
-            randomIndex = Random.Range(0, _cliantLeaderHands.Count);
+            randomIndex = Random.Range(0, _cliantLeaderHands.Length);
             _cliantLeaderHands[randomIndex].HandEffect.ChangePlayersIndex(player);
             player.HandCollection.SetLeaderHand(_cliantLeaderHands[randomIndex]);
         }
@@ -58,7 +58,7 @@ public class CardManager : MonoBehaviour
                     player.HandCollection.SetLeaderHand(hand);
                 }
             }
-            randomIndex = Random.Range(0, _otherLeaderHands.Count);
+            randomIndex = Random.Range(0, _otherLeaderHands.Length);
             _otherLeaderHands[randomIndex].HandEffect.ChangePlayersIndex(player);
             player.HandCollection.SetLeaderHand(_otherLeaderHands[randomIndex]);
         }

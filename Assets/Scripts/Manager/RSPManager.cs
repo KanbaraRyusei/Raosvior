@@ -20,7 +20,7 @@ public struct RSPManager
 
     #region Public Method
 
-    public static int Calculator(RSPParameter playerRSP,RSPParameter enemyRSP)
+    public static int Calculator(RSPParameter playerRSP, RSPParameter enemyRSP)
     {
         var value = (playerRSP - enemyRSP + RSP_OFFSET) % RSP_REMAINDER;
         return value;

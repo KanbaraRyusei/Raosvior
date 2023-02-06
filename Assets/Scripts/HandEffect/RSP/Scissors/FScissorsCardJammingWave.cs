@@ -13,9 +13,9 @@ public class FScissorsCardJammingWave : RSPHandEffect
 
     public override void Effect()
     {
-        var allShield = Player.PlayerParameter.Shield;
-        Player.LifeChange.GetShield(-allShield);//相手のシールドを全て破壊
-        Player.LifeChange.ReceiveDamage();
+        var allShield = Enemy.PlayerParameter.Shield;
+        Enemy.LifeChange.GetShield(-allShield);//相手のシールドを全て破壊
+        Enemy.LifeChange.ReceiveDamage();
     }
 
     #endregion
