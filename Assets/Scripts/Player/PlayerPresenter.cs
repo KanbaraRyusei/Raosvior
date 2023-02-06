@@ -3,34 +3,51 @@ using UnityEngine;
 
 public class PlayerPresenter : MonoBehaviour
 {
-    PlayerData _playerData;
+    #region Public Property
+
+    public PlayerData PlayerData { get; private set; }
+
+    #endregion
+
+    #region Inspector
 
     [SerializeField]
-    PlayerView _playerView;
+    private PlayerView _playerView;
 
-    private void Awake()
-    {
-        _playerData = PlayerManager.Players[0];
-    }
+    #endregion
+
+    #region Unity Method
 
     private void Start()
     {
-        _playerData.ObserveEveryValueChanged(x => _playerData.Life)
-            .Subscribe(x => _playerView.ChangeLifeText(x)).AddTo(this);
+        PlayerData
+            .ObserveEveryValueChanged(x => PlayerData.Life)
+            .Subscribe(life => _playerView.ChangeLifeText(life))
+            .AddTo(this);
 
-        _playerData.ObserveEveryValueChanged(x => _playerData.Shield)
-            .Subscribe(x => _playerView.ChangeShieldText(x)).AddTo(this);
+        PlayerData
+            .ObserveEveryValueChanged(x => PlayerData.Shield)
+            .Subscribe(shild => _playerView.ChangeShieldText(shild))
+            .AddTo(this);
 
-        _playerData.ObserveEveryValueChanged(x => _playerData.PlayerReserve.Count)
-            .Subscribe(x => _playerView.ChangeReserveText(x)).AddTo(this);
+        PlayerData
+            .ObserveEveryValueChanged(x => PlayerData.PlayerReserve.Count)
+            .Subscribe(reserveCount => _playerView.ChangeReserveText(reserveCount))
+            .AddTo(this);
 
-        for (int i = 0; i < _playerData.PlayerHands.Count; i++)
+        for (int i = 0; i < PlayerData.PlayerHands.Count; i++)
         {
-            _playerData.ObserveEveryValueChanged(x => _playerData.PlayerHands[i])
-                .Subscribe(x => _playerView.ChangeHandsImage(x.CardImage, i)).AddTo(this);
+            PlayerData
+                .ObserveEveryValueChanged(x => PlayerData.PlayerHands[i])
+                .Subscribe(hand => _playerView.ChangeHandsImage(hand.CardImage, i))
+                .AddTo(this);
         }
 
-        _playerData.ObserveEveryValueChanged(x => _playerData.PlayerSetHand.CardImage)
-            .Subscribe(x => _playerView.ChangeSetHandImage(x)).AddTo(this);
+        PlayerData
+            .ObserveEveryValueChanged(x => PlayerData.PlayerSetHand.CardImage)
+            .Subscribe(cardImage => _playerView.ChangeSetHandImage(cardImage))
+            .AddTo(this);
     }
+
+    #endregion
 }

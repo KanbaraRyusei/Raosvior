@@ -1,12 +1,13 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 
 /// <summary>
 /// プレイヤーのデータを持つクラス
 /// </summary>
-public class PlayerData : IHandCollection, ILifeChange
+public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
 {
-    #region public property
+    #region Public Property (IPlayerParameter Interface)
 
     /// <summary>
     /// プレイヤーのライフの読み取り専用プロパティ
@@ -17,6 +18,11 @@ public class PlayerData : IHandCollection, ILifeChange
     /// プレイヤーのシールドの読み取り専用プロパティ
     /// </summary>
     public int Shield => _shield;
+
+    /// <summary>
+    /// プレイヤーのリーダーカードの読み取り専用プロパティ
+    /// </summary>
+    public LeaderPlayerHand LeaderHand => _leaderHand;
 
     /// <summary>
     /// プレイヤーの手札の読み取り専用プロパティ
@@ -37,27 +43,39 @@ public class PlayerData : IHandCollection, ILifeChange
 
     #endregion
 
-    #region private member
+    #region Private Member
 
     /// <summary>
     /// プレイヤーのライフ
     /// </summary>
     private int _life;
+
     /// <summary>
     /// プレイヤーのシールド
     /// </summary>
     private int _shield;
 
     /// <summary>
+    /// プレイヤーのリーダーカード
+    /// </summary>
+    private LeaderPlayerHand _leaderHand;
+
+    /// <summary>
     /// プレイヤーの手札
     /// 上限が決まっているため、要素数を指定して少し軽くした
     /// </summary>
     private List<PlayerHand> _playerHands = new List<PlayerHand>(5);
+
     /// <summary>
     /// プレイヤーのリザーブ
     /// 上限が決まっているため、要素数を指定して少し軽くした
     /// </summary>
     private List<PlayerHand> _playerReserve = new List<PlayerHand>(5);
+
+    /// <summary>
+    /// シールドトークン化した敵のカード
+    /// </summary>
+    private List<PlayerHand> _rspShildTokenDatas = new List<PlayerHand>();
 
     /// <summary>
     /// 場にセットするカード
@@ -66,7 +84,13 @@ public class PlayerData : IHandCollection, ILifeChange
 
     #endregion
 
-    #region constructor
+    #region Constant
+
+    private const int LIFE_DEFAULT = 5;
+
+    #endregion
+
+    #region Constructor
 
     public PlayerData()
     {
@@ -75,17 +99,17 @@ public class PlayerData : IHandCollection, ILifeChange
 
     #endregion
 
-    #region private method
+    #region Private Method
 
     private void Init()// 初期化する関数
     {
-        _life = ConstParameter.LIFE_DEFAULT;
-        _shield = ConstParameter.ZERO;
+        _life = LIFE_DEFAULT;
+        _shield = 0;
     }
 
     #endregion
 
-    #region IHandCollection interface
+    #region IHandCollection Interface
 
     public void SetHand(PlayerHand playerHand)
     {
@@ -95,13 +119,21 @@ public class PlayerData : IHandCollection, ILifeChange
 
     public void SetCardOnReserve()
     {
-        _playerReserve.Add(_playerSetHand);// セットされているカードをリザーブに送る
-        _playerSetHand = null;// セットされていたカードを消す
+        if (_playerSetHand != null)
+        {
+            _playerReserve.Add(_playerSetHand);// セットされているカードをリザーブに送る
+            _playerSetHand = null;// セットされていたカードを消す
+        }
     }
 
     public void AddHand(PlayerHand playerHand)
     {
         _playerHands.Add(playerHand);// 手札にカードを加える
+    }
+
+    public void RemoveHand(PlayerHand playerHand)
+    {
+        _playerHands.Remove(playerHand);// 手札のカードを消す
     }
 
     public void OnReserveHand(PlayerHand playerHand)
@@ -110,20 +142,48 @@ public class PlayerData : IHandCollection, ILifeChange
         _playerReserve.Add(playerHand);// リザーブにカードを追加
     }
 
+    public void CardBack()
+    {
+        _playerHands.Add(_playerSetHand);
+        _playerSetHand = null;// セットされていたカードを消す
+    }
+
+    public void SetLeaderHand(LeaderPlayerHand leader)
+    {
+        _leaderHand = leader;
+    }
+
+    public void ResetHand()
+    {
+        _playerHands = _playerReserve;
+        _playerReserve.Clear();
+    }
+
     #endregion
 
-    #region ILifeChange interface
+    #region ILifeChange Interface
 
     public void HealLife(int heal)
     {
         _life += heal;// ライフを回復 上限がないため余計な処理はない
     }
 
-    public void ReceiveDamage(int damage)
+    async public void ReceiveDamage(int damage = 1)
     {
-        if(_shield > ConstParameter.ZERO)// シールドがあるかどうか判定
+        if(_leaderHand.HandEffect.GetType() == typeof(ShamanData))
         {
-            if(_shield - damage >= ConstParameter.ZERO)// シールドの数がダメージより大きかったら
+            _leaderHand.HandEffect.CardEffect();
+            await UniTask.NextFrame();
+            await UniTask.WaitUntil(() =>
+                PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
+
+            var shaman =_leaderHand.HandEffect as ShamanData;
+            if (shaman.IsReducing) damage--;
+
+        }
+        if(_shield > 0)// シールドがあるかどうか判定
+        {
+            if(_shield - damage >= 0)// シールドの数がダメージより大きかったら
             {
                 _shield -= damage;// シールドを削る
                 return;
@@ -131,15 +191,35 @@ public class PlayerData : IHandCollection, ILifeChange
             else// シールドの数がダメージより少なかったら
             {
                 damage -= _shield;// ダメージをシールドの数減らす
-                _shield = ConstParameter.ZERO;// シールドを0にする
+                _shield = 0;// シールドを0にする
             }
         }
         _life -= damage;// ライフを減らす
+
+        foreach (var data in _rspShildTokenDatas)
+        {
+            if(_shield < data.ShildNumber)
+            {
+                var isEnemy = PlayerManager.Players[0].HandCollection != this;
+                if (isEnemy)
+                PlayerManager.Players[0].HandCollection.AddHand(data);
+                else
+                PlayerManager.Players[1].HandCollection.AddHand(data);
+
+                _rspShildTokenDatas.Remove(data);
+            }
+        }
     }
 
-    public void GetShield(int num)
+    public void GetShield(int num, PlayerHand playerHand = null)
     {
         _shield += num;// シールドを追加 上限がないため余計な処理はない
+
+        if (playerHand != null)
+        {
+            playerHand.SetShildNumber(num);
+            _rspShildTokenDatas.Add(playerHand);
+        }
     }
 
     #endregion

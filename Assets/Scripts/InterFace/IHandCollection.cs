@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,8 +22,30 @@ public interface IHandCollection
     void AddHand(PlayerHand playerHand);
 
     /// <summary>
+    /// 手札のカードを消す関数
+    /// </summary>
+    /// <param name="playerHand"></param>
+    void RemoveHand(PlayerHand playerHand);
+
+    /// <summary>
     /// 手札をリザーブに送る関数
     /// </summary>
     /// <param name="playerHand"></param>
     void OnReserveHand(PlayerHand playerHand);
+
+    /// <summary>
+    /// セットしたカードを手札に戻す関数
+    /// </summary>
+    void CardBack();
+
+    /// <summary>
+    /// リーダーカードをセットする関数
+    /// </summary>
+    /// <param name="leader"></param>
+    void SetLeaderHand(LeaderPlayerHand leader);
+
+    /// <summary>
+    /// 手札を場にセットする関数
+    /// </summary>
+    void ResetHand();
 }

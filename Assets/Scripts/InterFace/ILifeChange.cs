@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,11 +15,11 @@ public interface ILifeChange
     /// シールドがあれば先に削ってからライフにダメージを与える
     /// </summary>
     /// <param name="damage"></param>
-    void ReceiveDamage(int damage);
+    void ReceiveDamage(int damage = 1);
 
     /// <summary>
     /// プレイヤーのシールドを増やす関数
     /// </summary>
     /// <param name="num"></param>
-    void GetShield(int num);
+    void GetShield(int num,PlayerHand playerHand = null);
 }

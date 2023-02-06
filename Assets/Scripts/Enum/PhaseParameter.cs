@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// フェーズのパラメータ
@@ -7,6 +7,9 @@
 /// </summary>
 public enum PhaseParameter
 {
+    [Tooltip("リーダーカード選択フェーズ")]
+    LeaderSelect,
+
     [Tooltip("手札選択フェーズ")]
     HandSelect,
 
@@ -24,6 +27,9 @@ public enum PhaseParameter
 
     [Tooltip("キャラクターの効果処理フェーズ")]
     CharacterEffect,
+
+    [Tooltip("効果ストック処理フェーズ")]
+    StockEffect,
 
     [Tooltip("リザーブ処理フェーズ")]
     UseCardOnReserve,
