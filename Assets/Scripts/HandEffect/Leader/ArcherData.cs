@@ -13,25 +13,15 @@ public class ArcherData : LeaderHandEffect
 
     public override void CardEffect()
     {
-        ChangePlayersIndex(Player);
-        var playerRSP = Players[PlayerIndex].PlayerParameter.PlayerSetHand.Hand;
-        var enemyRSP = Players[EnemyIndex].PlayerParameter.PlayerSetHand.Hand;
+        var playerRSP = Player.PlayerParameter.PlayerSetHand.Hand;
+        var enemyRSP = Enemy.PlayerParameter.PlayerSetHand.Hand;
 
         var value = RSPManager.Calculator(playerRSP, enemyRSP);
-        if (value == RSPManager.DRAW)//引き分けなら
-        {
-            //エネミーに1ダメージ与える。
-            Players[EnemyIndex]
-                .LifeChange
-                .ReceiveDamage();
-        }
-        else if(value == RSPManager.LOSE)//負けなら
-        {
-            //プレイヤーがもう1ダメージを受ける。
-            Players[PlayerIndex]
-                .LifeChange
-                .ReceiveDamage();
-        }
+            
+        //引き分けならエネミーに1ダメージ与える
+        if (value == RSPManager.DRAW) Enemy.LifeChange.ReceiveDamage();
+        //負けならプレイヤーがもう1ダメージを受ける
+        else if(value == RSPManager.LOSE) Player.LifeChange.ReceiveDamage();
     }
 
     #endregion

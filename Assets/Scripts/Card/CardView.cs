@@ -52,7 +52,7 @@ public class CardView : MonoBehaviour
 
     #region Private Member
 
-    private int _maxHandCount;
+    private const int MAX_HAND_COUNT = 4;
 
     #endregion
 
@@ -263,7 +263,7 @@ public class CardView : MonoBehaviour
 
     private void Generate()
     {
-        for (int i = 0; i < _maxHandCount; i++)
+        for (int i = 0; i < MAX_HAND_COUNT; i++)
         {
             var enemyHand = Instantiate(_rspHandButtonPrefab);
             enemyHand.gameObject.SetActive(false);

@@ -9,6 +9,7 @@ using UnityEngine;
 /// ダメージを受ける時
 /// チョキを1枚捨てて
 /// ダメージを1減らしてもよい。
+/// ※介入処理
 /// </summary>
 public class ShamanData : LeaderHandEffect
 {
@@ -19,9 +20,18 @@ public class ShamanData : LeaderHandEffect
 
     #endregion
 
+    #region Inspector Member
+
+    [SerializeField]
+    [Header("選択時間")]
+    private int _selectTime = 20000;
+
+    #endregion
+
     #region Private Member
 
     private PlayerHand _playerHand;
+    private float _initTime = 1f;
 
     #endregion
 
@@ -29,10 +39,9 @@ public class ShamanData : LeaderHandEffect
 
     public override void CardEffect()
     {
-        ChangePlayersIndex(Player);
-        var enemyLeader = Players[EnemyIndex].PlayerParameter.LeaderHand.HandEffect.GetType();
-        var playerRSP = Players[PlayerIndex].PlayerParameter .PlayerSetHand.Hand;
-        var enemyRSP = Players[EnemyIndex].PlayerParameter.PlayerSetHand.Hand;
+        var enemyLeader = Enemy.PlayerParameter.LeaderHand.HandEffect.GetType();
+        var playerRSP = Player.PlayerParameter .PlayerSetHand.Hand;
+        var enemyRSP = Enemy.PlayerParameter.PlayerSetHand.Hand;
 
         var value = RSPManager.Calculator(playerRSP, enemyRSP);
         //相手がアーチャーの引き分けor負けだったら
@@ -40,7 +49,7 @@ public class ShamanData : LeaderHandEffect
         if (draw || value == RSPManager.LOSE)
         {
             //チョキのカードを絞り込む
-            foreach (var RSP in Players[PlayerIndex].PlayerParameter.PlayerHands)
+            foreach (var RSP in Player.PlayerParameter.PlayerHands)
             {
                 //チョキのカードがあったら
                 if (RSP.Hand == RSPParameter.Scissors)
@@ -62,22 +71,22 @@ public class ShamanData : LeaderHandEffect
         IsDecide = true;
         IsReducing = false;
 
-        Invoke("Init", 1f);
+        Invoke("Init", _initTime);
     }
 
     public void DecideScissorsHand()
     {
-        Players[PlayerIndex].HandCollection.OnReserveHand(_playerHand);
+        Player.HandCollection.OnReserveHand(_playerHand);
 
         IsDecide = true;
         IsReducing = true;
 
-        Invoke("Init", 1f);
+        Invoke("Init", _initTime);
     }
 
     async public void LimitSelectTime(CancellationToken token)
     {
-        await UniTask.Delay(20000, cancellationToken: token);
+        await UniTask.Delay(_selectTime, cancellationToken: token);
 
         var currentPhase = PhaseManager.CurrentPhaseProperty;
         var interventionPhase = PhaseParameter.Intervention;

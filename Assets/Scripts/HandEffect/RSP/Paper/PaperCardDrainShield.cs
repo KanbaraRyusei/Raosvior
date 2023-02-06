@@ -19,9 +19,24 @@ public class PaperCardDrainShield : RSPHandEffect
 
     #endregion
 
+    #region Inspector Member
+
+    [SerializeField]
+    [Header("選択時間")]
+    private int _selectTime = 20000;
+
+    #endregion
+
     #region Private Member
 
     private PlayerHand _enemyHand;
+    private float _initTime = 1f;
+
+    #endregion
+
+    #region Constant
+
+    private const int DEFAULT_DAMEGE = 1;
 
     #endregion
 
@@ -29,8 +44,6 @@ public class PaperCardDrainShield : RSPHandEffect
 
     public override void Effect()
     {
-        ChangePlayersIndex(Player);
-
         //相手のカードを自分のシールドトークンにしたいので
         //ここで相手の手札を選ぶ
         PhaseManager.OnNextPhase(this);
@@ -43,17 +56,17 @@ public class PaperCardDrainShield : RSPHandEffect
 
     public void DecideEnemyHand()
     {
-        if(_enemyHand == null) _enemyHand = Players[EnemyIndex].PlayerParameter.PlayerHands[0];
+        if(_enemyHand == null) _enemyHand = Enemy.PlayerParameter.PlayerHands[0];
         
-        Players[EnemyIndex].HandCollection.RemoveHand(_enemyHand);
-        Players[PlayerIndex].LifeChange.GetShield(playerHand: _enemyHand);
+        Enemy.HandCollection.RemoveHand(_enemyHand);
+        Player.LifeChange.GetShield(DEFAULT_DAMEGE, _enemyHand);
 
-        Invoke("Init", 1f);
+        Invoke("Init", _initTime);
     }
 
     async public void LimitSelectTime(CancellationToken token)
     {
-        await UniTask.Delay(20000, cancellationToken: token);
+        await UniTask.Delay(_selectTime, cancellationToken: token);
 
         var currentPhase = PhaseManager.CurrentPhaseProperty;
         var interventionPhase = PhaseParameter.Intervention;

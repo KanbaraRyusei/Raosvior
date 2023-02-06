@@ -11,49 +11,31 @@ public abstract class HandEffect : MonoBehaviour
 
     public PlayerInterface Player { get; private set; }
 
-    #endregion
+    public PlayerInterface Enemy { get; private set; }
 
-    #region protected property
+    #endregion 
 
-    // プレイヤーを参照するList用のインデックス
-    protected int PlayerIndex { get; private set; }
-    protected int EnemyIndex { get; private set; }
-
-    #endregion
-
-    #region protected member
-
-    // プレイヤーのインターフェースをを参照するList
-    protected IReadOnlyList<PlayerInterface> Players => PlayerManager.Players;
-
-    #endregion
-
-    #region
-
-    public void SetPlayerData(PlayerInterface player)
-    {
-        Player = player;
-    }
-
-    #endregion
-
-    #region protected method
+    #region Public Method
 
     /// <summary>
     /// プレイヤーを切り替えるメソッド
     /// </summary>
-    protected void ChangePlayersIndex(PlayerInterface player)
+    public void ChangePlayersIndex(PlayerInterface player)
     {
-        if (Players[0].HandCollection == player)
+        int playerIndex;
+        int enemyIndex;
+        if (PlayerManager.Players[0].HandCollection == player)
         {
-            PlayerIndex = 0;
-            EnemyIndex = 1;
+            playerIndex = 0;
+            enemyIndex = 1;
         }
         else
         {
-            PlayerIndex = 1;
-            EnemyIndex = 0;
+            playerIndex = 1;
+            enemyIndex = 0;
         }
+        Player = PlayerManager.Players[playerIndex];
+        Enemy = PlayerManager.Players[enemyIndex];
     }
 
     #endregion

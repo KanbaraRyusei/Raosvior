@@ -23,10 +23,10 @@ public class FRockCardExplosion : RSPHandEffect
         ChangePlayersIndex(Player);
 
         //自分のリザーフにカードが3枚以上あれば
-        if (Players[PlayerIndex].PlayerParameter.PlayerReserve.Count >= RESERVE_COUNT)
+        if (Player.PlayerParameter.PlayerReserve.Count >= RESERVE_COUNT)
         {
             //さらに2ダメージを与える。
-            Players[EnemyIndex].LifeChange.ReceiveDamage(ADD_DAMEGE);
+            Enemy.LifeChange.ReceiveDamage(ADD_DAMEGE);
         }
     }
 

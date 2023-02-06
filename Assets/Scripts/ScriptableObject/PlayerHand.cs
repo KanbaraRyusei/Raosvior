@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System;
 
@@ -9,7 +9,7 @@ using System;
 [CreateAssetMenu(menuName = "ScriptableObjects/CreatePlayerHandAsset")]
 public class PlayerHand : ScriptableObject
 {
-    #region public property
+    #region Public property
 
     /// <summary>
     /// カードの手の読み取り専用プロパティ
@@ -33,9 +33,14 @@ public class PlayerHand : ScriptableObject
 
     public Image CardImage => _cardImage;
 
+    /// <summary>
+    /// シールドトークンになった時の番号
+    /// </summary>
+    public int ShildNumber { get; private set; }
+
     #endregion
 
-    #region private property
+    #region Inspector Member
 
     [SerializeField]
     [Header("じゃんけんの手")]
@@ -57,5 +62,14 @@ public class PlayerHand : ScriptableObject
     [SerializeField]
     [Header("カードの画像")]
     private Image _cardImage;
+    #endregion
+
+    #region Public Method
+
+    public void SetShildNumber(int number)
+    {
+        ShildNumber = number;
+    }
+
     #endregion
 }

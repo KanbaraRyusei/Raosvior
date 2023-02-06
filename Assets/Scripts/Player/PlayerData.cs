@@ -73,11 +73,20 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
     private List<PlayerHand> _playerReserve = new List<PlayerHand>(5);
 
     /// <summary>
+    /// シールドトークン化した敵のカード
+    /// </summary>
+    private List<PlayerHand> _rspShildTokenDatas = new List<PlayerHand>();
+
+    /// <summary>
     /// 場にセットするカード
     /// </summary>
     private PlayerHand _playerSetHand;
 
-    private List<RSPShildTokenData> _rspShildTokenDatas = new List<RSPShildTokenData>();
+    #endregion
+
+    #region Constant
+
+    private const int LIFE_DEFAULT = 5;
 
     #endregion
 
@@ -94,8 +103,8 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
 
     private void Init()// 初期化する関数
     {
-        _life = ConstParameter.LIFE_DEFAULT;
-        _shield = ConstParameter.ZERO;
+        _life = LIFE_DEFAULT;
+        _shield = 0;
     }
 
     #endregion
@@ -172,9 +181,9 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
             if (shaman.IsReducing) damage--;
 
         }
-        if(_shield > ConstParameter.ZERO)// シールドがあるかどうか判定
+        if(_shield > 0)// シールドがあるかどうか判定
         {
-            if(_shield - damage >= ConstParameter.ZERO)// シールドの数がダメージより大きかったら
+            if(_shield - damage >= 0)// シールドの数がダメージより大きかったら
             {
                 _shield -= damage;// シールドを削る
                 return;
@@ -182,35 +191,34 @@ public class PlayerData : IPlayerParameter,IHandCollection, ILifeChange
             else// シールドの数がダメージより少なかったら
             {
                 damage -= _shield;// ダメージをシールドの数減らす
-                _shield = ConstParameter.ZERO;// シールドを0にする
+                _shield = 0;// シールドを0にする
             }
         }
         _life -= damage;// ライフを減らす
 
         foreach (var data in _rspShildTokenDatas)
         {
-            if(_shield < data.Number)
+            if(_shield < data.ShildNumber)
             {
                 var isEnemy = PlayerManager.Players[0].HandCollection != this;
                 if (isEnemy)
-                PlayerManager.Players[0].HandCollection.AddHand(data.RSPHand);
+                PlayerManager.Players[0].HandCollection.AddHand(data);
                 else
-                PlayerManager.Players[1].HandCollection.AddHand(data.RSPHand);
+                PlayerManager.Players[1].HandCollection.AddHand(data);
 
                 _rspShildTokenDatas.Remove(data);
             }
         }
     }
 
-    public void GetShield(int num = 1,PlayerHand playerHand = null)
+    public void GetShield(int num,PlayerHand playerHand = null)
     {
         _shield += num;// シールドを追加 上限がないため余計な処理はない
 
         if (playerHand != null)
         {
-            var newData = new RSPShildTokenData();
-            newData.SetRSPShildTokenData(playerHand, num);
-            _rspShildTokenDatas.Add(newData);
+            playerHand.SetShildNumber(num);
+            _rspShildTokenDatas.Add(playerHand);
         }
     }
 

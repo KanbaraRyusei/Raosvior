@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public abstract class LeaderHandEffect : HandEffect
 {
-    #region constants
+    #region Constants
 
     protected RSPParameter ROCK = RSPParameter.Rock;
     protected RSPParameter SCISSORS = RSPParameter.Scissors;
@@ -15,7 +15,7 @@ public abstract class LeaderHandEffect : HandEffect
 
     #endregion
 
-    #region public method
+    #region Public Method
 
     /// <summary>
     /// じゃんけんの勝敗がついたときに呼び出される

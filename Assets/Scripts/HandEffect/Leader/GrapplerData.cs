@@ -13,13 +13,12 @@ public class GrapplerData : LeaderHandEffect
 
     public override void CardEffect()
     {
-        ChangePlayersIndex(Player);
-        var playerRSP = Players[PlayerIndex].PlayerParameter.PlayerSetHand.Hand;
-        var enemyRSP = Players[EnemyIndex].PlayerParameter.PlayerSetHand.Hand;
+        var playerRSP = Player.PlayerParameter.PlayerSetHand.Hand;
+        var enemyRSP = Enemy.PlayerParameter.PlayerSetHand.Hand;
         if (playerRSP == ROCK && enemyRSP == SCISSORS)//グーで勝利したら
         {
             //効果をもう一度発動
-            Players[PlayerIndex].PlayerParameter.PlayerSetHand.HandEffect.Effect();
+            Player.PlayerParameter.PlayerSetHand.HandEffect.Effect();
         }
     }
 

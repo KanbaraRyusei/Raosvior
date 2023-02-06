@@ -13,13 +13,11 @@ public class RockCardExplodingArrow : RSPHandEffect
 
     public override void Effect()
     {
-        ChangePlayersIndex(Player); 
-
         //相手がシールドトークンを所持しているなら
-        if (Players[EnemyIndex].PlayerParameter.Shield > 0)
+        if (Enemy.PlayerParameter.Shield > 0)
         {
             //さらに1ダメージを与える
-            Players[EnemyIndex].LifeChange.ReceiveDamage();
+            Enemy.LifeChange.ReceiveDamage();
         }
     }
 

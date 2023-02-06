@@ -7,7 +7,6 @@ using UnityEngine;
 
 /// <summary>
 /// Battleの進行管理システムの参照を持ち、実際に関数を呼び出すクラス
-/// シャーマン...おめぇどこにでもいるな...
 /// </summary>
 public class BattleManager : MonoBehaviour
 {
@@ -34,7 +33,6 @@ public class BattleManager : MonoBehaviour
     [Header("敗北したプレイヤー")]
     private PlayerInterface _loser;
 
-    //終了時間は仮で用意(本来なら演出?の時間)
     [SerializeField]
     [Header("リーダーカード選択フェーズ強制終了時間")]
     private int _leaderSelectTime = 20000;
@@ -47,6 +45,7 @@ public class BattleManager : MonoBehaviour
     [Header("カード選択フェーズ強制終了時間")]
     private int _cardSelectTime = 20000;
 
+    //ここからの終了時間は仮で用意(本来なら演出?の時間)
     [SerializeField]
     [Header("バトル勝敗決定処理フェーズ終了時間")]
     private int _battleTime = 5000;
@@ -92,10 +91,16 @@ public class BattleManager : MonoBehaviour
 
     #endregion
 
+    #region Unity Method
+
     private void Awake()
     {
         AllPhase();
     }
+
+    #endregion
+
+    #region Private Member
 
     async private void AllPhase()
     {
@@ -339,22 +344,22 @@ public class BattleManager : MonoBehaviour
 
     #region WinnerCardEffect Method
 
-    async private UniTask WinnerCardEffect()
-    {
-        var handEffect = _winner.PlayerParameter.PlayerSetHand.HandEffect;
-        var handType = _winner.PlayerParameter.PlayerSetHand.HandEffect.GetType();
+        async private UniTask WinnerCardEffect()
+        {
+            var handEffect = _winner.PlayerParameter.PlayerSetHand.HandEffect;
+            var handType = _winner.PlayerParameter.PlayerSetHand.HandEffect.GetType();
 
-        if (handType != typeof(ScissorsCardChainAx)) handEffect.Effect();
-        else OnStockEffect += handEffect.Effect;
+            if (handType != typeof(ScissorsCardChainAx)) handEffect.Effect();
+            else OnStockEffect += handEffect.Effect;
 
-        await UniTask.Delay(_winnerCardEffectTime);
-        await UniTask.WaitUntil(() =>
-            PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
+            await UniTask.Delay(_winnerCardEffectTime);
+            await UniTask.WaitUntil(() =>
+                PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
 
-        PhaseManager.OnNextPhase();//リーダーの効果処理フェーズへ
-    }
+            PhaseManager.OnNextPhase();//リーダーの効果処理フェーズへ
+        }
 
-    #endregion
+        #endregion
 
     #region LeaderEffect Method
 
@@ -387,88 +392,94 @@ public class BattleManager : MonoBehaviour
     #region StockEffect Method
 
     async public UniTask StockEffect()
-    {
-        OnStockEffect?.Invoke();
-        if(OnStockEffect != null) await UniTask.Delay(_stockEffectTime);
-
-        await UniTask.WaitUntil(() => PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
+    {      
+        if (OnStockEffect != null)
+        {
+            OnStockEffect?.Invoke();
+            await UniTask.Delay(_stockEffectTime);
+            await UniTask.WaitUntil(() => PhaseManager.CurrentPhaseProperty != PhaseParameter.Intervention);
+            var handEffect = _winner.PlayerParameter.PlayerSetHand.HandEffect;
+            OnStockEffect -= handEffect.Effect;
+        }
 
         PhaseManager.OnNextPhase();//リザーブ処理フェーズへ
     }
 
     #endregion
 
-    #region UseCardOnReserve
+    #region UseCardOnReserve Method
 
-    async private UniTask UseCardOnReserve()
-    {
-        foreach (var player in PlayerManager.Players)
-            player.HandCollection.SetCardOnReserve();
-
-        await UniTask.Delay(_useCardOnReserveTime);
-
-        PhaseManager.OnNextPhase();//リフレッシュ処理フェーズへ
-    }
-
-    #endregion
-
-    #region Refresh
-
-    async private UniTask Refresh()
-    {
-        foreach (var player in PlayerManager.Players)
+        async private UniTask UseCardOnReserve()
         {
-            var count = player.PlayerParameter.PlayerHands.Count;
-            if (count == 0) player.HandCollection.ResetHand();
+            foreach (var player in PlayerManager.Players)
+                player.HandCollection.SetCardOnReserve();
+
+            await UniTask.Delay(_useCardOnReserveTime);
+
+            PhaseManager.OnNextPhase();//リフレッシュ処理フェーズへ
         }
 
-        await UniTask.Delay(_refreshTime);
+        #endregion
 
-        PhaseManager.OnNextPhase();//決着処理フェーズへ
-    }
+    #region Refresh Method
 
-    #endregion
-
-    #region Judgement
-
-    async private UniTask InitForJudgement()
-    {
-        _winner = null;
-        _loser = null;
-
-        await UniTask.Delay(_judgementTime);
-
-        PhaseManager.OnNextPhase();//カード選択フェーズへ
-    }
-
-    #endregion
-
-    #region GameEnd Method
-
-    private void GameEnd()
-    {
-        //どっちかのプレイヤーが0になったら
-        var client = PlayerManager.Players[0].PlayerParameter;
-        var other = PlayerManager.Players[1].PlayerParameter;
-        if (client.Life > 0 && other.Life <= 0)
+        async private UniTask Refresh()
         {
-            _winner = PlayerManager.Players[0];
-            _loser = PlayerManager.Players[1];
-            Debug.Log("クライアントの勝利");
+            foreach (var player in PlayerManager.Players)
+            {
+                var count = player.PlayerParameter.PlayerHands.Count;
+                if (count == 0) player.HandCollection.ResetHand();
+            }
+
+            await UniTask.Delay(_refreshTime);
+
+            PhaseManager.OnNextPhase();//決着処理フェーズへ
         }
-        else if (client.Life <= 0 && other.Life > 0)
-        {
-            _winner = PlayerManager.Players[1];
-            _loser = PlayerManager.Players[0];
-            Debug.Log("クライアントの敗北");
-        }
-        else
+
+        #endregion
+
+    #region Judgement Method
+
+        async private UniTask InitForJudgement()
         {
             _winner = null;
             _loser = null;
-            Debug.Log("引き分け");
+
+            await UniTask.Delay(_judgementTime);
+
+            PhaseManager.OnNextPhase();//カード選択フェーズへ
         }
-    }
+
+        #endregion
+
+    #region GameEnd Method
+
+        private void GameEnd()
+        {
+            //どっちかのプレイヤーが0になったら
+            var client = PlayerManager.Players[0].PlayerParameter;
+            var other = PlayerManager.Players[1].PlayerParameter;
+            if (client.Life > 0 && other.Life <= 0)
+            {
+                _winner = PlayerManager.Players[0];
+                _loser = PlayerManager.Players[1];
+                Debug.Log("クライアントの勝利");
+            }
+            else if (client.Life <= 0 && other.Life > 0)
+            {
+                _winner = PlayerManager.Players[1];
+                _loser = PlayerManager.Players[0];
+                Debug.Log("クライアントの敗北");
+            }
+            else
+            {
+                _winner = null;
+                _loser = null;
+                Debug.Log("引き分け");
+            }
+        }
+
+        #endregion
 
     #endregion
 }

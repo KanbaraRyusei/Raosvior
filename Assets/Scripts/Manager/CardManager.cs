@@ -31,7 +31,7 @@ public class CardManager : MonoBehaviour
     /// <param name="leader">カードの種類(nullならランダム)</param>
     public void SetLeaderHand(PlayerInterface playerData, string name = "")
     {
-        var randomIndex = 0;
+        int randomIndex;
         if (playerData == PlayerManager.Players[0])
         {
             var player = PlayerManager.Players[0];
@@ -39,12 +39,12 @@ public class CardManager : MonoBehaviour
             {
                 if (hand.CardName == name)
                 {
-                    hand.HandEffect.SetPlayerData(player);
+                    hand.HandEffect.ChangePlayersIndex(player);
                     player.HandCollection.SetLeaderHand(hand);
                 }
             }
             randomIndex = Random.Range(0, _cliantLeaderHands.Count);
-            _cliantLeaderHands[randomIndex].HandEffect.SetPlayerData(player);
+            _cliantLeaderHands[randomIndex].HandEffect.ChangePlayersIndex(player);
             player.HandCollection.SetLeaderHand(_cliantLeaderHands[randomIndex]);
         }
         else
@@ -54,12 +54,12 @@ public class CardManager : MonoBehaviour
             {
                 if (hand.CardName == name)
                 {
-                    hand.HandEffect.SetPlayerData(player);
+                    hand.HandEffect.ChangePlayersIndex(player);
                     player.HandCollection.SetLeaderHand(hand);
                 }
             }
             randomIndex = Random.Range(0, _otherLeaderHands.Count);
-            _otherLeaderHands[randomIndex].HandEffect.SetPlayerData(player);
+            _otherLeaderHands[randomIndex].HandEffect.ChangePlayersIndex(player);
             player.HandCollection.SetLeaderHand(_otherLeaderHands[randomIndex]);
         }
     }
@@ -79,7 +79,7 @@ public class CardManager : MonoBehaviour
             {
                 if (hand.CardName == handName)
                 {
-                    hand.HandEffect.SetPlayerData(playerData);
+                    hand.HandEffect.ChangePlayersIndex(playerData);
                     player.HandCollection.AddHand(hand);
                     _cliantRSPHands.Remove(hand);
                 }
@@ -95,7 +95,7 @@ public class CardManager : MonoBehaviour
             {
                 if (hand.CardName == handName)
                 {
-                    hand.HandEffect.SetPlayerData(playerData);
+                    hand.HandEffect.ChangePlayersIndex(playerData);
                     player.HandCollection.AddHand(hand);
                     _otherRSPHands.Remove(hand);
                 }

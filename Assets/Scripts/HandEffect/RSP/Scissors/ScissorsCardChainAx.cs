@@ -7,13 +7,27 @@ using UnityEngine;
 /// <summary>
 /// チェーンアックス(チョキ)
 /// 勝利した時このカードを手札に戻せる。
-/// ※カードを手札に戻すかどうかの選択が必要
+/// ※介入処理
 /// </summary>
 public class ScissorsCardChainAx : RSPHandEffect
 {
     #region Public Property
 
     public bool IsDecide { get; private set; }
+
+    #endregion
+
+    #region Inspector Member
+
+    [SerializeField]
+    [Header("選択時間")]
+    private int _selectTime = 20000;
+
+    #endregion
+
+    #region Private Member
+
+    private float _initTime = 1f;
 
     #endregion
 
@@ -28,22 +42,22 @@ public class ScissorsCardChainAx : RSPHandEffect
 
     public void CardBack()
     {
-        Players[PlayerIndex].HandCollection.CardBack();
+        Player.HandCollection.CardBack();
         IsDecide = true;
 
-        Invoke("Init", 1f);
+        Invoke("Init", _initTime);
     }
 
     public void NotCardBack()
     {
         IsDecide = true;
 
-        Invoke("Init", 1f);
+        Invoke("Init", _initTime);
     }
 
     async public void LimitSelectTime(CancellationToken token)
     {
-        await UniTask.Delay(20000, cancellationToken: token);
+        await UniTask.Delay(_selectTime, cancellationToken: token);
 
         var currentPhase = PhaseManager.CurrentPhaseProperty;
         var interventionPhase = PhaseParameter.Intervention;
