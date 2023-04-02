@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class SelectHand : MonoBehaviour
 { 
@@ -27,11 +28,11 @@ public class SelectHand : MonoBehaviour
 
     [SerializeField]
     [Header("カードごとの現在えらんでいる枚数を表示するテキスト")]
-    Text[] _presentCount;
+    TMP_Text [] _presentCount;
 
     [SerializeField]
     [Header("合計選択中のカード枚数を表示するテキスト")]
-    Text _text;
+    TMP_Text _text;
 
     private void Awake()
     {
