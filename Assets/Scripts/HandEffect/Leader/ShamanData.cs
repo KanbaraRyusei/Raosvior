@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -13,14 +12,14 @@ using UnityEngine;
 /// </summary>
 public class ShamanData : LeaderHandEffect
 {
-    #region Public Property
+    #region Properties
 
     public bool IsDecide { get; private set; }
     public bool IsReducing { get; private set; }
 
     #endregion
 
-    #region Inspector Member
+    #region Inspector Variables
 
     [SerializeField]
     [Header("選択時間")]
@@ -28,14 +27,14 @@ public class ShamanData : LeaderHandEffect
 
     #endregion
 
-    #region Private Member
+    #region Member Variables
 
-    private PlayerHand _playerHand;
+    private RSPPlayerHand _playerHand;
     private float _initTime = 1f;
 
     #endregion
 
-    #region public method
+    #region Public Methods
 
     public override void CardEffect()
     {
@@ -48,20 +47,15 @@ public class ShamanData : LeaderHandEffect
         var draw = value == RSPManager.DRAW && enemyLeader == typeof(ArcherData);
         if (draw || value == RSPManager.LOSE)
         {
+            var playerHands = Player.PlayerParameter.PlayerHands;
+            var scissors = RSPParameter.Scissors;
             //チョキのカードを絞り込む
-            foreach (var RSP in Player.PlayerParameter.PlayerHands)
-            {
-                //チョキのカードがあったら
-                if (RSP.Hand == RSPParameter.Scissors)
-                {
-                    PhaseManager.OnNextPhase(this);
-                    return;
-                }
-            }
+            if (playerHands.FirstOrDefault(x => x.Hand == scissors) != null)
+                PhaseManager.OnNextPhase(this);
         }
     }
 
-    public void SelectScissorsHand(PlayerHand playerHand)
+    public void SelectScissorsHand(RSPPlayerHand playerHand)
     {
         _playerHand  = playerHand;     
     }
@@ -71,7 +65,7 @@ public class ShamanData : LeaderHandEffect
         IsDecide = true;
         IsReducing = false;
 
-        Invoke("Init", _initTime);
+        Invoke(nameof(Init), _initTime);
     }
 
     public void DecideScissorsHand()
@@ -81,21 +75,21 @@ public class ShamanData : LeaderHandEffect
         IsDecide = true;
         IsReducing = true;
 
-        Invoke("Init", _initTime);
+        Invoke(nameof(Init), _initTime);
     }
 
-    async public void LimitSelectTime(CancellationToken token)
+    public async void LimitSelectTime(CancellationToken token)
     {
         await UniTask.Delay(_selectTime, cancellationToken: token);
 
         var currentPhase = PhaseManager.CurrentPhaseProperty;
         var interventionPhase = PhaseParameter.Intervention;
-        if (currentPhase == interventionPhase)DontSelectScissorsHand();
+        if (currentPhase == interventionPhase) DontSelectScissorsHand();
     }
 
     #endregion
 
-    #region Private Method
+    #region Private Methods
 
     private void Init()
     {

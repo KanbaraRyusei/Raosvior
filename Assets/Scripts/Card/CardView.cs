@@ -82,7 +82,7 @@ public class CardView : MonoBehaviour
     /// <summary>
     /// 選択できるカードを表示する関数
     /// </summary>
-    public void SelectRSPCard(IReadOnlyList<PlayerHand> playerHands)
+    public void SelectRSPCard(IReadOnlyList<RSPPlayerHand> playerHands)
     {
 
     }
@@ -97,7 +97,7 @@ public class CardView : MonoBehaviour
     /// <param name="scissorsHands"></param>
     public void SelectCardForLeaderCardShaman
         (IReadOnlyList<UnityAction> methods, UnityAction cancelMethod, 
-        UnityAction decideMethod, IEnumerable<PlayerHand> scissorsHands)
+        UnityAction decideMethod, IEnumerable<RSPPlayerHand> scissorsHands)
     {
         foreach (var method in methods)
         {

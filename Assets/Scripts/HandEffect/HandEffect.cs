@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public abstract class HandEffect : MonoBehaviour
 {
-    #region Public Property
+    #region Properties
 
     public PlayerInterface Player { get; private set; }
 
@@ -15,25 +13,22 @@ public abstract class HandEffect : MonoBehaviour
 
     #endregion 
 
-    #region Public Method
+    #region Public Methods
 
     /// <summary>
     /// プレイヤーを切り替えるメソッド
     /// </summary>
     public void ChangePlayersIndex(PlayerInterface player)
     {
-        int playerIndex;
-        int enemyIndex;
+        int playerIndex = 1;
+        int enemyIndex = 0;
+
         if (PlayerManager.Players[0].HandCollection == player)
         {
             playerIndex = 0;
             enemyIndex = 1;
         }
-        else
-        {
-            playerIndex = 1;
-            enemyIndex = 0;
-        }
+
         Player = PlayerManager.Players[playerIndex];
         Enemy = PlayerManager.Players[enemyIndex];
     }

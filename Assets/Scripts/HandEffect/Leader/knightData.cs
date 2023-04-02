@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
 /// ナイト
 /// パーで勝利した時
@@ -10,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public class KnightData : LeaderHandEffect
 {
-    #region public method
+    #region Public Methods
 
     public override void CardEffect()
     {
@@ -20,7 +16,7 @@ public class KnightData : LeaderHandEffect
         {
             // 相手のリザーブの数だけシールドトークンを獲得
             var count = Enemy.PlayerParameter.PlayerReserve.Count;
-            Player.LifeChange.GetShield(count);
+            Player.ChangeableLife.GetShield(count);
         }
     }
 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -11,13 +9,13 @@ using UnityEngine;
 /// </summary>
 public class ScissorsCardChainAx : RSPHandEffect
 {
-    #region Public Property
+    #region Properties
 
     public bool IsDecide { get; private set; }
 
     #endregion
 
-    #region Inspector Member
+    #region Inspector Variables
 
     [SerializeField]
     [Header("選択時間")]
@@ -25,7 +23,7 @@ public class ScissorsCardChainAx : RSPHandEffect
 
     #endregion
 
-    #region Private Member
+    #region Member Variables
 
     private float _initTime = 1f;
 
@@ -45,17 +43,17 @@ public class ScissorsCardChainAx : RSPHandEffect
         Player.HandCollection.CardBack();
         IsDecide = true;
 
-        Invoke("Init", _initTime);
+        Invoke(nameof(Init), _initTime);
     }
 
     public void NotCardBack()
     {
         IsDecide = true;
 
-        Invoke("Init", _initTime);
+        Invoke(nameof(Init), _initTime);
     }
 
-    async public void LimitSelectTime(CancellationToken token)
+    public async void LimitSelectTime(CancellationToken token)
     {
         await UniTask.Delay(_selectTime, cancellationToken: token);
 
@@ -66,7 +64,7 @@ public class ScissorsCardChainAx : RSPHandEffect
 
     #endregion
 
-    #region Private Method
+    #region Private Methods
 
     private void Init()
     {

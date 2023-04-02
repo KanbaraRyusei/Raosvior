@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
-
 /// <summary>
 /// 使い方
 /// 1 新しいクラスを作る
@@ -11,9 +6,12 @@ using UnityEngine;
 /// </summary>
 public abstract class RSPHandEffect : HandEffect
 {
+    #region Public Methods
+
     /// <summary>
     /// カードの効果を発動させる関数
     /// </summary>
     public abstract void Effect();
 
+    #endregion
 }

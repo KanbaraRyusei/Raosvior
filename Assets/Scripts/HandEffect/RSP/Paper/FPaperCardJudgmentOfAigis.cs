@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -12,13 +10,13 @@ using UnityEngine;
 /// </summary>
 public class FPaperCardJudgmentOfAigis : RSPHandEffect
 {
-    #region Public Property
+    #region Properties
 
     public bool IsDecide { get; private set; }
 
     #endregion
 
-    #region Inspector Member
+    #region Inspector Variables
 
     [SerializeField]
     [Header("選択時間")]
@@ -26,7 +24,7 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
 
     #endregion
 
-    #region Private Member
+    #region Member Variables
 
     private int _breakCount;
     private float _initTime = 1f;
@@ -38,7 +36,6 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
     public override void Effect()
     {
         //自分のシールドを破壊する枚数を決めれるようにする
-
         PhaseManager.OnNextPhase(this);
     }
 
@@ -70,14 +67,14 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
 
         if (_breakCount > 0)
         {
-            Enemy.LifeChange.GetShield(-_breakCount);
-            Enemy.LifeChange.ReceiveDamage(_breakCount);
+            Enemy.ChangeableLife.GetShield(-_breakCount);
+            Enemy.ChangeableLife.ReceiveDamage(_breakCount);
         }
 
-        Invoke("Init",_initTime);
+        Invoke(nameof(Init),_initTime);
     }
 
-    async public void LimitSelectTime(CancellationToken token)
+    public async void LimitSelectTime(CancellationToken token)
     {
         await UniTask.Delay(_selectTime, cancellationToken: token);
 
@@ -88,7 +85,7 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
 
     #endregion
 
-    #region Private Method
+    #region Private Methods
 
     private void Init()
     {

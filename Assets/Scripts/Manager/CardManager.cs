@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class CardManager : MonoBehaviour
 {
+    #region Inspector Variables
+
     [SerializeField]
     [Header("プレイヤー用のリーダーカード")]
     private LeaderPlayerHand[] _cliantLeaderHands = new LeaderPlayerHand[4];
@@ -18,11 +19,15 @@ public class CardManager : MonoBehaviour
 
     [SerializeField]
     [Header("プレイヤー用のじゃんけんカード")]
-    private List<PlayerHand> _cliantRSPHands = new List<PlayerHand>(9);
+    private List<RSPPlayerHand> _cliantRSPHands = new(9);
 
     [SerializeField]
     [Header("もう片方のプレイヤー用のじゃんけんカード")]
-    private List<PlayerHand> _otherRSPHands = new List<PlayerHand>(9);
+    private List<RSPPlayerHand> _otherRSPHands = new(9);
+
+    #endregion
+
+    #region Public Methods
 
     /// <summary>
     /// プレイヤーにリーダーカードを渡す関数
@@ -71,7 +76,7 @@ public class CardManager : MonoBehaviour
     /// <param name="handName">カード名(nullならランダム)</param>
     public void SetRSPHand(PlayerInterface playerData, string handName = "")
     {
-        var randomIndex = 0;
+        int randomIndex;
         if (playerData == PlayerManager.Players[0])
         {
             var player = PlayerManager.Players[0];
@@ -105,4 +110,6 @@ public class CardManager : MonoBehaviour
             _otherRSPHands.Remove(_otherRSPHands[randomIndex]);
         }
     }
+
+    #endregion
 }

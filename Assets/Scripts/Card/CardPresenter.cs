@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,13 +8,13 @@ using UnityEngine.Events;
 
 public class CardPresenter : MonoBehaviour
 {
-    #region Static Property
+    #region Properties
 
     private PhaseParameter CurrentPhase => PhaseManager.CurrentPhaseProperty;
 
     #endregion
 
-    #region Inspector Member
+    #region Inspector Variables
 
     [SerializeField]
     [Header("ハンドのビュー")]
@@ -27,7 +26,7 @@ public class CardPresenter : MonoBehaviour
 
     #endregion
 
-    #region Unity Method
+    #region Unity Methods
 
     private void Awake()
     {
@@ -82,8 +81,8 @@ public class CardPresenter : MonoBehaviour
                 var player = _playerPresenter.PlayerData;
                 var client = PlayerManager.Players[0].PlayerParameter;
 
-                var isClient = player == client && PhaseManager.IsCliant;
-                var isOther = player != client && !PhaseManager.IsCliant;
+                var isClient = player == client && PhaseManager.IsClient;
+                var isOther = player != client && !PhaseManager.IsClient;
 
                 if (isClient) DisplayViewByIntervetion();     
                 else if(isOther) DisplayViewByIntervetion();
@@ -92,7 +91,7 @@ public class CardPresenter : MonoBehaviour
         }
     }
 
-    async private void DisplayViewByIntervetion()
+    private async void DisplayViewByIntervetion()
     {
         switch (PhaseManager.IntervetionProperty)
         {
@@ -124,7 +123,7 @@ public class CardPresenter : MonoBehaviour
         PhaseManager.OnNextPhase();
     }
 
-    async private UniTask LeaderCardShaman()
+    private async UniTask LeaderCardShaman()
     {
         var shaman = _playerPresenter
                         .PlayerData
@@ -140,10 +139,6 @@ public class CardPresenter : MonoBehaviour
                         .Where(hand => 
                                 hand.HandEffect.GetType() == chainAx ||
                                 hand.HandEffect.GetType() == jammingWave);
-
-        PlayerInterface player;
-        if (PhaseManager.IsCliant) player = PlayerManager.Players[1];
-        else player = PlayerManager.Players[0];
 
         var methods = new List<UnityAction>();
 
@@ -165,7 +160,7 @@ public class CardPresenter : MonoBehaviour
                     (methods, shaman.DontSelectScissorsHand,shaman.DecideScissorsHand);
     }
 
-    async private UniTask FPaperCardJudgmentOfAigis()
+    private async UniTask FPaperCardJudgmentOfAigis()
     {
         var judgmentOfAigis =
             _playerPresenter
@@ -194,7 +189,7 @@ public class CardPresenter : MonoBehaviour
                         judgmentOfAigis.DecideBreakCount);
     }
 
-    async private UniTask PaperCardDrainShield()
+    private async UniTask PaperCardDrainShield()
     {
         var paperCardDrainShield =
             _playerPresenter
@@ -204,7 +199,7 @@ public class CardPresenter : MonoBehaviour
 
 
         PlayerInterface player;
-        if(PhaseManager.IsCliant)player = PlayerManager.Players[1];
+        if(PhaseManager.IsClient)player = PlayerManager.Players[1];
         else player = PlayerManager.Players[0];
 
         var methods = new List<UnityAction>();
@@ -226,7 +221,7 @@ public class CardPresenter : MonoBehaviour
         _handView.InactiveEnemyHandButton(methods, paperCardDrainShield.DecideEnemyHand);
     }
 
-    async private UniTask ScissorsCardChainAxAsync()
+    private async UniTask ScissorsCardChainAxAsync()
     {
         var scissorsCardChainAx =
             _playerPresenter

@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
-using UnityEngine;
-
 /// <summary>
 /// エクスプロージョン・F(グー)
 /// 勝利した時自分のリザーフにカードが3枚以上あればさらに2ダメージを与える。
@@ -16,7 +11,7 @@ public class FRockCardExplosion : RSPHandEffect
 
     #endregion
 
-    #region Public Method
+    #region Public Methods
 
     public override void Effect()
     {
@@ -26,7 +21,7 @@ public class FRockCardExplosion : RSPHandEffect
         if (Player.PlayerParameter.PlayerReserve.Count >= RESERVE_COUNT)
         {
             //さらに2ダメージを与える。
-            Enemy.LifeChange.ReceiveDamage(ADD_DAMEGE);
+            Enemy.ChangeableLife.ReceiveDamage(ADD_DAMEGE);
         }
     }
 

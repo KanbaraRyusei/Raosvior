@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerView : MonoBehaviour
 {
-    #region Inspector Member
+    #region Inspector Variables
 
     [SerializeField]
     [Header("ライフのテキスト")]
