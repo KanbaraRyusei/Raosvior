@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Photon.Pun;
 using UnityEngine;
 
 /// <summary>
@@ -20,6 +21,9 @@ public class BattleManager : MonoBehaviour
     #endregion
 
     #region Inspector Variables
+
+    [SerializeField]
+    RPCManager _rpcManager = null;
 
     [SerializeField]
     [Header("カードマネージャー")]
@@ -91,18 +95,9 @@ public class BattleManager : MonoBehaviour
 
     #endregion
 
-    #region Unity Methods
+    #region Public Methods
 
-    private void Awake()
-    {
-        AllPhase();
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private async void AllPhase()
+    public async void AllPhase()
     {
         await LeaderSelect();
         await HandSelect();
@@ -123,6 +118,10 @@ public class BattleManager : MonoBehaviour
 
         GameEnd();
     }
+
+    #endregion
+
+    #region Private Methods
 
     #region LeaderSelect Methods
 
@@ -148,7 +147,7 @@ public class BattleManager : MonoBehaviour
 
         var player = PlayerManager.Players[1];
         //クライアントかどうかの判定をする
-        if (true) player = PlayerManager.Players[0];
+        if (PhotonNetwork.IsMasterClient) player = PlayerManager.Players[0];
 
         var isSelecting = player.PlayerParameter.LeaderHand;
         if (isSelecting != null) _cardManager.SetLeaderHand(player);
@@ -253,7 +252,7 @@ public class BattleManager : MonoBehaviour
         await UniTask.Delay(_cardSelectTime, cancellationToken: token);
 
         var player = PlayerManager.Players[1];
-        if (true) player = PlayerManager.Players[0];
+        if (PhotonNetwork.IsMasterClient) player = PlayerManager.Players[0];
 
         //カードがセットされていなかったら
         if (player.PlayerParameter.PlayerSetHand == null)
