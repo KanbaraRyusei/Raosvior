@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
 /// アーチャー
 /// 引き分けた時1ダメージ与える。
@@ -9,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class ArcherData : LeaderHandEffect
 {
-    #region public method
+    #region Public Methods
 
     public override void CardEffect()
     {
@@ -19,9 +15,9 @@ public class ArcherData : LeaderHandEffect
         var value = RSPManager.Calculator(playerRSP, enemyRSP);
             
         //引き分けならエネミーに1ダメージ与える
-        if (value == RSPManager.DRAW) Enemy.LifeChange.ReceiveDamage();
+        if (value == RSPManager.DRAW) Enemy.ChangeableLife.ReceiveDamage();
         //負けならプレイヤーがもう1ダメージを受ける
-        else if(value == RSPManager.LOSE) Player.LifeChange.ReceiveDamage();
+        else if(value == RSPManager.LOSE) Player.ChangeableLife.ReceiveDamage();
     }
 
     #endregion

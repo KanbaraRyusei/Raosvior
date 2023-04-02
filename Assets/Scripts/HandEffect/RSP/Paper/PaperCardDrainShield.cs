@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -13,13 +10,13 @@ using UnityEngine;
 /// </summary>
 public class PaperCardDrainShield : RSPHandEffect
 {
-    #region Public Property
+    #region Properties
 
     public bool IsDecide { get; private set; }
 
     #endregion
 
-    #region Inspector Member
+    #region Inspector Variables
 
     [SerializeField]
     [Header("選択時間")]
@@ -27,14 +24,14 @@ public class PaperCardDrainShield : RSPHandEffect
 
     #endregion
 
-    #region Private Member
+    #region Member Variables
 
-    private PlayerHand _enemyHand;
+    private RSPPlayerHand _enemyHand;
     private float _initTime = 1f;
 
     #endregion
 
-    #region Constant
+    #region Constants
 
     private const int DEFAULT_DAMEGE = 1;
 
@@ -49,7 +46,7 @@ public class PaperCardDrainShield : RSPHandEffect
         PhaseManager.OnNextPhase(this);
     }
 
-    public void SelectEnemyHand(PlayerHand enemyHand)
+    public void SelectEnemyHand(RSPPlayerHand enemyHand)
     {
         _enemyHand = enemyHand;
     }
@@ -59,12 +56,12 @@ public class PaperCardDrainShield : RSPHandEffect
         if(_enemyHand == null) _enemyHand = Enemy.PlayerParameter.PlayerHands[0];
         
         Enemy.HandCollection.RemoveHand(_enemyHand);
-        Player.LifeChange.GetShield(DEFAULT_DAMEGE, _enemyHand);
+        Player.ChangeableLife.GetShield(DEFAULT_DAMEGE, _enemyHand);
 
-        Invoke("Init", _initTime);
+        Invoke(nameof(Init), _initTime);
     }
 
-    async public void LimitSelectTime(CancellationToken token)
+    public async void LimitSelectTime(CancellationToken token)
     {
         await UniTask.Delay(_selectTime, cancellationToken: token);
 
@@ -75,7 +72,7 @@ public class PaperCardDrainShield : RSPHandEffect
 
     #endregion
 
-    #region Private Method
+    #region Private Methods
 
     private void Init()
     {

@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 [Serializable]
 public class PlayerInterface
@@ -10,7 +7,7 @@ public class PlayerInterface
 
     public IPlayerParameter PlayerParameter { get; private set; }
     public IHandCollection HandCollection { get; private set; }
-    public ILifeChange LifeChange { get; private set; }
+    public IChangeableLife ChangeableLife { get; private set; }
 
     #endregion
 
@@ -20,7 +17,7 @@ public class PlayerInterface
     {
         PlayerParameter = player;
         HandCollection = player;
-        LifeChange = player;
+        ChangeableLife = player;
     }
 
     public void SetPlayerParameter(IPlayerParameter player) =>
@@ -29,8 +26,8 @@ public class PlayerInterface
     public void SetHandCollection(IHandCollection player) =>
         HandCollection = player;
 
-    public void SetLifeChange(ILifeChange player) =>
-        LifeChange = player;
+    public void SetLifeChange(IChangeableLife player) =>
+        ChangeableLife = player;
 
     #endregion
 }

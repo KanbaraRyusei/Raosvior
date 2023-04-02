@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 /// <summary>
 /// グラップラー
 /// グーで勝利したとき
@@ -9,7 +5,7 @@ using UnityEngine;
 /// </summary>
 public class GrapplerData : LeaderHandEffect
 {
-    #region public method
+    #region Public Method
 
     public override void CardEffect()
     {

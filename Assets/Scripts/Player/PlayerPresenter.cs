@@ -3,20 +3,20 @@ using UnityEngine;
 
 public class PlayerPresenter : MonoBehaviour
 {
-    #region Public Property
+    #region Properties
 
     public PlayerData PlayerData { get; private set; }
 
     #endregion
 
-    #region Inspector
+    #region Inspector Variables
 
     [SerializeField]
     private PlayerView _playerView;
 
     #endregion
 
-    #region Unity Method
+    #region Unity Methods
 
     private void Start()
     {

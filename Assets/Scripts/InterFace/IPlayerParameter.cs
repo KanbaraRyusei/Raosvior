@@ -23,16 +23,16 @@ public interface IPlayerParameter
     /// プレイヤーの手札の読み取り専用プロパティ
     /// キャストして変更しようとする奴は殺すので要注意
     /// </summary>
-    IReadOnlyList<PlayerHand> PlayerHands { get; }
+    IReadOnlyList<RSPPlayerHand> PlayerHands { get; }
 
     /// <summary>
     /// プレイヤーのリザーブの読み取り専用プロパティ
     /// キャストして変更しようとする奴は殺すので要注意
     /// </summary>
-    IReadOnlyList<PlayerHand> PlayerReserve { get; }
+    IReadOnlyList<RSPPlayerHand> PlayerReserve { get; }
 
     /// <summary>
     /// 場にセットするカードの読み取り専用プロパティ
     /// </summary>
-    PlayerHand PlayerSetHand { get; }
+    RSPPlayerHand PlayerSetHand { get; }
 }

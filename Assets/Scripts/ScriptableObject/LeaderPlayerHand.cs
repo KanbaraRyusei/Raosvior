@@ -9,47 +9,22 @@ using UnityEngine.UI;
 /// </summary>
 [Serializable]
 [CreateAssetMenu(menuName = "ScriptableObjects/CreateLeaderHandAsset")]
-public class LeaderPlayerHand : ScriptableObject
+public class LeaderPlayerHand : PlayerHandBase
 {
-    #region Public Property
-
-    /// <summary>
-    /// リーダーカードの名前の読み取り専用プロパティ
-    /// </summary>
-    public string CardName => _cardName;
-
-    /// <summary>
-    /// リーダーカードの効果の文の読み取り専用プロパティ
-    /// </summary>
-    public string CardEffect => _cardEffect;
+    #region Properties
 
     /// <summary>
     /// リーダーカードの効果の読み取り専用プロパティ
     /// </summary>
     public LeaderHandEffect HandEffect => _handEffect;
 
-    public Image CardImage => _cardImage;
-
     #endregion
 
-    #region Private Property
-
-    [SerializeField]
-    [Header("カード名")]
-    private string _cardName = "";
-
-    [SerializeField]
-    [Header("効果名")]
-    [Multiline]
-    private string _cardEffect = "";
+    #region Private Variables
 
     [SerializeField]
     [Header("効果")]
-    private LeaderHandEffect _handEffect;
-
-    [SerializeField]
-    [Header("カードの画像")]
-    private Image _cardImage;
+    private LeaderHandEffect _handEffect = null;
 
     #endregion
 }

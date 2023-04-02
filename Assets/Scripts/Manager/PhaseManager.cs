@@ -14,7 +14,7 @@ public static class PhaseManager
 
     public static IntervetionParameter IntervetionProperty { get; private set; }
 
-    public static bool IsCliant { get; private set; }
+    public static bool IsClient { get; private set; }
 
     #endregion
 
@@ -45,8 +45,8 @@ public static class PhaseManager
         {
             var player =
                 handEffect.Player.PlayerParameter.PlayerSetHand.HandEffect.Player.PlayerParameter;
-            if (player == PlayerManager.Players[0].PlayerParameter) IsCliant = true;
-            else IsCliant = false;
+            if (player == PlayerManager.Players[0].PlayerParameter) IsClient = true;
+            else IsClient = false;
 
             var type = handEffect.Player.PlayerParameter.PlayerSetHand.GetType();
             if (type == typeof(FPaperCardJudgmentOfAigis))
@@ -63,8 +63,8 @@ public static class PhaseManager
                 IntervetionProperty = IntervetionParameter.LeaderCardShaman;
                 player =
                     handEffect.Player.PlayerParameter.LeaderHand.HandEffect.Player.PlayerParameter;
-                if (player == PlayerManager.Players[0].PlayerParameter) IsCliant = true;
-                else IsCliant = false;
+                if (player == PlayerManager.Players[0].PlayerParameter) IsClient = true;
+                else IsClient = false;
             }
 
             _oldPhase = _currentPhase;// 前のフェーズを保存
