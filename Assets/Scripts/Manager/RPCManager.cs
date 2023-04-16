@@ -20,9 +20,9 @@ public class RPCManager : MonoBehaviour
     #region Events
 
     public event Action OnReceiveStartGame;
-    public event Action<string> OnSelectLeaderHand;
-    public event Action<string[]> OnSelectRSPHand;
-    public event Action<string> OnSetRSPHand;
+    public event Action<int, string> OnSelectLeaderHand;
+    public event Action<int, string[]> OnSelectRSPHand;
+    public event Action<int, string> OnSetRSPHand;
     public event Action OnShaman;
     public event Action OnFPaperCardJudgmentOfAigis;
     public event Action OnPaperCardDrainShield;
@@ -44,41 +44,42 @@ public class RPCManager : MonoBehaviour
     public void SendStartGame()
     {
         if (PhotonNetwork.PlayerList.Length != 2) return;
-        _photonView.RPC(nameof(StartGame), RpcTarget.AllViaServer);
+        _photonView.RPC(nameof(StartGame), RpcTarget.All);
     }
 
     public void SendSelectLeaderHandGame()
     {
-        _photonView.RPC(nameof(SelectLeaderHandGame), RpcTarget.AllViaServer);
+        _photonView.RPC(nameof(SelectLeaderHandGame), RpcTarget.All);
     }
 
     public void SendSelectRSPHand()
     {
-        _photonView.RPC(nameof(SelectRSPHand), RpcTarget.AllViaServer);
+        _photonView.RPC(nameof(SelectRSPHand), RpcTarget.All);
     }
 
     public void SendSetRSPHand()
     {
-        _photonView.RPC(nameof(SetRSPHand), RpcTarget.AllViaServer);
+        _photonView.RPC(nameof(SetRSPHand), RpcTarget.All);
     }
 
     public void SendShaman()
     {
-        _photonView.RPC(nameof(Shaman), RpcTarget.AllViaServer);
+        _photonView.RPC(nameof(Shaman), RpcTarget.All);
     }
 
     public void SendFPaperCardJudgmentOfAigis()
     {
-        _photonView.RPC(nameof(FPaperCardJudgmentOfAigis), RpcTarget.AllViaServer);
+        _photonView.RPC(nameof(FPaperCardJudgmentOfAigis), RpcTarget.All);
     }
 
     public void SendPaperCardDrainShield()
     {
-        _photonView.RPC(nameof(PaperCardDrainShield), RpcTarget.AllViaServer);
+        _photonView.RPC(nameof(PaperCardDrainShield), RpcTarget.All);
     }
+
     public void SendScissorsCardChainAx()
     {
-        _photonView.RPC(nameof(ScissorsCardChainAx), RpcTarget.AllViaServer);
+        _photonView.RPC(nameof(ScissorsCardChainAx), RpcTarget.All);
     }
 
     #endregion

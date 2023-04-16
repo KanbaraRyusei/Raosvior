@@ -42,6 +42,13 @@ MonoBehaviour:
   - CaughtSurvivor
   - SetIsBomber
   - StartGame
+  - FPaperCardJudgmentOfAigis
+  - PaperCardDrainShield
+  - ScissorsCardChainAx
+  - SelectLeaderHandGame
+  - SelectRSPHand
+  - SetRSPHand
+  - Shaman
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

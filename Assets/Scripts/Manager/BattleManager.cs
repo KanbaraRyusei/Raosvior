@@ -145,12 +145,12 @@ public class BattleManager : MonoBehaviour
         //一定時間経過後
         await UniTask.Delay(_leaderSelectTime, cancellationToken: token);
 
-        var player = PlayerManager.Players[1];
         //クライアントかどうかの判定をする
-        if (PhotonNetwork.IsMasterClient) player = PlayerManager.Players[0];
+        int index = PhotonNetwork.IsMasterClient ? 0 : 1;
+        var player = PlayerManager.Players[index];
 
         var isSelecting = player.PlayerParameter.LeaderHand;
-        if (isSelecting != null) _cardManager.SetLeaderHand(player);
+        if (isSelecting != null) _cardManager.SetLeaderHand(index);
     }
 
     private async UniTask DelaySetLeader()
@@ -193,18 +193,18 @@ public class BattleManager : MonoBehaviour
         //一定時間経過後
         await UniTask.Delay(_handSelectTime, cancellationToken: token);
 
-        var player = PlayerManager.Players[1];
         //クライアントかどうかの判定をする
-        if (true) player = PlayerManager.Players[0];
+        var index = PhotonNetwork.IsMasterClient ? 0 : 1;
+        var player = PlayerManager.Players[index];
 
-        var handCount = player
+        var handCount = player 
                         .PlayerParameter
                         .PlayerHands
                         .Count;
 
         //じゃんけんカードが5枚になるまで繰り返す
         for (int count = handCount; count < MAX_HAND_COUNT; count++)
-            _cardManager.SetRSPHand(player);
+            _cardManager.SetRSPHand(index);
     }
 
     /// <summary>

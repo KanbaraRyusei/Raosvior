@@ -10,8 +10,11 @@ public class CardManager : MonoBehaviour
     #region Inspector Variables
 
     [SerializeField]
+    private RPCManager rpcManager = null;
+
+    [SerializeField]
     [Header("プレイヤー用のリーダーカード")]
-    private LeaderPlayerHand[] _cliantLeaderHands = new LeaderPlayerHand[4];
+    private LeaderPlayerHand[] _clientLeaderHands = new LeaderPlayerHand[4];
 
     [SerializeField]
     [Header("もう片方のプレイヤー用のリーダーカード")]
@@ -19,7 +22,7 @@ public class CardManager : MonoBehaviour
 
     [SerializeField]
     [Header("プレイヤー用のじゃんけんカード")]
-    private List<RSPPlayerHand> _cliantRSPHands = new(9);
+    private List<RSPPlayerHand> _clientRSPHands = new(9);
 
     [SerializeField]
     [Header("もう片方のプレイヤー用のじゃんけんカード")]
@@ -34,39 +37,23 @@ public class CardManager : MonoBehaviour
     /// </summary>
     /// /// <param name="playerData">プレイヤー</param>
     /// <param name="leader">カードの種類(nullならランダム)</param>
-    public void SetLeaderHand(PlayerInterface playerData, string name = "")
+    public void SetLeaderHand(int index, string name = "")
     {
         int randomIndex;
-        if (playerData == PlayerManager.Players[0])
+        var player = PlayerManager.Players[index];
+        var leaderHands = index == 0 ? _clientLeaderHands : _otherLeaderHands;
+
+        foreach (var hand in leaderHands)
         {
-            var player = PlayerManager.Players[0];
-            foreach (var hand in _cliantLeaderHands)
+            if (hand.CardName == name)
             {
-                if (hand.CardName == name)
-                {
-                    hand.HandEffect.ChangePlayersIndex(player);
-                    player.HandCollection.SetLeaderHand(hand);
-                }
+                hand.HandEffect.ChangePlayersIndex(player);
+                player.HandCollection.SetLeaderHand(hand);
             }
-            randomIndex = Random.Range(0, _cliantLeaderHands.Length);
-            _cliantLeaderHands[randomIndex].HandEffect.ChangePlayersIndex(player);
-            player.HandCollection.SetLeaderHand(_cliantLeaderHands[randomIndex]);
         }
-        else
-        {
-            var player = PlayerManager.Players[1];
-            foreach (var hand in _otherLeaderHands)
-            {
-                if (hand.CardName == name)
-                {
-                    hand.HandEffect.ChangePlayersIndex(player);
-                    player.HandCollection.SetLeaderHand(hand);
-                }
-            }
-            randomIndex = Random.Range(0, _otherLeaderHands.Length);
-            _otherLeaderHands[randomIndex].HandEffect.ChangePlayersIndex(player);
-            player.HandCollection.SetLeaderHand(_otherLeaderHands[randomIndex]);
-        }
+        randomIndex = Random.Range(0, leaderHands.Length);
+        leaderHands[randomIndex].HandEffect.ChangePlayersIndex(player);
+        player.HandCollection.SetLeaderHand(leaderHands[randomIndex]);
     }
 
     /// <summary>
@@ -74,41 +61,24 @@ public class CardManager : MonoBehaviour
     /// </summary>
     /// <param name="playerData">プレイヤー</param>
     /// <param name="handName">カード名(nullならランダム)</param>
-    public void SetRSPHand(PlayerInterface playerData, string handName = "")
+    public void SetRSPHand(int index, string handName = "")
     {
         int randomIndex;
-        if (playerData == PlayerManager.Players[0])
+        var player = PlayerManager.Players[index];
+        var rspHands = index == 0 ? _clientRSPHands : _otherRSPHands;
+
+        foreach (var hand in rspHands)
         {
-            var player = PlayerManager.Players[0];
-            foreach (var hand in _cliantRSPHands)
+            if (hand.CardName == handName)
             {
-                if (hand.CardName == handName)
-                {
-                    hand.HandEffect.ChangePlayersIndex(playerData);
-                    player.HandCollection.AddHand(hand);
-                    _cliantRSPHands.Remove(hand);
-                }
+                hand.HandEffect.ChangePlayersIndex(player);
+                player.HandCollection.AddHand(hand);
+                rspHands.Remove(hand);
             }
-            randomIndex = Random.Range(0, _cliantRSPHands.Count);
-            PlayerManager.Players[0].HandCollection.AddHand(_cliantRSPHands[randomIndex]);
-            _cliantRSPHands.Remove(_cliantRSPHands[randomIndex]);
         }
-        else
-        {
-            var player = PlayerManager.Players[1];
-            foreach (var hand in _otherRSPHands)
-            {
-                if (hand.CardName == handName)
-                {
-                    hand.HandEffect.ChangePlayersIndex(playerData);
-                    player.HandCollection.AddHand(hand);
-                    _otherRSPHands.Remove(hand);
-                }
-            }
-            randomIndex = Random.Range(0, _otherRSPHands.Count);
-            player.HandCollection.AddHand(_otherRSPHands[randomIndex]);
-            _otherRSPHands.Remove(_otherRSPHands[randomIndex]);
-        }
+        randomIndex = Random.Range(0, rspHands.Count);
+        PlayerManager.Players[0].HandCollection.AddHand(rspHands[randomIndex]);
+        rspHands.Remove(rspHands[randomIndex]);
     }
 
     #endregion
