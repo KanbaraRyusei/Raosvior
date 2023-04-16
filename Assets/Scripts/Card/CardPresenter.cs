@@ -35,8 +35,8 @@ public class CardPresenter : MonoBehaviour
             .Subscribe(phase =>
             {
                 DisplayViewByPhase(phase);
-            }
-            ).AddTo(this);
+            })
+            .AddTo(this);
     }
 
     #endregion

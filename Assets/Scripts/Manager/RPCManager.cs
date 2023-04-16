@@ -47,19 +47,19 @@ public class RPCManager : MonoBehaviour
         _photonView.RPC(nameof(StartGame), RpcTarget.All);
     }
 
-    public void SendSelectLeaderHandGame()
+    public void SendSelectLeaderHandGame(int index, string name)
     {
-        _photonView.RPC(nameof(SelectLeaderHandGame), RpcTarget.All);
+        _photonView.RPC(nameof(SelectLeaderHandGame), RpcTarget.All, index, name);
     }
 
-    public void SendSelectRSPHand()
+    public void SendSelectRSPHand(int index, string[] name)
     {
-        _photonView.RPC(nameof(SelectRSPHand), RpcTarget.All);
+        _photonView.RPC(nameof(SelectRSPHand), RpcTarget.All, index, name);
     }
 
-    public void SendSetRSPHand()
+    public void SendSetRSPHand(int index, string name)
     {
-        _photonView.RPC(nameof(SetRSPHand), RpcTarget.All);
+        _photonView.RPC(nameof(SetRSPHand), RpcTarget.All, index, name);
     }
 
     public void SendShaman()
@@ -95,51 +95,48 @@ public class RPCManager : MonoBehaviour
     }
 
     [PunRPC]
-    private void SelectLeaderHandGame()
+    private void SelectLeaderHandGame(int index, string name)
     {
-        OnReceiveStartGame?.Invoke();
-        Debug.Log("Start");
+        OnSelectLeaderHand?.Invoke(index, name);
     }
 
     [PunRPC]
-    private void SelectRSPHand()
+    private void SelectRSPHand(int index, string[] name)
     {
-        OnReceiveStartGame?.Invoke();
-        Debug.Log("Start");
+        OnSelectRSPHand?.Invoke(index, name);
     }
 
     [PunRPC]
-    private void SetRSPHand()
+    private void SetRSPHand(int index, string name)
     {
-        OnReceiveStartGame?.Invoke();
-        Debug.Log("Start");
+        OnSetRSPHand?.Invoke(index, name);
     }
 
     [PunRPC]
     private void Shaman()
     {
-        OnReceiveStartGame?.Invoke();
+        OnShaman?.Invoke();
         Debug.Log("Start");
     }
 
     [PunRPC]
     private void FPaperCardJudgmentOfAigis()
     {
-        OnReceiveStartGame?.Invoke();
+        OnFPaperCardJudgmentOfAigis?.Invoke();
         Debug.Log("Start");
     }
 
     [PunRPC]
     private void PaperCardDrainShield()
     {
-        OnReceiveStartGame?.Invoke();
+        OnPaperCardDrainShield?.Invoke();
         Debug.Log("Start");
     }
 
     [PunRPC]
     private void ScissorsCardChainAx()
     {
-        OnReceiveStartGame?.Invoke();
+        OnScissorsCardChainAx?.Invoke();
         Debug.Log("Start");
     }
 
