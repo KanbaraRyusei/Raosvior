@@ -109,7 +109,7 @@ public class CardView : MonoBehaviour
                     {
                         hand.transform.SetParent(_handButtonParent);
                         hand.onClick.AddListener(method);
-                        hand.image.sprite = sprite.CardImage.sprite;
+                        hand.image.sprite = sprite.CardSprite;
                         hand.gameObject.SetActive(true);
                         break;
                     }

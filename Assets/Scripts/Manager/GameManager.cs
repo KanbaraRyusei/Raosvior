@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
             PlayerManager.Register(_playerPresenter[1].PlayerData);
         }
 
+        _battleManager.SetPlayerIndex();
         _battleManager.AllPhase();
     }
 }

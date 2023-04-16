@@ -20,7 +20,7 @@ public abstract class PlayerHandBase : ScriptableObject
     /// </summary>
     public string CardEffect => _cardEffect;
 
-    public Image CardImage => _cardImage;
+    public Sprite CardSprite => _cardSprite;
 
     #endregion
 
@@ -37,14 +37,14 @@ public abstract class PlayerHandBase : ScriptableObject
 
     [SerializeField]
     [Header("カードの画像")]
-    private Image _cardImage = null;
+    private Sprite _cardSprite = null;
 
     #endregion
 
     #region Public Methods
 
     public void SetCardImage(Sprite sprite) =>
-        _cardImage.sprite = sprite;
+        _cardSprite = sprite;
 
     #endregion
 }

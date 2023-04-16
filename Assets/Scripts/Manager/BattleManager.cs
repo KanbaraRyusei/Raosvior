@@ -83,6 +83,13 @@ public class BattleManager : MonoBehaviour
 
     #endregion
 
+    #region Member Variables
+
+    private int _playerIndex = 0;
+    private int _enemyIndex = 0;
+
+    #endregion
+
     #region Constants
 
     private const int MAX_HAND_COUNT = 5;
@@ -92,6 +99,7 @@ public class BattleManager : MonoBehaviour
     #region Events
 
     private event Action OnStockEffect;
+    private event Action OnGameEnd;
 
     #endregion
 
@@ -117,6 +125,18 @@ public class BattleManager : MonoBehaviour
         }
 
         GameEnd();
+    }
+
+    public void RegisterGameEnd(Action method)
+    {
+        OnGameEnd -= method;
+        OnGameEnd += method;
+    }
+
+    public void SetPlayerIndex()
+    {
+        _playerIndex = PhotonNetwork.IsMasterClient ? 0 : 1;
+        _enemyIndex = PhotonNetwork.IsMasterClient ? 1 : 0;
     }
 
     #endregion
@@ -150,7 +170,7 @@ public class BattleManager : MonoBehaviour
         var player = PlayerManager.Players[index];
 
         var isSelecting = player.PlayerParameter.LeaderHand;
-        if (isSelecting != null) _cardManager.SetLeaderHand(index);
+        if (isSelecting != null) _cardManager.SelectLeaderHand(index);
     }
 
     private async UniTask DelaySetLeader()
@@ -204,7 +224,7 @@ public class BattleManager : MonoBehaviour
 
         //じゃんけんカードが5枚になるまで繰り返す
         for (int count = handCount; count < MAX_HAND_COUNT; count++)
-            _cardManager.SetRSPHand(index);
+            _cardManager.SelectRSPHand(index);
     }
 
     /// <summary>
@@ -492,6 +512,8 @@ public class BattleManager : MonoBehaviour
             _loser = null;
             Debug.Log("引き分け");
         }
+
+        OnGameEnd();
     }
 
     #endregion

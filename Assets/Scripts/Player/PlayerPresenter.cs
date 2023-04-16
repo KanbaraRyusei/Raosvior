@@ -39,12 +39,12 @@ public class PlayerPresenter : MonoBehaviour
         {
             PlayerData
                 .ObserveEveryValueChanged(x => PlayerData.PlayerHands[i])
-                .Subscribe(hand => _playerView.ChangeHandsImage(hand.CardImage, i))
+                .Subscribe(hand => _playerView.ChangeHandsImage(hand.CardSprite, i))
                 .AddTo(this);
         }
 
         PlayerData
-            .ObserveEveryValueChanged(x => PlayerData.PlayerSetHand.CardImage)
+            .ObserveEveryValueChanged(x => PlayerData.PlayerSetHand.CardSprite)
             .Subscribe(cardImage => _playerView.ChangeSetHandImage(cardImage))
             .AddTo(this);
     }

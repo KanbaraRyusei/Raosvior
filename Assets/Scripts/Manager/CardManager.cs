@@ -10,7 +10,7 @@ public class CardManager : MonoBehaviour
     #region Inspector Variables
 
     [SerializeField]
-    private RPCManager rpcManager = null;
+    private RPCManager _rpcManager = null;
 
     [SerializeField]
     [Header("プレイヤー用のリーダーカード")]
@@ -30,6 +30,15 @@ public class CardManager : MonoBehaviour
 
     #endregion
 
+    #region Unity Methods
+
+    private void Awake()
+    {
+        
+    }
+
+    #endregion
+
     #region Public Methods
 
     /// <summary>
@@ -37,9 +46,8 @@ public class CardManager : MonoBehaviour
     /// </summary>
     /// /// <param name="playerData">プレイヤー</param>
     /// <param name="leader">カードの種類(nullならランダム)</param>
-    public void SetLeaderHand(int index, string name = "")
+    public void SelectLeaderHand(int index, string name = "")
     {
-        int randomIndex;
         var player = PlayerManager.Players[index];
         var leaderHands = index == 0 ? _clientLeaderHands : _otherLeaderHands;
 
@@ -49,9 +57,11 @@ public class CardManager : MonoBehaviour
             {
                 hand.HandEffect.ChangePlayersIndex(player);
                 player.HandCollection.SetLeaderHand(hand);
+                return;
             }
         }
-        randomIndex = Random.Range(0, leaderHands.Length);
+        
+        int randomIndex = Random.Range(0, leaderHands.Length);
         leaderHands[randomIndex].HandEffect.ChangePlayersIndex(player);
         player.HandCollection.SetLeaderHand(leaderHands[randomIndex]);
     }
@@ -61,9 +71,8 @@ public class CardManager : MonoBehaviour
     /// </summary>
     /// <param name="playerData">プレイヤー</param>
     /// <param name="handName">カード名(nullならランダム)</param>
-    public void SetRSPHand(int index, string handName = "")
+    public void SelectRSPHand(int index, string handName = "")
     {
-        int randomIndex;
         var player = PlayerManager.Players[index];
         var rspHands = index == 0 ? _clientRSPHands : _otherRSPHands;
 
@@ -74,11 +83,33 @@ public class CardManager : MonoBehaviour
                 hand.HandEffect.ChangePlayersIndex(player);
                 player.HandCollection.AddHand(hand);
                 rspHands.Remove(hand);
+                return;
             }
         }
-        randomIndex = Random.Range(0, rspHands.Count);
-        PlayerManager.Players[0].HandCollection.AddHand(rspHands[randomIndex]);
+        int randomIndex = Random.Range(0, rspHands.Count);
+        player.HandCollection.AddHand(rspHands[randomIndex]);
         rspHands.Remove(rspHands[randomIndex]);
+    }
+
+    /// <summary>
+    /// じゃんけんカードをセットする関数
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="handName"></param>
+    public void SetRSPHand(int index, string handName = "")
+    {
+        var player = PlayerManager.Players[index];
+        var rspHands = PlayerManager.Players[index].PlayerParameter.PlayerHands;
+        foreach (var hand in rspHands)
+        {
+            if (hand.CardName == handName)
+            {
+                player.HandCollection.SetHand(hand);
+                return;
+            }
+        }
+        int randomIndex = Random.Range(0, rspHands.Count);
+        player.HandCollection.SetHand(rspHands[randomIndex]);
     }
 
     #endregion
