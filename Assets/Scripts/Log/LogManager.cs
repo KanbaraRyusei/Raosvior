@@ -17,7 +17,7 @@ public static class LogManager
     /// <summary>
     /// デッキに入れたカードのリスト
     /// </summary>
-    private static List<string> _selectCards = new();
+    private static string[] _selectCards = new string[5];
 
     /// <summary>
     /// 使用したカードのリスト
@@ -44,15 +44,27 @@ public static class LogManager
     #region Public Methods
 
     /// <summary>
+    /// データを初期化する関数
+    /// </summary>
+    public static void Init()
+    {
+        _selectCards = new string[5];
+        _useCards.Clear();
+        _cardAddDamage.Clear();
+        _firstCardName = null;
+        _turnCount = 0;
+    }
+
+    /// <summary>
     /// デッキに入れたカード名を格納するメソッド
     /// 引数にカード名を配列で渡す
     /// </summary>
     /// <param name="cards"></param>
     public static void SetSelectCards(string[] cards)
     {
-        foreach(var card in cards)
+        for(int i = 0; i < _selectCards.Length; i++)
         {
-            _selectCards.Add(card);
+            _selectCards[i] = cards[i];
         }
     }
 
@@ -103,7 +115,7 @@ public static class LogManager
 /// カード毎の与えたダメージのログを取るためのクラス
 /// コンストラクタにカード名とダメージ量を渡す
 /// </summary>
-public class CardAddDamageLogData
+public struct CardAddDamageLogData
 {
     #region Properties
 
