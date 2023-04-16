@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+#ROOTNAMESPACEBEGIN#
+/// <summary>
+/// シリアライズブル
+/// </summary>
+[Serializable]
+public class #SCRIPTNAME#
+{
+    #region Properties
+    #endregion
+
+    #region Inspector Variables
+    #endregion
+}
+#ROOTNAMESPACEEND#

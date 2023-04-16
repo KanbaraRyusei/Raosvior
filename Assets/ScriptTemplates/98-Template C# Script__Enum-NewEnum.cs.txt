@@ -1,0 +1,11 @@
+﻿using UnityEngine;
+
+#ROOTNAMESPACEBEGIN#
+/// <summary>
+/// イーナム
+/// </summary>
+public enum #SCRIPTNAME#
+{
+    
+}
+#ROOTNAMESPACEEND#

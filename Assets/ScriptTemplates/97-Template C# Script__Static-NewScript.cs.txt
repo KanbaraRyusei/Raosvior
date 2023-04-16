@@ -1,0 +1,13 @@
+﻿﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+
+#ROOTNAMESPACEBEGIN#
+/// <summary>
+/// スクリプト
+/// </summary>
+public static class #SCRIPTNAME#
+{
+    
+}
+#ROOTNAMESPACEEND#
