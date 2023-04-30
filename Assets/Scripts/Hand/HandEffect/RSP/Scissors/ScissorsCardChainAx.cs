@@ -39,7 +39,8 @@ public class ScissorsCardChainAx : RSPHandEffect
 
     public void PutCardBack()
     {
-        Player.HandCollection.PutCardBack();
+        var index = PlayerManager.Instance.Players[0] == Player ? 0 : 1;
+        RPCManager.Instance.SendScissorsCardChainAx(index);
         IsDecide = true;
 
         Invoke(nameof(Init), _initTime);

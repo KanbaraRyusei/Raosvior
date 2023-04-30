@@ -52,11 +52,11 @@ public class InterventionPresenter : MonoBehaviour
         {
             case PhaseParameter.Intervention:
 
-                var isClient = PhaseManager.Instance.IsFirstPlayer;
-                var isOther = !PhaseManager.Instance.IsFirstPlayer;
+                var isClient = PhaseManager.Instance.IsFirstPlayer && _battleManager.PlayerIndex == 0;
+                var isOther = !PhaseManager.Instance.IsFirstPlayer && _battleManager.PlayerIndex == 1;
 
-                if (PhaseManager.Instance.IsFirstPlayer) DisplayViewByIntervetion();     
-                else if(!PhaseManager.Instance.IsFirstPlayer) DisplayViewByIntervetion();
+                if (isClient) DisplayViewByIntervetion();     
+                else if(isOther) DisplayViewByIntervetion();
 
                 break;
         }

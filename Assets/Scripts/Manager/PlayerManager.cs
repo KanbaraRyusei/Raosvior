@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
@@ -14,14 +15,9 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
 
     #region Inspector Variables
 
-    [SerializeField]
-    private PlayerPresenter _client = null;
 
     [SerializeField]
-    private PlayerPresenter _other = null;
-
-    [SerializeField]
-    private HandSetter _handSetter = null;
+    private PlayerPresenter[] _players = null;
 
     #endregion
 
@@ -36,8 +32,8 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
     protected override void Awake()
     {
         base.Awake();
-        Caster(_client.PlayerData);
-        Caster(_other.PlayerData);
+        Caster(_players[0].PlayerData);
+        Caster(_players[1].PlayerData);
     }
 
     #endregion
@@ -48,6 +44,12 @@ public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
     {
         Players[_currentIndex].SetInterface(playerData);
         _currentIndex++;
+    }
+
+    [Button]
+    public void FindPresenter()
+    {
+        _players = FindObjectsOfType<PlayerPresenter>();
     }
 
     #endregion

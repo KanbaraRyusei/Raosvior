@@ -70,7 +70,7 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
             var index = PlayerManager.Instance.Players[0] == Player ? 0 : 1;
             RPCManager.Instance.SendFPaperCardJudgmentOfAigis(index, _breakCount);
         }
-
+        
         Invoke(nameof(Init),_initTime);
     }
 

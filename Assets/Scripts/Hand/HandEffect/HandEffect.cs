@@ -1,5 +1,4 @@
 using UnityEngine;
-
 /// <summary>
 /// 全てのハンドの効果の基底クラス
 /// </summary>

@@ -74,7 +74,9 @@ public class ShamanData : LeaderHandEffect
 
     public void DecideScissorsHand()
     {
-        Player.HandCollection.OnReserveHand(_playerHand);
+        var index = PlayerManager.Instance.Players[0] == Player ? 0 : 1;
+        var name = _playerHand.RSPHand.CardName;
+        RPCManager.Instance.SendShaman(index ,name);
 
         IsDecide = true;
         IsReducing = true;

@@ -12,9 +12,6 @@ public class HandSetter : MonoBehaviour
     private LeaderPlayerHand[] _leaderPlayerHands = null;
 
     [SerializeField]
-    private HandSelecter _handSelecter = null;
-
-    [SerializeField]
     private RSPPlayerHand[] _rspPlayerHands = null;
 
     #endregion
@@ -25,6 +22,7 @@ public class HandSetter : MonoBehaviour
     private LeaderHandData[] _otherLeaderHands = new LeaderHandData[LEADER_COUNT];
     private List<RSPHandData> _clientRSPHands = new(RSP_COUNT);
     private List<RSPHandData> _otherRSPHands = new(RSP_COUNT);
+    private HandSelecter _handSelecter = null;
 
     #endregion
 
@@ -41,6 +39,7 @@ public class HandSetter : MonoBehaviour
     {
         SetLeaderData();
         SetRSPData();
+        TryGetComponent(out _handSelecter);
     }
 
     #endregion
