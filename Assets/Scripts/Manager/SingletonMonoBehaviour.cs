@@ -1,6 +1,9 @@
-using UnityEngine;
 using System;
+using UnityEngine;
 
+/// <summary>
+/// スクリプト
+/// </summary>
 public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T instance;

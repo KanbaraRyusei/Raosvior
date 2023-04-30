@@ -8,7 +8,7 @@ public interface IHandCollection
     /// 手札を場にセットする関数
     /// </summary>
     /// <param name="playerHand"></param>
-    void SetHand(RSPPlayerHand playerHand);
+    void SetHand(RSPHandData playerHand);
 
     /// <summary>
     /// 場にセットされたカードをリザーブに送る関数
@@ -19,30 +19,30 @@ public interface IHandCollection
     /// 手札にカードを加える関数
     /// </summary>
     /// <param name="playerHand"></param>
-    void AddHand(RSPPlayerHand playerHand);
+    void AddHand(RSPHandData playerHand);
 
     /// <summary>
     /// 手札のカードを消す関数
     /// </summary>
     /// <param name="playerHand"></param>
-    void RemoveHand(RSPPlayerHand playerHand);
+    void RemoveHand(RSPHandData playerHand);
 
     /// <summary>
     /// 手札をリザーブに送る関数
     /// </summary>
     /// <param name="playerHand"></param>
-    void OnReserveHand(RSPPlayerHand playerHand);
+    void OnReserveHand(RSPHandData playerHand);
 
     /// <summary>
     /// セットしたカードを手札に戻す関数
     /// </summary>
-    void CardBack();
+    void PutCardBack();
 
     /// <summary>
     /// リーダーカードをセットする関数
     /// </summary>
     /// <param name="leader"></param>
-    void SetLeaderHand(LeaderPlayerHand leader);
+    void SetLeaderHand(LeaderHandData leader);
 
     /// <summary>
     /// 手札を場にセットする関数

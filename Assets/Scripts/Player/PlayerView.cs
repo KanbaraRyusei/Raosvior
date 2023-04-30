@@ -47,14 +47,14 @@ public class PlayerView : MonoBehaviour
         _playerReserve.text = value.ToString();
     }
 
-    public void ChangeHandsImage(Image img, int index)// Imageに引数を代入
+    public void ChangeHandsImage(Sprite sprite, int index)// Imageに引数を代入
     {
-        _playerHands[index] = img;
+        _playerHands[index].sprite = sprite;
     }
 
-    public void ChangeSetHandImage(Image img)// Imageに引数を代入
+    public void ChangeSetHandImage(Sprite sprite)// Imageに引数を代入
     {
-        _playerSetHand = img;
+        _playerSetHand.sprite = sprite;
     }
 
     #endregion

@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public interface IPlayerParameter
 {
@@ -17,22 +15,22 @@ public interface IPlayerParameter
     /// <summary>
     /// プレイヤーのリーダーカードの読み取り専用プロパティ
     /// </summary>
-    LeaderPlayerHand LeaderHand { get; }
+    LeaderHandData LeaderHand { get; }
 
     /// <summary>
     /// プレイヤーの手札の読み取り専用プロパティ
     /// キャストして変更しようとする奴は殺すので要注意
     /// </summary>
-    IReadOnlyList<RSPPlayerHand> PlayerHands { get; }
+    IReadOnlyList<RSPHandData> RSPHands { get; }
 
     /// <summary>
     /// プレイヤーのリザーブの読み取り専用プロパティ
     /// キャストして変更しようとする奴は殺すので要注意
     /// </summary>
-    IReadOnlyList<RSPPlayerHand> PlayerReserve { get; }
+    IReadOnlyList<RSPHandData> Reserve { get; }
 
     /// <summary>
     /// 場にセットするカードの読み取り専用プロパティ
     /// </summary>
-    RSPPlayerHand PlayerSetHand { get; }
+    RSPHandData SetRSPHand { get; }
 }

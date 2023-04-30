@@ -1,0 +1,18 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+#ROOTNAMESPACEBEGIN#
+/// <summary>
+/// スクリプタブルオブジェクト
+/// </summary>
+[CreateAssetMenu(fileName = "#SCRIPTNAME#", menuName = "ScriptableObjects/#SCRIPTNAME#", order = 0)]
+public class #SCRIPTNAME# : ScriptableObject
+{
+    #region Properties
+    #endregion
+
+    #region Inspector Variables
+    #endregion
+}
+#ROOTNAMESPACEEND#
