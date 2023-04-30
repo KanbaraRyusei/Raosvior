@@ -6,17 +6,18 @@ using Cysharp.Threading.Tasks;
 
 public class LogSaveManager : SingletonMonoBehaviour<LogSaveManager>
 {
-    #region Inspector Variables
-
     [SerializeField]
-    [Header("初回のセーブデータ")]
-    private SaveData _initialSaveData;
+    private BattleManager _battleManager;
+
+    #region Private Member
+
+    private LogData _initialSaveData;
 
     #endregion
 
     #region Private Member
 
-    private SaveData _saveData;
+    private LogData _saveData;
 
     #endregion
 
@@ -34,17 +35,21 @@ public class LogSaveManager : SingletonMonoBehaviour<LogSaveManager>
     {
         base.Awake();
 
-        // TODO RPCManagerのデリゲートに登録する
-        // _rPCManager.Instance.OnDisableStartGame += SetGameStartDelegate;
+        RPCManager.Instance.OnStartGame += SetGameStartDelegate;
+         _battleManager.OnGameEnd += SetGameEndDelegate;
+    }
 
-        // _rPCManager.Instance.OnGameEnd += () => SaveAsync(_saveData);
+    private void OnDisable()
+    {
+        RPCManager.Instance.OnStartGame -= SetGameStartDelegate;
+        _battleManager.OnGameEnd -= SetGameEndDelegate;
     }
 
     #endregion
 
     #region Public Methods
 
-    public async UniTask SaveAsync(SaveData saveData)
+    public async UniTask SaveAsync(LogData saveData)
     {
         _saveData = saveData;
         await JsonUtils.CreateJsonAsync(_saveData, $"{FileUtils.GetWritableDirectoryPath()}/{FileUtils.SAVE_DATA_JSON_FILE_NAME}");
@@ -63,7 +68,7 @@ public class LogSaveManager : SingletonMonoBehaviour<LogSaveManager>
         // セーブデータのロードを試みる
         try
         {
-            _saveData = await JsonUtils.LoadJsonAsync<SaveData>($"{FileUtils.GetWritableDirectoryPath()}/{FileUtils.SAVE_DATA_JSON_FILE_NAME}");
+            _saveData = await JsonUtils.LoadJsonAsync<LogData>($"{FileUtils.GetWritableDirectoryPath()}/{FileUtils.SAVE_DATA_JSON_FILE_NAME}");
             CheckSaveData();
         }
         catch (Exception) // 初回ロード時はデータが作成されてないので例外をキャッチする
@@ -74,7 +79,7 @@ public class LogSaveManager : SingletonMonoBehaviour<LogSaveManager>
             try
             {
                 // 作ったデータのロードを試みる
-                _saveData = await JsonUtils.LoadJsonAsync<SaveData>($"{FileUtils.GetWritableDirectoryPath()}/{FileUtils.SAVE_DATA_JSON_FILE_NAME}");
+                _saveData = await JsonUtils.LoadJsonAsync<LogData>($"{FileUtils.GetWritableDirectoryPath()}/{FileUtils.SAVE_DATA_JSON_FILE_NAME}");
                 CheckSaveData();
             }
             catch (Exception)
@@ -95,7 +100,7 @@ public class LogSaveManager : SingletonMonoBehaviour<LogSaveManager>
     {
         if (_saveData.SelectCards == null || _saveData.UseCards == null || _saveData.CardAddDamage == null || string.IsNullOrWhiteSpace(_saveData.FirstCardName) || _saveData.TurnCount == 0)
         {
-            throw new Exception("データが空です");
+            Debug.LogError("データが空です");
         }
     }
 
@@ -106,14 +111,14 @@ public class LogSaveManager : SingletonMonoBehaviour<LogSaveManager>
 
     private void SetGameEndDelegate()
     {
-
+        SaveAsync(_saveData).Forget();
     }
 
     #endregion
 }
 
 [Serializable]
-public class SaveData
+public class LogData
 {
     #region Properties
 
@@ -156,7 +161,7 @@ public class SaveData
 
     #region Constructor
 
-    public SaveData(string[] selectCards, List<string> useCards, List<CardAddDamageLogData> cardAddDamage, string firstCardName, int turnCount)
+    public LogData(string[] selectCards, List<string> useCards, List<CardAddDamageLogData> cardAddDamage, string firstCardName, int turnCount)
     {
         _selectCards = selectCards;
         _useCards = useCards;
