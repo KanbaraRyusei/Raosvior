@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerView : MonoBehaviour
 {
@@ -9,15 +10,15 @@ public class PlayerView : MonoBehaviour
 
     [SerializeField]
     [Header("ライフのテキスト")]
-    Text _lifeText;
+     TMP_Text _lifeText;
 
     [SerializeField]
     [Header("シールドのテキスト")]
-    Text _shieldText;
+    TMP_Text _shieldText;
 
     [SerializeField]
     [Header("墓地の枚数のテキスト")]
-    Text _playerReserve;
+    TMP_Text _playerReserve;
 
     [SerializeField]
     [Header("セットするカードの画像")]
