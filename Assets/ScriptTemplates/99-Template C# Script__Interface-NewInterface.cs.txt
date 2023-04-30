@@ -1,0 +1,8 @@
+﻿/// <summary>
+/// インターフェース
+/// </summary>
+public interface #SCRIPTNAME#
+{
+    #region Methods
+    #endregion
+}

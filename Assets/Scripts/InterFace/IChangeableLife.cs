@@ -16,10 +16,4 @@ public interface IChangeableLife
     /// </summary>
     /// <param name="damage"></param>
     void ReceiveDamage(int damage = 1);
-
-    /// <summary>
-    /// プレイヤーのシールドを増やす関数
-    /// </summary>
-    /// <param name="num"></param>
-    void GetShield(int num,RSPPlayerHand playerHand = null);
 }
