@@ -8,9 +8,6 @@ public class LogSaveManager : SingletonMonoBehaviour<LogSaveManager>
 {
     #region Inspector Variables
 
-    //[SerializeField]
-    //private RPCManager _rPCManager;
-
     [SerializeField]
     [Header("初回のセーブデータ")]
     private SaveData _initialSaveData;
@@ -38,9 +35,9 @@ public class LogSaveManager : SingletonMonoBehaviour<LogSaveManager>
         base.Awake();
 
         // TODO RPCManagerのデリゲートに登録する
-        // _rPCManager.OnDisableStartGame += SetGameStartDelegate;
+        // _rPCManager.Instance.OnDisableStartGame += SetGameStartDelegate;
 
-        // _rPCManager.OnGameEnd += () => SaveAsync(_saveData);
+        // _rPCManager.Instance.OnGameEnd += () => SaveAsync(_saveData);
     }
 
     #endregion
