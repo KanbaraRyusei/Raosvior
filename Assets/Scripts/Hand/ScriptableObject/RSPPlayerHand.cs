@@ -1,6 +1,5 @@
-using UnityEngine;
-using UnityEngine.UI;
 using System;
+using UnityEngine;
 
 /// <summary>
 /// カードの情報を持つクラス
@@ -16,11 +15,6 @@ public class RSPPlayerHand : PlayerHandBase
     /// </summary>
     public RSPParameter Hand => _rSP;
 
-    /// <summary>
-    /// カードの効果の読み取り専用プロパティ
-    /// </summary>
-    public RSPHandEffect HandEffect => _handEffect;
-
     #endregion
 
     #region Inspector Variables
@@ -28,10 +22,6 @@ public class RSPPlayerHand : PlayerHandBase
     [SerializeField]
     [Header("じゃんけんの手")]
     private RSPParameter _rSP = RSPParameter.Rock;
-
-    [SerializeField]
-    [Header("効果")]
-    private RSPHandEffect _handEffect = null;
 
     #endregion
 }

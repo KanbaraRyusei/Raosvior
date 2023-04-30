@@ -8,6 +8,7 @@ public class PlayerInterface
     public IPlayerParameter PlayerParameter { get; private set; }
     public IHandCollection HandCollection { get; private set; }
     public IChangeableLife ChangeableLife { get; private set; }
+    public IGetableShield GetableShield { get; private set; }
 
     #endregion
 
@@ -18,16 +19,8 @@ public class PlayerInterface
         PlayerParameter = player;
         HandCollection = player;
         ChangeableLife = player;
+        GetableShield = player;
     }
-
-    public void SetPlayerParameter(IPlayerParameter player) =>
-        PlayerParameter = player;
-
-    public void SetHandCollection(IHandCollection player) =>
-        HandCollection = player;
-
-    public void SetLifeChange(IChangeableLife player) =>
-        ChangeableLife = player;
 
     #endregion
 }

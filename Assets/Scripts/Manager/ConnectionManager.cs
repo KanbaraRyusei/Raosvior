@@ -36,7 +36,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     #endregion
 
-    #region Public Methods
+    #region PunCallbacks Methods
 
     /// <summary>
     /// 接続

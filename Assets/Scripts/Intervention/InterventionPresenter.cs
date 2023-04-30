@@ -6,19 +6,22 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using UnityEngine.Events;
 
-public class CardPresenter : MonoBehaviour
+public class InterventionPresenter : MonoBehaviour
 {
     #region Properties
 
-    private PhaseParameter CurrentPhase => PhaseManager.CurrentPhaseProperty;
+    private PhaseParameter CurrentPhase => PhaseParameter.Judgement;
 
     #endregion
 
     #region Inspector Variables
 
     [SerializeField]
+    private BattleManager _battleManager = null;
+
+    [SerializeField]
     [Header("ハンドのビュー")]
-    private CardView _handView;
+    private InterventionView _handView;
 
     [SerializeField]
     [Header("プレイヤーのプレゼンター")]
@@ -47,45 +50,13 @@ public class CardPresenter : MonoBehaviour
     {
         switch (phase)
         {
-            case PhaseParameter.HandSelect:
-
-                _handView.SelectAllHand();
-
-                break;
-
-            case PhaseParameter.CardSelect:
-
-                _handView.SelectRSPCard(_playerPresenter.PlayerData.PlayerHands);
-
-                break;
-
-            case PhaseParameter.Battle:
-                break;
-            case PhaseParameter.WinnerDamageProcess:
-                break;
-            case PhaseParameter.WinnerCardEffect:
-                break;
-            case PhaseParameter.CharacterEffect:
-                break;
-            case PhaseParameter.StockEffect:
-                break;
-            case PhaseParameter.UseCardOnReserve:
-                break;
-            case PhaseParameter.Refresh:
-                break;
-            case PhaseParameter.Judgement:
-                break;
-
             case PhaseParameter.Intervention:
 
-                var player = _playerPresenter.PlayerData;
-                var client = PlayerManager.Players[0].PlayerParameter;
+                var isClient = PhaseManager.Instance.IsFirstPlayer;
+                var isOther = !PhaseManager.Instance.IsFirstPlayer;
 
-                var isClient = player == client && PhaseManager.IsClient;
-                var isOther = player != client && !PhaseManager.IsClient;
-
-                if (isClient) DisplayViewByIntervetion();     
-                else if(isOther) DisplayViewByIntervetion();
+                if (PhaseManager.Instance.IsFirstPlayer) DisplayViewByIntervetion();     
+                else if(!PhaseManager.Instance.IsFirstPlayer) DisplayViewByIntervetion();
 
                 break;
         }
@@ -93,7 +64,7 @@ public class CardPresenter : MonoBehaviour
 
     private async void DisplayViewByIntervetion()
     {
-        switch (PhaseManager.IntervetionProperty)
+        switch (PhaseManager.Instance.IntervetionProperty)
         {
             case IntervetionParameter.LeaderCardShaman:
 
@@ -120,7 +91,7 @@ public class CardPresenter : MonoBehaviour
                 break;
         }
 
-        PhaseManager.OnNextPhase();
+        PhaseManager.Instance.OnNextPhase();
     }
 
     private async UniTask LeaderCardShaman()
@@ -135,7 +106,7 @@ public class CardPresenter : MonoBehaviour
         var scissorsHands =
                     _playerPresenter
                         .PlayerData
-                        .PlayerHands
+                        .RSPHands
                         .Where(hand => 
                                 hand.HandEffect.GetType() == chainAx ||
                                 hand.HandEffect.GetType() == jammingWave);
@@ -148,13 +119,8 @@ public class CardPresenter : MonoBehaviour
         _handView.SelectCardForLeaderCardShaman
                     (methods, shaman.DontSelectScissorsHand, shaman.DecideScissorsHand,scissorsHands);
 
-        var cts = new CancellationTokenSource();
-
-        shaman.LimitSelectTime(cts.Token);
-
-        await UniTask.WaitUntil(() => shaman.IsDecide);
-
-        cts.Cancel();
+        await UniTask.WaitUntil(() => 
+                PhaseManager.Instance.CurrentPhaseProperty != PhaseParameter.Intervention);
 
         _handView.InactiveScissorsHandButton
                     (methods, shaman.DontSelectScissorsHand,shaman.DecideScissorsHand);
@@ -165,7 +131,7 @@ public class CardPresenter : MonoBehaviour
         var judgmentOfAigis =
             _playerPresenter
                 .PlayerData
-                .PlayerSetHand
+                .SetRSPHand
                 .HandEffect as FPaperCardJudgmentOfAigis;
 
         var shildCount = _playerPresenter.PlayerData.Shield;
@@ -194,17 +160,17 @@ public class CardPresenter : MonoBehaviour
         var paperCardDrainShield =
             _playerPresenter
                 .PlayerData
-                .PlayerSetHand
+                .SetRSPHand
                 .HandEffect as PaperCardDrainShield;
 
 
-        PlayerInterface player;
-        if(PhaseManager.IsClient)player = PlayerManager.Players[1];
-        else player = PlayerManager.Players[0];
+        PlayerInterface player = new();
+        //if(_battleManager.PhaseManager.IsFirstPlayer)player = PlayerManager.Players[1];
+        //else player = PlayerManager.Players[0];
 
         var methods = new List<UnityAction>();
 
-        foreach (var enemyHand in player.PlayerParameter.PlayerHands)
+        foreach (var enemyHand in player.PlayerParameter.RSPHands)
             methods.Add(() => paperCardDrainShield.SelectEnemyHand(enemyHand));
 
         _handView.SelectCardForPaperCardDrainShield
@@ -226,12 +192,12 @@ public class CardPresenter : MonoBehaviour
         var scissorsCardChainAx =
             _playerPresenter
                 .PlayerData
-                .PlayerSetHand
+                .SetRSPHand
                 .HandEffect as ScissorsCardChainAx;
 
         _handView.SelectCardForScissorsCardChainAx
-                    (scissorsCardChainAx.CardBack,
-                        scissorsCardChainAx.NotCardBack);
+                    (scissorsCardChainAx.PutCardBack,
+                        scissorsCardChainAx.DontPutCardBack);
 
         var cts = new CancellationTokenSource();
         scissorsCardChainAx.LimitSelectTime(cts.Token);
@@ -241,8 +207,8 @@ public class CardPresenter : MonoBehaviour
         cts.Cancel();
 
         _handView.InactiveCardBackButton
-                    (scissorsCardChainAx.CardBack,
-                        scissorsCardChainAx.NotCardBack);
+                    (scissorsCardChainAx.PutCardBack,
+                        scissorsCardChainAx.DontPutCardBack);
     }
 
     #endregion

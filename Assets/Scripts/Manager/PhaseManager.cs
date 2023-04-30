@@ -1,61 +1,61 @@
-using UnityEngine;
-
 /// <summary>
 /// ゲームの進行管理をするクラス
 /// </summary>
-public static class PhaseManager
+public class PhaseManager : SingletonMonoBehaviour<PhaseManager>
 {
-    #region public property
+    #region Properties
 
     /// <summary>
     /// 現在のフェーズを公開するプロパティ
     /// </summary>
-    public static PhaseParameter CurrentPhaseProperty { get; private set;}
+    public PhaseParameter CurrentPhaseProperty { get; private set; }
 
-    public static IntervetionParameter IntervetionProperty { get; private set; }
+    public IntervetionParameter IntervetionProperty { get; private set; }
 
-    public static bool IsClient { get; private set; }
+    public bool IsFirstPlayer { get; private set; }
 
-    #endregion
-
-    #region private member
-
-    private static PhaseParameter _currentPhase;// 現在のフェーズ
-
-    private static PhaseParameter _oldPhase;// 1つ前のフェーズ
+    public PlayerInterface[] PlayerInterfaces { get; private set; }
 
     #endregion
 
-    #region public method
+    #region Member Variables
+
+    private PhaseParameter _currentPhase;// 現在のフェーズ
+
+    private PhaseParameter _oldPhase;// 1つ前のフェーズ
+
+    #endregion
+
+    #region Public Methods
 
     /// <summary>
     /// フェーズを進める関数
     /// 介入処理があるときのみ引数にtrueを渡す
     /// </summary>
-    public static void OnNextPhase(HandEffect handEffect = null)
+    public void OnNextPhase(HandEffect handEffect = null)
     {
-        if(_currentPhase == PhaseParameter.Judgement)// もし決着判定だったら
+        if (_currentPhase == PhaseParameter.Judgement)// もし決着判定だったら
         {
             _oldPhase = _currentPhase;// 前のフェーズを保存
             _currentPhase = PhaseParameter.CardSelect;// 最初のフェーズに戻る
             CurrentPhaseProperty = _currentPhase;// 外部に現在のフェーズを公開する
             return;
         }
-        if(handEffect != null)// もし介入処理があったら
+        if (handEffect != null)// もし介入処理があったら
         {
             var player =
-                handEffect.Player.PlayerParameter.PlayerSetHand.HandEffect.Player.PlayerParameter;
-            if (player == PlayerManager.Players[0].PlayerParameter) IsClient = true;
-            else IsClient = false;
+                handEffect.Player.PlayerParameter.SetRSPHand.HandEffect.Player.PlayerParameter;
+            if (player == PlayerInterfaces[0].PlayerParameter) IsFirstPlayer = true;
+            else IsFirstPlayer = false;
 
-            var type = handEffect.Player.PlayerParameter.PlayerSetHand.GetType();
+            var type = handEffect.Player.PlayerParameter.SetRSPHand.GetType();
             if (type == typeof(FPaperCardJudgmentOfAigis))
                 IntervetionProperty = IntervetionParameter.FPaperCardJudgmentOfAigis;
 
-            else if(type == typeof(PaperCardDrainShield))
+            else if (type == typeof(PaperCardDrainShield))
                 IntervetionProperty = IntervetionParameter.PaperCardDrainShield;
 
-            else if(type == typeof(ScissorsCardChainAx))
+            else if (type == typeof(ScissorsCardChainAx))
                 IntervetionProperty = IntervetionParameter.ScissorsCardChainAx;
 
             else
@@ -63,8 +63,8 @@ public static class PhaseManager
                 IntervetionProperty = IntervetionParameter.LeaderCardShaman;
                 player =
                     handEffect.Player.PlayerParameter.LeaderHand.HandEffect.Player.PlayerParameter;
-                if (player == PlayerManager.Players[0].PlayerParameter) IsClient = true;
-                else IsClient = false;
+                if (player == PlayerInterfaces[0].PlayerParameter) IsFirstPlayer = true;
+                else IsFirstPlayer = false;
             }
 
             _oldPhase = _currentPhase;// 前のフェーズを保存
@@ -72,7 +72,7 @@ public static class PhaseManager
             CurrentPhaseProperty = _currentPhase;// 外部に現在のフェーズを公開する
             return;
         }
-        if(_currentPhase == PhaseParameter.Intervention)// もし介入処理だったら
+        if (_currentPhase == PhaseParameter.Intervention)// もし介入処理だったら
         {
             _currentPhase = _oldPhase;// 介入前のフェーズに戻す
             return;

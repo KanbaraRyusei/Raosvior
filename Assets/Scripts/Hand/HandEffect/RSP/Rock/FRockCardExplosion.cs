@@ -15,10 +15,8 @@ public class FRockCardExplosion : RSPHandEffect
 
     public override void Effect()
     {
-        ChangePlayersIndex(Player);
-
         //自分のリザーフにカードが3枚以上あれば
-        if (Player.PlayerParameter.PlayerReserve.Count >= RESERVE_COUNT)
+        if (Player.PlayerParameter.Reserve.Count >= RESERVE_COUNT)
         {
             //さらに2ダメージを与える。
             Enemy.ChangeableLife.ReceiveDamage(ADD_DAMEGE);

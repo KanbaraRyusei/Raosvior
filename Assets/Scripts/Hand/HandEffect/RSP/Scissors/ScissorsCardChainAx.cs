@@ -33,20 +33,19 @@ public class ScissorsCardChainAx : RSPHandEffect
 
     public override void Effect()
     {
-        ChangePlayersIndex(Player);
         //このカードを手札に戻すのでカードを捨てるか選択できるようにする
-        PhaseManager.OnNextPhase(this);
+        PhaseManager.Instance.OnNextPhase(this);
     }
 
-    public void CardBack()
+    public void PutCardBack()
     {
-        Player.HandCollection.CardBack();
+        Player.HandCollection.PutCardBack();
         IsDecide = true;
 
         Invoke(nameof(Init), _initTime);
     }
 
-    public void NotCardBack()
+    public void DontPutCardBack()
     {
         IsDecide = true;
 
@@ -57,9 +56,9 @@ public class ScissorsCardChainAx : RSPHandEffect
     {
         await UniTask.Delay(_selectTime, cancellationToken: token);
 
-        var currentPhase = PhaseManager.CurrentPhaseProperty;
+        var currentPhase = PhaseManager.Instance.CurrentPhaseProperty;
         var interventionPhase = PhaseParameter.Intervention;
-        if (currentPhase == interventionPhase) NotCardBack();
+        if (currentPhase == interventionPhase) DontPutCardBack();
     }
 
     #endregion

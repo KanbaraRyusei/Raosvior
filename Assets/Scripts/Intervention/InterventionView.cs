@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class CardView : MonoBehaviour
+public class InterventionView : MonoBehaviour
 {
     #region Inspector Member
 
@@ -65,30 +65,6 @@ public class CardView : MonoBehaviour
 
     #endregion
 
-    #region HandSelectPhase
-
-    /// <summary>
-    /// 手札選択フェーズの手札を表示する関数
-    /// </summary>
-    public void SelectAllHand()
-    {
-
-    }
-
-    #endregion
-
-    #region CardSelectPhase
-
-    /// <summary>
-    /// 選択できるカードを表示する関数
-    /// </summary>
-    public void SelectRSPCard(IReadOnlyList<RSPPlayerHand> playerHands)
-    {
-
-    }
-
-    #endregion
-
     #region LeaderCardShaman
 
     /// <summary>
@@ -97,7 +73,7 @@ public class CardView : MonoBehaviour
     /// <param name="scissorsHands"></param>
     public void SelectCardForLeaderCardShaman
         (IReadOnlyList<UnityAction> methods, UnityAction cancelMethod, 
-        UnityAction decideMethod, IEnumerable<RSPPlayerHand> scissorsHands)
+        UnityAction decideMethod, IEnumerable<RSPHandData> scissorsHands)
     {
         foreach (var method in methods)
         {
@@ -109,7 +85,7 @@ public class CardView : MonoBehaviour
                     {
                         hand.transform.SetParent(_handButtonParent);
                         hand.onClick.AddListener(method);
-                        hand.image.sprite = sprite.CardSprite;
+                        hand.image.sprite = sprite.Sprite;
                         hand.gameObject.SetActive(true);
                         break;
                     }
@@ -259,7 +235,7 @@ public class CardView : MonoBehaviour
 
     #endregion
 
-    #region Private Method
+    #region Private Methods
 
     private void Generate()
     {

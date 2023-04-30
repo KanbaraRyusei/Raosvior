@@ -2,37 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class PlayerManager
+public class PlayerManager : SingletonMonoBehaviour<PlayerManager>
 {
     #region Public Property
 
     //PlayerのInterfaceを参照できる
-    public static IReadOnlyList<PlayerInterface> Players => _players;
+    public PlayerInterface[] Players { get; private set; } =
+        new PlayerInterface[2];
 
     #endregion
 
-    #region Private Member
+    #region Inspector Variables
 
-    private static List<PlayerInterface> _players = new List<PlayerInterface>();
+    [SerializeField]
+    private PlayerPresenter _client = null;
+
+    [SerializeField]
+    private PlayerPresenter _other = null;
+
+    [SerializeField]
+    private HandSetter _handSetter = null;
+
+    #endregion
+
+    #region Member Variables
+
+    private int _currentIndex = 0;
+
+    #endregion
+
+    #region Unity Methods
+
+    protected override void Awake()
+    {
+        base.Awake();
+        Caster(_client.PlayerData);
+        Caster(_other.PlayerData);
+    }
 
     #endregion
 
     #region Public Methods
 
-    public static void Register(PlayerData playerData)
+    public void Caster(PlayerData playerData)
     {
-        var player = new PlayerInterface();
-        _players.Add(player);
-        player.SetInterface(playerData);
-    }
-
-    public static void Release(PlayerData playerData)
-    {
-        foreach (var player in _players)
-        {
-            var isPlayer = player.PlayerParameter == playerData;
-            if (isPlayer) _players.Remove(player);
-        }
+        Players[_currentIndex].SetInterface(playerData);
+        _currentIndex++;
     }
 
     #endregion

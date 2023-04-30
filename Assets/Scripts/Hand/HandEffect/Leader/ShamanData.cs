@@ -29,8 +29,8 @@ public class ShamanData : LeaderHandEffect
 
     #region Member Variables
 
-    private RSPPlayerHand _playerHand;
-    private float _initTime = 1f;
+    private RSPHandData _playerHand;
+    private float _initTime = 10f;
 
     #endregion
 
@@ -39,23 +39,27 @@ public class ShamanData : LeaderHandEffect
     public override void CardEffect()
     {
         var enemyLeader = Enemy.PlayerParameter.LeaderHand.HandEffect.GetType();
-        var playerRSP = Player.PlayerParameter .PlayerSetHand.Hand;
-        var enemyRSP = Enemy.PlayerParameter.PlayerSetHand.Hand;
+        var playerRSP = Player.PlayerParameter .SetRSPHand.RSPHand.Hand;
+        var enemyRSP = Enemy.PlayerParameter.SetRSPHand.RSPHand.Hand;
 
         var value = RSPManager.Calculator(playerRSP, enemyRSP);
         //相手がアーチャーの引き分けor負けだったら
         var draw = value == RSPManager.DRAW && enemyLeader == typeof(ArcherData);
         if (draw || value == RSPManager.LOSE)
         {
-            var playerHands = Player.PlayerParameter.PlayerHands;
+            var playerHands = Player.PlayerParameter.RSPHands;
             var scissors = RSPParameter.Scissors;
             //チョキのカードを絞り込む
-            if (playerHands.FirstOrDefault(x => x.Hand == scissors) != null)
-                PhaseManager.OnNextPhase(this);
+            var isScissorsCard = playerHands.FirstOrDefault(x => x.RSPHand.Hand == scissors);
+            if (isScissorsCard != null)
+            {
+                PhaseManager.Instance.OnNextPhase(this);
+                _playerHand = isScissorsCard;
+            }
         }
     }
 
-    public void SelectScissorsHand(RSPPlayerHand playerHand)
+    public void SelectScissorsHand(RSPHandData playerHand)
     {
         _playerHand  = playerHand;     
     }
@@ -82,7 +86,7 @@ public class ShamanData : LeaderHandEffect
     {
         await UniTask.Delay(_selectTime, cancellationToken: token);
 
-        var currentPhase = PhaseManager.CurrentPhaseProperty;
+        var currentPhase = PhaseManager.Instance.CurrentPhaseProperty;
         var interventionPhase = PhaseParameter.Intervention;
         if (currentPhase == interventionPhase) DontSelectScissorsHand();
     }

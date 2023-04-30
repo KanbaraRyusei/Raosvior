@@ -11,29 +11,14 @@ public class GameManager : MonoBehaviour
     private ConnectionManager _connectionManager = null;
 
     [SerializeField]
-    private RPCManager _rpcManager = null;
-
-    [SerializeField]
     private BattleManager _battleManager = null;
-
-    [SerializeField]
-    private PlayerPresenter[] _playerPresenter = new PlayerPresenter[2];
 
     [SerializeField]
     private Button _startGameButton = null;
 
     private void Awake()
     {
-        _connectionManager.OnJoinedRoomEvent += room =>
-                {
-                    if (PhotonNetwork.IsMasterClient)
-                    {
-                        _startGameButton.gameObject.SetActive(true);
-                        _startGameButton.onClick.AddListener(_rpcManager.SendStartGame);
-                    }
-                };
-
-        _rpcManager.OnReceiveStartGame += StartGame;
+        Register();
     }
 
     /// <summary>
@@ -43,16 +28,22 @@ public class GameManager : MonoBehaviour
     {
         _startGameButton.gameObject.SetActive(false);
 
-        if(PhotonNetwork.IsMasterClient)
-        {
-            PlayerManager.Register(_playerPresenter[0].PlayerData);
-        }
-        else
-        {
-            PlayerManager.Register(_playerPresenter[1].PlayerData);
-        }
-
         _battleManager.SetPlayerIndex();
         _battleManager.AllPhase();
+    }
+
+    private void Register()
+    {
+        _connectionManager
+            .OnJoinedRoomEvent += room =>
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    _startGameButton.gameObject.SetActive(true);
+                    _startGameButton.onClick.AddListener(RPCManager.Instance.SendStartGame);
+                }
+            };
+
+        RPCManager.Instance.OnStartGame += StartGame;
     }
 }

@@ -36,7 +36,7 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
     public override void Effect()
     {
         //自分のシールドを破壊する枚数を決めれるようにする
-        PhaseManager.OnNextPhase(this);
+        PhaseManager.Instance.OnNextPhase(this);
     }
 
     /// <summary>
@@ -67,8 +67,8 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
 
         if (_breakCount > 0)
         {
-            Enemy.ChangeableLife.GetShield(-_breakCount);
-            Enemy.ChangeableLife.ReceiveDamage(_breakCount);
+            var index = PlayerManager.Instance.Players[0] == Player ? 0 : 1;
+            RPCManager.Instance.SendFPaperCardJudgmentOfAigis(index, _breakCount);
         }
 
         Invoke(nameof(Init),_initTime);
@@ -78,7 +78,7 @@ public class FPaperCardJudgmentOfAigis : RSPHandEffect
     {
         await UniTask.Delay(_selectTime, cancellationToken: token);
 
-        var currentPhase = PhaseManager.CurrentPhaseProperty;
+        var currentPhase = PhaseManager.Instance.CurrentPhaseProperty;
         var interventionPhase = PhaseParameter.Intervention;
         if (currentPhase == interventionPhase) DecideBreakCount();
     }

@@ -9,7 +9,7 @@ using UnityEngine;
 /// </summary>
 [DisallowMultipleComponent]
 [RequireComponent(typeof(PhotonView))]
-public class RPCManager : MonoBehaviour
+public class RPCManager : SingletonMonoBehaviour<RPCManager>
 {
     #region Member Variables
 
@@ -19,14 +19,14 @@ public class RPCManager : MonoBehaviour
 
     #region Events
 
-    public event Action OnReceiveStartGame;
+    public event Action OnStartGame;
     public event Action<int, string> OnSelectLeaderHand;
-    public event Action<int, string[]> OnSelectRSPHand;
+    public event Action<int, string> OnSelectRSPHand;
     public event Action<int, string> OnSetRSPHand;
-    public event Action OnShaman;
-    public event Action OnFPaperCardJudgmentOfAigis;
-    public event Action OnPaperCardDrainShield;
-    public event Action OnScissorsCardChainAx;
+    public event Action<int, string> OnShaman;
+    public event Action<int, int> OnFPaperCardJudgmentOfAigis;
+    public event Action<int, string> OnPaperCardDrainShield;
+    public event Action<int> OnScissorsCardChainAx;
 
     #endregion
 
@@ -39,7 +39,7 @@ public class RPCManager : MonoBehaviour
 
     #endregion
 
-    #region Public Methods
+    #region Send Methods
 
     public void SendStartGame()
     {
@@ -47,39 +47,39 @@ public class RPCManager : MonoBehaviour
         _photonView.RPC(nameof(StartGame), RpcTarget.All);
     }
 
-    public void SendSelectLeaderHandGame(int index, string name)
+    public void SendSelectLeaderHand(int index, string name = "")
     {
         _photonView.RPC(nameof(SelectLeaderHandGame), RpcTarget.All, index, name);
     }
 
-    public void SendSelectRSPHand(int index, string[] name)
+    public void SendSelectRSPHand(int index, string name = "")
     {
         _photonView.RPC(nameof(SelectRSPHand), RpcTarget.All, index, name);
     }
 
-    public void SendSetRSPHand(int index, string name)
+    public void SendSetRSPHand(int index, string name = "")
     {
         _photonView.RPC(nameof(SetRSPHand), RpcTarget.All, index, name);
     }
 
-    public void SendShaman()
+    public void SendShaman(int index, string name)
     {
-        _photonView.RPC(nameof(Shaman), RpcTarget.All);
+        _photonView.RPC(nameof(Shaman), RpcTarget.All, index, name);
     }
 
-    public void SendFPaperCardJudgmentOfAigis()
+    public void SendFPaperCardJudgmentOfAigis(int index, int shild)
     {
-        _photonView.RPC(nameof(FPaperCardJudgmentOfAigis), RpcTarget.All);
+        _photonView.RPC(nameof(FPaperCardJudgmentOfAigis), RpcTarget.All, index, shild);
     }
 
-    public void SendPaperCardDrainShield()
+    public void SendPaperCardDrainShield(int index, string name)
     {
-        _photonView.RPC(nameof(PaperCardDrainShield), RpcTarget.All);
+        _photonView.RPC(nameof(PaperCardDrainShield), RpcTarget.All, index, name);
     }
 
-    public void SendScissorsCardChainAx()
+    public void SendScissorsCardChainAx(int index)
     {
-        _photonView.RPC(nameof(ScissorsCardChainAx), RpcTarget.All);
+        _photonView.RPC(nameof(ScissorsCardChainAx), RpcTarget.All, index);
     }
 
     #endregion
@@ -90,7 +90,7 @@ public class RPCManager : MonoBehaviour
     private void StartGame()
     {
         PhotonNetwork.CurrentRoom.IsOpen = false;
-        OnReceiveStartGame?.Invoke();
+        OnStartGame?.Invoke();
         Debug.Log("Start");
     }
 
@@ -101,7 +101,7 @@ public class RPCManager : MonoBehaviour
     }
 
     [PunRPC]
-    private void SelectRSPHand(int index, string[] name)
+    private void SelectRSPHand(int index, string name)
     {
         OnSelectRSPHand?.Invoke(index, name);
     }
@@ -113,30 +113,30 @@ public class RPCManager : MonoBehaviour
     }
 
     [PunRPC]
-    private void Shaman()
+    private void Shaman(int index, string name)
     {
-        OnShaman?.Invoke();
+        OnShaman?.Invoke(index, name);
         Debug.Log("Start");
     }
 
     [PunRPC]
-    private void FPaperCardJudgmentOfAigis()
+    private void FPaperCardJudgmentOfAigis(int index, int shild)
     {
-        OnFPaperCardJudgmentOfAigis?.Invoke();
+        OnFPaperCardJudgmentOfAigis?.Invoke(index, shild);
         Debug.Log("Start");
     }
 
     [PunRPC]
-    private void PaperCardDrainShield()
+    private void PaperCardDrainShield(int index, string name)
     {
-        OnPaperCardDrainShield?.Invoke();
+        OnPaperCardDrainShield?.Invoke(index, name);
         Debug.Log("Start");
     }
 
     [PunRPC]
-    private void ScissorsCardChainAx()
+    private void ScissorsCardChainAx(int index)
     {
-        OnScissorsCardChainAx?.Invoke();
+        OnScissorsCardChainAx?.Invoke(index);
         Debug.Log("Start");
     }
 

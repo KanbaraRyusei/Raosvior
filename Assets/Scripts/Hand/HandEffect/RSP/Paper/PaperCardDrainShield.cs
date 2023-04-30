@@ -26,7 +26,7 @@ public class PaperCardDrainShield : RSPHandEffect
 
     #region Member Variables
 
-    private RSPPlayerHand _enemyHand;
+    private RSPHandData _enemyHand;
     private float _initTime = 1f;
 
     #endregion
@@ -43,20 +43,21 @@ public class PaperCardDrainShield : RSPHandEffect
     {
         //相手のカードを自分のシールドトークンにしたいので
         //ここで相手の手札を選ぶ
-        PhaseManager.OnNextPhase(this);
+        PhaseManager.Instance.OnNextPhase(this);
     }
 
-    public void SelectEnemyHand(RSPPlayerHand enemyHand)
+    public void SelectEnemyHand(RSPHandData enemyHand)
     {
         _enemyHand = enemyHand;
     }
 
     public void DecideEnemyHand()
     {
-        if(_enemyHand == null) _enemyHand = Enemy.PlayerParameter.PlayerHands[0];
-        
-        Enemy.HandCollection.RemoveHand(_enemyHand);
-        Player.ChangeableLife.GetShield(DEFAULT_DAMEGE, _enemyHand);
+        if(_enemyHand == null) _enemyHand = Enemy.PlayerParameter.RSPHands[0];
+
+        var index = PlayerManager.Instance.Players[0] == Player ? 0 : 1;
+        var name = _enemyHand.RSPHand.CardName;
+        RPCManager.Instance.SendPaperCardDrainShield(index, name);
 
         Invoke(nameof(Init), _initTime);
     }
@@ -65,7 +66,7 @@ public class PaperCardDrainShield : RSPHandEffect
     {
         await UniTask.Delay(_selectTime, cancellationToken: token);
 
-        var currentPhase = PhaseManager.CurrentPhaseProperty;
+        var currentPhase = PhaseManager.Instance.CurrentPhaseProperty;
         var interventionPhase = PhaseParameter.Intervention;
         if (currentPhase == interventionPhase) DecideEnemyHand();
     }

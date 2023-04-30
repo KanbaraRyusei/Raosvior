@@ -31,20 +31,20 @@ public class PlayerPresenter : MonoBehaviour
             .AddTo(this);
 
         PlayerData
-            .ObserveEveryValueChanged(x => PlayerData.PlayerReserve.Count)
+            .ObserveEveryValueChanged(x => PlayerData.Reserve.Count)
             .Subscribe(reserveCount => _playerView.ChangeReserveText(reserveCount))
             .AddTo(this);
 
-        for (int i = 0; i < PlayerData.PlayerHands.Count; i++)
+        for (int i = 0; i < PlayerData.RSPHands.Count; i++)
         {
             PlayerData
-                .ObserveEveryValueChanged(x => PlayerData.PlayerHands[i])
-                .Subscribe(hand => _playerView.ChangeHandsImage(hand.CardSprite, i))
+                .ObserveEveryValueChanged(x => PlayerData.RSPHands[i])
+                .Subscribe(hand => _playerView.ChangeHandsImage(hand.Sprite, i))
                 .AddTo(this);
         }
 
         PlayerData
-            .ObserveEveryValueChanged(x => PlayerData.PlayerSetHand.CardSprite)
+            .ObserveEveryValueChanged(x => PlayerData.SetRSPHand.Sprite)
             .Subscribe(cardImage => _playerView.ChangeSetHandImage(cardImage))
             .AddTo(this);
     }
