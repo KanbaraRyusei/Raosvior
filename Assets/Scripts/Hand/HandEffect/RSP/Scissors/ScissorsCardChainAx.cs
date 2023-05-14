@@ -34,7 +34,7 @@ public class ScissorsCardChainAx : RSPHandEffect
     public override void Effect()
     {
         //このカードを手札に戻すのでカードを捨てるか選択できるようにする
-        PhaseManager.Instance.OnNextPhase(this);
+        PhaseManager.OnNextPhase(this);
     }
 
     public void PutCardBack()
@@ -57,7 +57,7 @@ public class ScissorsCardChainAx : RSPHandEffect
     {
         await UniTask.Delay(_selectTime, cancellationToken: token);
 
-        var currentPhase = PhaseManager.Instance.CurrentPhaseProperty;
+        var currentPhase = PhaseManager.CurrentPhase;
         var interventionPhase = PhaseParameter.Intervention;
         if (currentPhase == interventionPhase) DontPutCardBack();
     }

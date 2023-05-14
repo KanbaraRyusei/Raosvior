@@ -1,7 +1,5 @@
-using Photon.Pun;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 /// <summary>
@@ -20,20 +18,28 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
     #region Events
 
     public event Action OnStartGame;
+
+    //選択したカード
     public event Action<int, string> OnSelectLeaderHand;
     public event Action<int, string> OnSelectRSPHand;
     public event Action<int, string> OnSetRSPHand;
+
+    //介入処理
     public event Action<int, string> OnShaman;
     public event Action<int, int> OnFPaperCardJudgmentOfAigis;
     public event Action<int, string> OnPaperCardDrainShield;
     public event Action<int> OnScissorsCardChainAx;
 
+    //再接続
+    public event Action<PhaseParameter, PhaseParameter> OnSetPhase;
+
     #endregion
 
     #region Unity Methods
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         TryGetComponent(out _photonView);
     }
 
@@ -44,42 +50,47 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
     public void SendStartGame()
     {
         if (PhotonNetwork.PlayerList.Length != 2) return;
-        _photonView.RPC(nameof(StartGame), RpcTarget.All);
+        _photonView.RPC(nameof(StartGame), RpcTarget.AllBuffered);
     }
 
     public void SendSelectLeaderHand(int index, string name = "")
     {
-        _photonView.RPC(nameof(SelectLeaderHandGame), RpcTarget.All, index, name);
+        _photonView.RPC(nameof(SelectLeaderHandGame), RpcTarget.AllBuffered, index, name);
     }
 
     public void SendSelectRSPHand(int index, string name = "")
     {
-        _photonView.RPC(nameof(SelectRSPHand), RpcTarget.All, index, name);
+        _photonView.RPC(nameof(SelectRSPHand), RpcTarget.AllBuffered, index, name);
     }
 
     public void SendSetRSPHand(int index, string name = "")
     {
-        _photonView.RPC(nameof(SetRSPHand), RpcTarget.All, index, name);
+        _photonView.RPC(nameof(SetRSPHand), RpcTarget.AllBuffered, index, name);
     }
 
     public void SendShaman(int index, string name)
     {
-        _photonView.RPC(nameof(Shaman), RpcTarget.All, index, name);
+        _photonView.RPC(nameof(Shaman), RpcTarget.AllBuffered, index, name);
     }
 
     public void SendFPaperCardJudgmentOfAigis(int index, int shild)
     {
-        _photonView.RPC(nameof(FPaperCardJudgmentOfAigis), RpcTarget.All, index, shild);
+        _photonView.RPC(nameof(FPaperCardJudgmentOfAigis), RpcTarget.AllBuffered, index, shild);
     }
 
     public void SendPaperCardDrainShield(int index, string name)
     {
-        _photonView.RPC(nameof(PaperCardDrainShield), RpcTarget.All, index, name);
+        _photonView.RPC(nameof(PaperCardDrainShield), RpcTarget.AllBuffered, index, name);
     }
 
     public void SendScissorsCardChainAx(int index)
     {
-        _photonView.RPC(nameof(ScissorsCardChainAx), RpcTarget.All, index);
+        _photonView.RPC(nameof(ScissorsCardChainAx), RpcTarget.AllBuffered, index);
+    }
+
+    public void SendSetPhase(PhaseParameter current, PhaseParameter old)
+    {
+        _photonView.RPC(nameof(SetPhase), RpcTarget.OthersBuffered, current, old);
     }
 
     #endregion
@@ -116,28 +127,29 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
     private void Shaman(int index, string name)
     {
         OnShaman?.Invoke(index, name);
-        Debug.Log("Start");
     }
 
     [PunRPC]
     private void FPaperCardJudgmentOfAigis(int index, int shild)
     {
         OnFPaperCardJudgmentOfAigis?.Invoke(index, shild);
-        Debug.Log("Start");
     }
 
     [PunRPC]
     private void PaperCardDrainShield(int index, string name)
     {
         OnPaperCardDrainShield?.Invoke(index, name);
-        Debug.Log("Start");
     }
 
     [PunRPC]
     private void ScissorsCardChainAx(int index)
     {
         OnScissorsCardChainAx?.Invoke(index);
-        Debug.Log("Start");
+    }
+
+    private void SetPhase(PhaseParameter current, PhaseParameter old)
+    {
+        OnSetPhase?.Invoke(current, old);
     }
 
     #endregion

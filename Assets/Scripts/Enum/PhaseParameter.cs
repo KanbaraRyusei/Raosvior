@@ -37,9 +37,12 @@ public enum PhaseParameter
     [Tooltip("リフレッシュ処理フェーズ")]
     Refresh,
 
-    [Tooltip("決着処理フェーズ")]
-    Judgement,
+    [Tooltip("初期化フェーズ")]
+    Init,
 
     [Tooltip("介入処理フェーズ")]
-    Intervention
+    Intervention,
+
+    [Tooltip("ゲーム終了フェーズ")]
+    GameEnd
 }

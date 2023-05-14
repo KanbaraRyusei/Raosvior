@@ -14,6 +14,7 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     private string _roomName;
     private Action _onSuccess;
     private Action<string> _onError;
+    private bool _isLefting = false;
 
     #endregion
 
@@ -94,14 +95,24 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     /// 部屋に入ったら呼ぶ関数
     /// </summary>
     /// <param name="newPlayer"></param>
-    public override void OnPlayerEnteredRoom(Player newPlayer) =>
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
         OnPlayerEnteredEvent?.Invoke(newPlayer);
+        if(_isLefting)
+        {
+
+        }
+        _isLefting = false;
+    }
 
     /// <summary>
     /// 部屋から去ったら呼ぶ関数
     /// </summary>
-    public override void OnPlayerLeftRoom(Player otherPlayer) =>
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
         OnPlayerLeftEvent?.Invoke(otherPlayer);
+        _isLefting = true;
+    }
 
     #endregion
 

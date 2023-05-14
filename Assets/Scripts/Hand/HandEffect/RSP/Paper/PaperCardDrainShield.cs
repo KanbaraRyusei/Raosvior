@@ -43,7 +43,7 @@ public class PaperCardDrainShield : RSPHandEffect
     {
         //相手のカードを自分のシールドトークンにしたいので
         //ここで相手の手札を選ぶ
-        PhaseManager.Instance.OnNextPhase(this);
+        PhaseManager.OnNextPhase(this);
     }
 
     public void SelectEnemyHand(RSPHandData enemyHand)
@@ -66,7 +66,7 @@ public class PaperCardDrainShield : RSPHandEffect
     {
         await UniTask.Delay(_selectTime, cancellationToken: token);
 
-        var currentPhase = PhaseManager.Instance.CurrentPhaseProperty;
+        var currentPhase = PhaseManager.CurrentPhase;
         var interventionPhase = PhaseParameter.Intervention;
         if (currentPhase == interventionPhase) DecideEnemyHand();
     }

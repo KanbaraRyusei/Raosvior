@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Photon.Pun;
@@ -9,16 +10,18 @@ using UnityEngine;
 /// <summary>
 /// Battleの進行管理システムの参照を持ち、実際に関数を呼び出すクラス
 /// </summary>
-public class BattleManager : MonoBehaviour
+public class BattleManager : MonoBehaviour, IRegisterableGameEnd
 {
     #region Properties
 
     /// <summary>
     /// 現在のターン数
     /// </summary>
-    public int CurrentTurn { get; private set; }
+    public int CurrentTurn { get; private set; } = 1;
     public int PlayerIndex { get; private set; } = 0;
     public int EnemyIndex { get; private set; } = 1;
+    private IPlayerParameter Player => PlayerManager.Instance.Players[PlayerIndex].PlayerParameter;
+    private IPlayerParameter Enemy => PlayerManager.Instance.Players[EnemyIndex].PlayerParameter;
 
     #endregion
 
@@ -78,6 +81,13 @@ public class BattleManager : MonoBehaviour
 
     #endregion
 
+    #region Member Variables
+
+    private int _privLife = 0;
+    private int _privEnemyLife = 0;
+
+    #endregion
+
     #region Constants
 
     private const int MAX_HAND_COUNT = 5;
@@ -86,7 +96,7 @@ public class BattleManager : MonoBehaviour
 
     #region Events
 
-    public event Action OnGameEnd;
+    public event Action<LogData> OnGameEnd;
     private event Action OnStockEffect;
 
     #endregion
@@ -95,21 +105,32 @@ public class BattleManager : MonoBehaviour
 
     public async void AllPhase()
     {
-        await LeaderSelect();
-        await HandSelect();
+        if (PhaseManager.CurrentPhase == PhaseParameter.LeaderSelect) await LeaderSelect();
+        if (PhaseManager.CurrentPhase == PhaseParameter.HandSelect) await HandSelect();
 
         while (true)
         {
-            CurrentTurn++;         
-            await CardSelect();
-            await Battle();
-            await WinnerDamageProcess();
-            await WinnerCardEffect();
-            if (await LeaderEffect()) break;
-            await StockEffect();
-            await UseCardOnReserve();
-            await Refresh();
-            await InitForJudgement();
+            if(PhaseManager.CurrentPhase == PhaseParameter.CardSelect)
+                await CardSelect();
+            if (PhaseManager.CurrentPhase == PhaseParameter.Battle)
+                await Battle();
+            if (PhaseManager.CurrentPhase == PhaseParameter.WinnerDamageProcess)
+                await WinnerDamageProcess();
+            if (PhaseManager.CurrentPhase == PhaseParameter.WinnerCardEffect)
+                await WinnerCardEffect();
+            if (PhaseManager.CurrentPhase == PhaseParameter.CharacterEffect)
+                await LeaderEffect();
+            if (PhaseManager.CurrentPhase == PhaseParameter.GameEnd)
+                break;
+            if (PhaseManager.CurrentPhase == PhaseParameter.StockEffect)
+                await StockEffect();
+            if (PhaseManager.CurrentPhase == PhaseParameter.UseCardOnReserve)
+                await UseCardOnReserve();
+            if (PhaseManager.CurrentPhase == PhaseParameter.Refresh)
+                await Refresh();
+            if (PhaseManager.CurrentPhase == PhaseParameter.Init)
+                await Init();
+            CurrentTurn++;
         }
 
         GameEnd();
@@ -139,7 +160,7 @@ public class BattleManager : MonoBehaviour
 
         cts.Cancel();
 
-        PhaseManager.Instance.OnNextPhase();//手札選択フェーズへ
+        PhaseManager.OnNextPhase();//手札選択フェーズへ
     }
 
     private async void SetLeaderRandom(CancellationToken token)
@@ -182,7 +203,15 @@ public class BattleManager : MonoBehaviour
 
         cts.Cancel();
 
-        PhaseManager.Instance.OnNextPhase();//カード選択フェーズへ
+        var cards = Player
+                        .RSPHands
+                        .OrderBy(_ => _.RSPHand.Hand)
+                        .Select(x => x.RSPHand.CardName)
+                        .ToArray();
+
+        LogManager.SetSelectCards(cards);
+
+        PhaseManager.OnNextPhase();//カード選択フェーズへ
     }
 
     /// <summary>
@@ -239,7 +268,15 @@ public class BattleManager : MonoBehaviour
 
         cts.Cancel();
 
-        PhaseManager.Instance.OnNextPhase();//バトル勝敗決定処理フェーズへ
+        _privLife = Player.Life;
+        _privEnemyLife = Enemy.Life;
+
+        LogManager.SetUseCards(Player.SetRSPHand.RSPHand.CardName);
+
+        if (CurrentTurn == 1) 
+            LogManager.SetFirstCard(Player.SetRSPHand.RSPHand.CardName);
+
+        PhaseManager.OnNextPhase();//バトル勝敗決定処理フェーズへ
     }
 
     /// <summary>
@@ -312,7 +349,7 @@ public class BattleManager : MonoBehaviour
 
         await UniTask.Delay(_battleTime);
 
-        PhaseManager.Instance.OnNextPhase();//勝者のダメージ処理フェーズへ
+        PhaseManager.OnNextPhase();//勝者のダメージ処理フェーズへ
     }
 
     #endregion
@@ -333,7 +370,7 @@ public class BattleManager : MonoBehaviour
             await UniTask.Delay(_winnerDamegeProcessTime);
         }
 
-        PhaseManager.Instance.OnNextPhase();//勝者のカード効果処理フェーズへ
+        PhaseManager.OnNextPhase();//勝者のカード効果処理フェーズへ
     }
 
     #endregion
@@ -345,14 +382,16 @@ public class BattleManager : MonoBehaviour
         var handEffect = _winner.PlayerParameter.SetRSPHand.HandEffect;
         var handType = _winner.PlayerParameter.SetRSPHand.HandEffect.GetType();
 
-        if (handType != typeof(ScissorsCardChainAx)) handEffect.Effect();
-        else OnStockEffect += handEffect.Effect;
+        if (handType != typeof(ScissorsCardChainAx))
+            handEffect.Effect();
+        else
+            OnStockEffect += handEffect.Effect;
 
         await UniTask.Delay(_winnerCardEffectTime);
         await UniTask.WaitUntil(() =>
-            PhaseManager.Instance.CurrentPhaseProperty != PhaseParameter.Intervention);
+            PhaseManager.CurrentPhase != PhaseParameter.Intervention);
 
-        PhaseManager.Instance.OnNextPhase();//リーダーの効果処理フェーズへ
+        PhaseManager.OnNextPhase();//リーダーの効果処理フェーズへ
     }
 
     #endregion
@@ -362,26 +401,28 @@ public class BattleManager : MonoBehaviour
     /// <summary>
     /// リーダー効果発動用の関数
     /// </summary>
-    private async UniTask<bool> LeaderEffect()
+    private async UniTask LeaderEffect()
     {
         foreach (var player in PlayerManager.Instance.Players)
-        {
             if (player.GetType() != typeof(ShamanData))
                 _winner.PlayerParameter.LeaderHand.HandEffect.CardEffect();
-        }
 
         await UniTask.Delay(_leaderEffectTime);
         await UniTask.WaitUntil(() =>
-            PhaseManager.Instance.CurrentPhaseProperty != PhaseParameter.Intervention);
+            PhaseManager.CurrentPhase != PhaseParameter.Intervention);
+
+        var cardName = Player.SetRSPHand.RSPHand.CardName;
+        LogManager.SetCardAddDamage(new(cardName, _privLife - Player.Life));
 
         //どっちかのプレイヤーが0になったら
         var client = PlayerManager.Instance.Players[0].PlayerParameter;
         var other = PlayerManager.Instance.Players[1].PlayerParameter;
-        if (client.Life <= 0 || other.Life <= 0) return true;
+        if (client.Life <= 0 || other.Life <= 0)
+            PhaseManager.OnGameEndPhase();
+        else
+            PhaseManager.OnNextPhase();//効果ストック処理フェーズへ
 
-        PhaseManager.Instance.OnNextPhase();//効果ストック処理フェーズへ
-
-        return false;
+        return;
     }
 
     #endregion
@@ -397,12 +438,12 @@ public class BattleManager : MonoBehaviour
         {
             OnStockEffect?.Invoke();
             await UniTask.Delay(_stockEffectTime);
-            await UniTask.WaitUntil(() => PhaseManager.Instance.CurrentPhaseProperty != PhaseParameter.Intervention);
+            await UniTask.WaitUntil(() => PhaseManager.CurrentPhase != PhaseParameter.Intervention);
             var handEffect = _winner.PlayerParameter.SetRSPHand.HandEffect;
             OnStockEffect -= handEffect.Effect;
         }
 
-        PhaseManager.Instance.OnNextPhase();//リザーブ処理フェーズへ
+        PhaseManager.OnNextPhase();//リザーブ処理フェーズへ
     }
 
     #endregion
@@ -419,7 +460,7 @@ public class BattleManager : MonoBehaviour
 
         await UniTask.Delay(_useCardOnReserveTime);
 
-        PhaseManager.Instance.OnNextPhase();//リフレッシュ処理フェーズへ
+        PhaseManager.OnNextPhase();//リフレッシュ処理フェーズへ
     }
 
     #endregion
@@ -433,31 +474,30 @@ public class BattleManager : MonoBehaviour
     private async UniTask Refresh()
     {
         foreach (var player in PlayerManager.Instance.Players)
-        {
-            var count = player.PlayerParameter.RSPHands.Count;
-            if (count == 0) player.HandCollection.ResetHand();
-        }
+            if (player.PlayerParameter.RSPHands.Count == 0)
+                player.HandCollection.ResetHand();
 
         await UniTask.Delay(_refreshTime);
 
-        PhaseManager.Instance.OnNextPhase();//決着処理フェーズへ
+        PhaseManager.OnNextPhase();//決着処理フェーズへ
     }
 
     #endregion
 
-    #region Judgement Method
+    #region Init Method
 
     /// <summary>
     /// 初期化する関数
     /// </summary>
-    private async UniTask InitForJudgement()
+    private async UniTask Init()
     {
         _winner = null;
         _loser = null;
+        OnStockEffect = null;
 
         await UniTask.Delay(_judgementTime);
 
-        PhaseManager.Instance.OnNextPhase();//カード選択フェーズへ
+        PhaseManager.OnNextPhase();//カード選択フェーズへ
     }
 
     #endregion
@@ -491,7 +531,14 @@ public class BattleManager : MonoBehaviour
             Debug.Log("引き分け");
         }
 
-        OnGameEnd();
+        LogManager.SetTurnCount(CurrentTurn);
+
+        var selectCards = LogManager.SelectCards as string[];
+        var useCards = LogManager.UseCards as List<string>;
+        var cardAddDamage = LogManager.CardAddDamage as List<CardAddDamageLogData>;
+        var firstCardName = LogManager.FirstCardName;
+        var turnCount = LogManager.TurnCount;
+        OnGameEnd(new(selectCards , useCards, cardAddDamage, firstCardName, turnCount));
     }
 
     #endregion

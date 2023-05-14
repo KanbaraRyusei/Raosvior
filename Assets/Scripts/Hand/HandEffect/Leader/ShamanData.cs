@@ -53,7 +53,7 @@ public class ShamanData : LeaderHandEffect
             var isScissorsCard = playerHands.FirstOrDefault(x => x.RSPHand.Hand == scissors);
             if (isScissorsCard != null)
             {
-                PhaseManager.Instance.OnNextPhase(this);
+                PhaseManager.OnNextPhase(this);
                 _playerHand = isScissorsCard;
             }
         }
@@ -88,7 +88,7 @@ public class ShamanData : LeaderHandEffect
     {
         await UniTask.Delay(_selectTime, cancellationToken: token);
 
-        var currentPhase = PhaseManager.Instance.CurrentPhaseProperty;
+        var currentPhase = PhaseManager.CurrentPhase;
         var interventionPhase = PhaseParameter.Intervention;
         if (currentPhase == interventionPhase) DontSelectScissorsHand();
     }

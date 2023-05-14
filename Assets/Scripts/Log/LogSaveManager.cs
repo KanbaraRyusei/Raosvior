@@ -6,11 +6,10 @@ using Cysharp.Threading.Tasks;
 
 public class LogSaveManager : SingletonMonoBehaviour<LogSaveManager>
 {
-    [SerializeField]
-    private BattleManager _battleManager;
 
     #region Private Member
 
+    private IRegisterableGameEnd _registerableGameEnd = null;
     private LogData _initialSaveData;
 
     #endregion
@@ -35,14 +34,15 @@ public class LogSaveManager : SingletonMonoBehaviour<LogSaveManager>
     {
         base.Awake();
 
+        TryGetComponent(out _registerableGameEnd);
         RPCManager.Instance.OnStartGame += SetGameStartDelegate;
-         _battleManager.OnGameEnd += SetGameEndDelegate;
+         _registerableGameEnd.OnGameEnd += SetGameEndDelegate;
     }
 
     private void OnDisable()
     {
         RPCManager.Instance.OnStartGame -= SetGameStartDelegate;
-        _battleManager.OnGameEnd -= SetGameEndDelegate;
+        _registerableGameEnd.OnGameEnd -= SetGameEndDelegate;
     }
 
     #endregion
@@ -109,9 +109,9 @@ public class LogSaveManager : SingletonMonoBehaviour<LogSaveManager>
         LogManager.Init();
     }
 
-    private void SetGameEndDelegate()
+    private void SetGameEndDelegate(LogData logData)
     {
-        SaveAsync(_saveData).Forget();
+        SaveAsync(logData).Forget();
     }
 
     #endregion

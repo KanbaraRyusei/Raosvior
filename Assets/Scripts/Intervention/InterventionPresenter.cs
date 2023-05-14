@@ -10,7 +10,7 @@ public class InterventionPresenter : MonoBehaviour
 {
     #region Properties
 
-    private PhaseParameter CurrentPhase => PhaseParameter.Judgement;
+    private PhaseParameter CurrentPhase => PhaseParameter.Init;
 
     #endregion
 
@@ -52,8 +52,8 @@ public class InterventionPresenter : MonoBehaviour
         {
             case PhaseParameter.Intervention:
 
-                var isClient = PhaseManager.Instance.IsFirstPlayer && _battleManager.PlayerIndex == 0;
-                var isOther = !PhaseManager.Instance.IsFirstPlayer && _battleManager.PlayerIndex == 1;
+                var isClient = PhaseManager.IsFirstPlayer && _battleManager.PlayerIndex == 0;
+                var isOther = !PhaseManager.IsFirstPlayer && _battleManager.PlayerIndex == 1;
 
                 if (isClient) DisplayViewByIntervetion();     
                 else if(isOther) DisplayViewByIntervetion();
@@ -64,7 +64,7 @@ public class InterventionPresenter : MonoBehaviour
 
     private async void DisplayViewByIntervetion()
     {
-        switch (PhaseManager.Instance.IntervetionProperty)
+        switch (PhaseManager.Intervetion)
         {
             case IntervetionParameter.LeaderCardShaman:
 
@@ -91,7 +91,7 @@ public class InterventionPresenter : MonoBehaviour
                 break;
         }
 
-        PhaseManager.Instance.OnNextPhase();
+        PhaseManager.OnNextPhase();
     }
 
     private async UniTask LeaderCardShaman()
@@ -120,7 +120,7 @@ public class InterventionPresenter : MonoBehaviour
                     (methods, shaman.DontSelectScissorsHand, shaman.DecideScissorsHand,scissorsHands);
 
         await UniTask.WaitUntil(() => 
-                PhaseManager.Instance.CurrentPhaseProperty != PhaseParameter.Intervention);
+                PhaseManager.CurrentPhase != PhaseParameter.Intervention);
 
         _handView.InactiveScissorsHandButton
                     (methods, shaman.DontSelectScissorsHand,shaman.DecideScissorsHand);
@@ -165,8 +165,8 @@ public class InterventionPresenter : MonoBehaviour
 
 
         PlayerInterface player = new();
-        //if(_battleManager.PhaseManager.IsFirstPlayer)player = PlayerManager.Players[1];
-        //else player = PlayerManager.Players[0];
+        if (PhaseManager.IsFirstPlayer) player = PlayerManager.Instance.Players[1];
+        else player = PlayerManager.Instance.Players[0];
 
         var methods = new List<UnityAction>();
 
