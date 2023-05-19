@@ -31,7 +31,7 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
     public event Action<int> OnScissorsCardChainAx;
 
     //再接続
-    public event Action<PhaseParameter, PhaseParameter> OnSetPhase;
+    public event Action<PhaseParameter, PhaseParameter> OnResetPhase;
 
     #endregion
 
@@ -40,7 +40,13 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
     protected override void Awake()
     {
         base.Awake();
-        TryGetComponent(out _photonView);
+        _photonView ??= GetComponent<PhotonView>();
+        OnResetPhase += PhaseManager.SetPhase;
+    }
+
+    private void OnDestroy()
+    {
+        OnResetPhase -= PhaseManager.SetPhase;
     }
 
     #endregion
@@ -88,9 +94,9 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
         _photonView.RPC(nameof(ScissorsCardChainAx), RpcTarget.AllBuffered, index);
     }
 
-    public void SendSetPhase(PhaseParameter current, PhaseParameter old)
+    public void ResendSetPhase(PhaseParameter current, PhaseParameter old)
     {
-        _photonView.RPC(nameof(SetPhase), RpcTarget.OthersBuffered, current, old);
+        _photonView.RPC(nameof(ResetPhase), RpcTarget.OthersBuffered, current, old);
     }
 
     #endregion
@@ -147,9 +153,10 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
         OnScissorsCardChainAx?.Invoke(index);
     }
 
-    private void SetPhase(PhaseParameter current, PhaseParameter old)
+    [PunRPC]
+    private void ResetPhase(PhaseParameter current, PhaseParameter old)
     {
-        OnSetPhase?.Invoke(current, old);
+        OnResetPhase?.Invoke(current, old);
     }
 
     #endregion

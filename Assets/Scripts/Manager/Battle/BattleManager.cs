@@ -130,6 +130,7 @@ public class BattleManager : MonoBehaviour, IRegisterableGameEnd
                 await Refresh();
             if (PhaseManager.CurrentPhase == PhaseParameter.Init)
                 await Init();
+
             CurrentTurn++;
         }
 

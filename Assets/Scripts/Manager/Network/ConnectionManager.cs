@@ -100,9 +100,9 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         OnPlayerEnteredEvent?.Invoke(newPlayer);
         if(_isLefting)
         {
-
+            _isLefting = false;
+            //RPCManager.Instance.
         }
-        _isLefting = false;
     }
 
     /// <summary>
