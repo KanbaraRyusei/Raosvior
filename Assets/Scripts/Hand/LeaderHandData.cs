@@ -9,7 +9,7 @@ public class LeaderHandData : HandDataBase
 {
     #region Properties
 
-    public LeaderPlayerHand LeaderHand { get; private set; }
+    public LeaderPlayerHand Hand { get; private set; }
     public LeaderHandEffect HandEffect { get; private set; }
 
     #endregion
@@ -18,7 +18,7 @@ public class LeaderHandData : HandDataBase
 
     public LeaderHandData(LeaderPlayerHand hand, LeaderHandEffect effect)
     {
-        LeaderHand = hand;
+        Hand = hand;
         HandEffect = effect;
     }
 

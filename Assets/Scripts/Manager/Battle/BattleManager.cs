@@ -206,8 +206,8 @@ public class BattleManager : MonoBehaviour, IRegisterableGameEnd
 
         var cards = Player
                         .RSPHands
-                        .OrderBy(_ => _.RSPHand.Hand)
-                        .Select(x => x.RSPHand.CardName)
+                        .OrderBy(_ => _.Hand.Hand)
+                        .Select(x => x.Hand.CardName)
                         .ToArray();
 
         LogManager.SetSelectCards(cards);
@@ -263,6 +263,7 @@ public class BattleManager : MonoBehaviour, IRegisterableGameEnd
 
         //一定時間たったらランダムでカードをセット
         SelectRSPCardRandom(cts.Token);
+        SelectEnemyRSPCardRandom(cts.Token);
 
         //カードをセットするまで待つ
         await DelaySelectRSPCard();
@@ -272,10 +273,10 @@ public class BattleManager : MonoBehaviour, IRegisterableGameEnd
         _privLife = Player.Life;
         _privEnemyLife = Enemy.Life;
 
-        LogManager.SetUseCards(Player.SetRSPHand.RSPHand.CardName);
+        LogManager.SetUseCards(Player.SetRSPHand.Hand.CardName);
 
         if (CurrentTurn == 1) 
-            LogManager.SetFirstCard(Player.SetRSPHand.RSPHand.CardName);
+            LogManager.SetFirstCard(Player.SetRSPHand.Hand.CardName);
 
         PhaseManager.OnNextPhase();//バトル勝敗決定処理フェーズへ
     }
@@ -316,6 +317,28 @@ public class BattleManager : MonoBehaviour, IRegisterableGameEnd
         }
     }
 
+    /// <summary>
+    /// 一定時間経過後プレイヤーにカードがなかったら付与する関数
+    /// </summary>
+    private async void SelectEnemyRSPCardRandom(CancellationToken token)
+    {
+        //１人になったら
+        await UniTask.WaitUntil(() => PhotonNetwork.PlayerList.Length == 1, cancellationToken: token);
+
+        var player = PlayerManager.Instance.Players[EnemyIndex];
+
+        //カードがセットされていなかったら
+        if (player.PlayerParameter.SetRSPHand == null)
+        {
+            //ランダムでセット
+            var count = player.PlayerParameter.RSPHands.Count;
+            var random = UnityEngine.Random.Range(0, count);
+            player
+                .HandCollection
+                .SetHand(player.PlayerParameter.RSPHands[random]);
+        }
+    }
+
     #endregion
 
     #region Battle Method
@@ -325,8 +348,8 @@ public class BattleManager : MonoBehaviour, IRegisterableGameEnd
     /// </summary>
     private async UniTask Battle()
     {
-        var clientRSP = PlayerManager.Instance.Players[0].PlayerParameter.SetRSPHand.RSPHand.Hand;
-        var otherRSP = PlayerManager.Instance.Players[1].PlayerParameter.SetRSPHand.RSPHand.Hand;
+        var clientRSP = PlayerManager.Instance.Players[0].PlayerParameter.SetRSPHand.Hand.Hand;
+        var otherRSP = PlayerManager.Instance.Players[1].PlayerParameter.SetRSPHand.Hand.Hand;
         var judg = RSPManager.Calculator(clientRSP, otherRSP);
 
         if (judg == RSPManager.WIN)//クライアントの勝利なら
@@ -412,7 +435,7 @@ public class BattleManager : MonoBehaviour, IRegisterableGameEnd
         await UniTask.WaitUntil(() =>
             PhaseManager.CurrentPhase != PhaseParameter.Intervention);
 
-        var cardName = Player.SetRSPHand.RSPHand.CardName;
+        var cardName = Player.SetRSPHand.Hand.CardName;
         LogManager.SetCardAddDamage(new(cardName, _privLife - Player.Life));
 
         //どっちかのプレイヤーが0になったら

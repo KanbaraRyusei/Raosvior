@@ -37,7 +37,7 @@ public class StartPanel : MonoBehaviour
 
         _connectionManager
             .Connect
-                (nickName, roomName, Transition, Debug.LogError);
+                (nickName, Transition, Debug.LogError);
 
         await UniTask.Delay(TimeSpan.FromSeconds(10f));
 

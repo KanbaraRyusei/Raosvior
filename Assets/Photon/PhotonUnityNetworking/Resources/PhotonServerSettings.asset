@@ -58,6 +58,7 @@ MonoBehaviour:
   - ReselectRSPHand
   - ResetRSPHand
   - ResetPhase
+  - SetPhase
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

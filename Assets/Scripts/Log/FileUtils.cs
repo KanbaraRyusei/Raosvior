@@ -3,6 +3,7 @@ using UnityEngine;
 public static class FileUtils
 {
     public const string SAVE_DATA_JSON_FILE_NAME = "SaveData.json";
+    public const string ROOM_ID_DATA_JSON_FILE_NAME = "RoomIDData.json";
 
     /// <summary>
     /// 書き込み可能なディレクトリのパスを返す

@@ -9,8 +9,8 @@ public class GrapplerData : LeaderHandEffect
 
     public override void CardEffect()
     {
-        var playerRSP = Player.PlayerParameter.SetRSPHand.RSPHand.Hand;
-        var enemyRSP = Enemy.PlayerParameter.SetRSPHand.RSPHand.Hand;
+        var playerRSP = Player.PlayerParameter.SetRSPHand.Hand.Hand;
+        var enemyRSP = Enemy.PlayerParameter.SetRSPHand.Hand.Hand;
         if (playerRSP == ROCK && enemyRSP == SCISSORS)//グーで勝利したら
         {
             //効果をもう一度発動

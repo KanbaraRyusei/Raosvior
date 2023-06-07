@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -11,7 +12,6 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 {
     #region Private Variables
 
-    private string _roomName;
     private Action _onSuccess;
     private Action<string> _onError;
     private bool _isLefting = false;
@@ -42,23 +42,36 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     /// <summary>
     /// 接続
     /// </summary>
-    public void Connect(string nickName, string roomName, Action onSuccess, Action<string> onError)
+    public void Connect(string nickName, Action onSuccess, Action<string> onError)
     {
-        _roomName = roomName;
         _onSuccess = onSuccess;
         _onError = onError;
 
         PhotonNetwork.NickName = nickName;
 
         if (!PhotonNetwork.IsConnected) PhotonNetwork.ConnectUsingSettings();
-        else JoinOrCreateRoom();
+        else PhotonNetwork.JoinRandomRoom();
     }
 
     /// <summary>
     /// マスターに接続した
     /// </summary>
-    public override void OnConnectedToMaster() =>
-        JoinOrCreateRoom();
+    public override void OnConnectedToMaster()
+    {
+        PhotonNetwork.JoinRandomRoom();
+    }
+
+    /// <summary>
+    /// ランダムで参加できるルームが存在しないなら、新規でルームを作成する
+    /// </summary>
+    /// <param name="returnCode"></param>
+    /// <param name="message"></param>
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        var roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = 2;
+        PhotonNetwork.CreateRoom(null, new RoomOptions() { MaxPlayers = 2 }, TypedLobby.Default);
+    }
 
     /// <summary>
     /// ルームに参加したら呼ばれる関数
@@ -98,10 +111,26 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         OnPlayerEnteredEvent?.Invoke(newPlayer);
-        if(_isLefting)
+
+        //再接続
+        if (_isLefting && PhotonNetwork.IsMasterClient)
         {
             _isLefting = false;
-            //RPCManager.Instance.
+
+            var rpc = RPCManager.Instance;
+
+            for (int i = 0; i < PlayerManager.Instance.Players.Length; i++)
+            {
+                var player = PlayerManager.Instance.Players[i];
+                rpc.SendSelectLeaderHand(i, player.PlayerParameter.LeaderHand.Hand.CardName);
+
+                foreach (var hand in player.PlayerParameter.RSPHands)
+                    rpc.SendSelectRSPHand(i, hand.Hand.CardName);
+
+                rpc.SendSetRSPHand(i, player.PlayerParameter.SetRSPHand.Hand.CardName);
+                rpc.SendSetPhase(PhaseManager.CurrentPhase, PhaseManager.OldPhase);
+            }
+            rpc.SendRestartGame();
         }
     }
 
@@ -112,22 +141,6 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
     {
         OnPlayerLeftEvent?.Invoke(otherPlayer);
         _isLefting = true;
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    /// <summary>
-    /// ルームに参加するか作成する関数
-    /// </summary>
-    private void JoinOrCreateRoom()
-    {
-        PhotonNetwork
-            .JoinOrCreateRoom
-                (_roomName,
-                    new RoomOptions { MaxPlayers = 2 },
-                    TypedLobby.Default);
     }
 
     #endregion

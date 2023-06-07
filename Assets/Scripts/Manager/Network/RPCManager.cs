@@ -30,9 +30,6 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
     public event Action<int, string> OnPaperCardDrainShield;
     public event Action<int> OnScissorsCardChainAx;
 
-    //再接続
-    public event Action<PhaseParameter, PhaseParameter> OnResetPhase;
-
     #endregion
 
     #region Unity Methods
@@ -41,12 +38,6 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
     {
         base.Awake();
         _photonView ??= GetComponent<PhotonView>();
-        OnResetPhase += PhaseManager.SetPhase;
-    }
-
-    private void OnDestroy()
-    {
-        OnResetPhase -= PhaseManager.SetPhase;
     }
 
     #endregion
@@ -57,6 +48,12 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
     {
         if (PhotonNetwork.PlayerList.Length != 2) return;
         _photonView.RPC(nameof(StartGame), RpcTarget.AllBuffered);
+    }
+
+    public void SendRestartGame()
+    {
+        if (PhotonNetwork.PlayerList.Length != 2) return;
+        _photonView.RPC(nameof(StartGame), RpcTarget.OthersBuffered);
     }
 
     public void SendSelectLeaderHand(int index, string name = "")
@@ -94,9 +91,9 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
         _photonView.RPC(nameof(ScissorsCardChainAx), RpcTarget.AllBuffered, index);
     }
 
-    public void ResendSetPhase(PhaseParameter current, PhaseParameter old)
+    public void SendSetPhase(PhaseParameter current, PhaseParameter old)
     {
-        _photonView.RPC(nameof(ResetPhase), RpcTarget.OthersBuffered, current, old);
+        _photonView.RPC(nameof(SetPhase), RpcTarget.OthersBuffered, current, old);
     }
 
     #endregion
@@ -154,9 +151,9 @@ public class RPCManager : SingletonMonoBehaviour<RPCManager>
     }
 
     [PunRPC]
-    private void ResetPhase(PhaseParameter current, PhaseParameter old)
+    private void SetPhase(PhaseParameter current, PhaseParameter old)
     {
-        OnResetPhase?.Invoke(current, old);
+        PhaseManager.SetPhase(current, old);
     }
 
     #endregion

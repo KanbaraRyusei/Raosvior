@@ -9,8 +9,8 @@ public class ArcherData : LeaderHandEffect
 
     public override void CardEffect()
     {
-        var playerRSP = Player.PlayerParameter.SetRSPHand.RSPHand.Hand;
-        var enemyRSP = Enemy.PlayerParameter.SetRSPHand.RSPHand.Hand;
+        var playerRSP = Player.PlayerParameter.SetRSPHand.Hand.Hand;
+        var enemyRSP = Enemy.PlayerParameter.SetRSPHand.Hand.Hand;
 
         var value = RSPManager.Calculator(playerRSP, enemyRSP);
             

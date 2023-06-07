@@ -39,8 +39,8 @@ public class ShamanData : LeaderHandEffect
     public override void CardEffect()
     {
         var enemyLeader = Enemy.PlayerParameter.LeaderHand.HandEffect.GetType();
-        var playerRSP = Player.PlayerParameter .SetRSPHand.RSPHand.Hand;
-        var enemyRSP = Enemy.PlayerParameter.SetRSPHand.RSPHand.Hand;
+        var playerRSP = Player.PlayerParameter .SetRSPHand.Hand.Hand;
+        var enemyRSP = Enemy.PlayerParameter.SetRSPHand.Hand.Hand;
 
         var value = RSPManager.Calculator(playerRSP, enemyRSP);
         //相手がアーチャーの引き分けor負けだったら
@@ -50,7 +50,7 @@ public class ShamanData : LeaderHandEffect
             var playerHands = Player.PlayerParameter.RSPHands;
             var scissors = RSPParameter.Scissors;
             //チョキのカードを絞り込む
-            var isScissorsCard = playerHands.FirstOrDefault(x => x.RSPHand.Hand == scissors);
+            var isScissorsCard = playerHands.FirstOrDefault(x => x.Hand.Hand == scissors);
             if (isScissorsCard != null)
             {
                 PhaseManager.OnNextPhase(this);
@@ -75,7 +75,7 @@ public class ShamanData : LeaderHandEffect
     public void DecideScissorsHand()
     {
         var index = PlayerManager.Instance.Players[0] == Player ? 0 : 1;
-        var name = _playerHand.RSPHand.CardName;
+        var name = _playerHand.Hand.CardName;
         RPCManager.Instance.SendShaman(index ,name);
 
         IsDecide = true;

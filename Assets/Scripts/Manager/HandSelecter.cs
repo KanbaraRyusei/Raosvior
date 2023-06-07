@@ -84,7 +84,7 @@ public class HandSelecter : MonoBehaviour
 
         foreach (var hand in leaderHands)
         {
-            if (hand.LeaderHand.CardName == name)
+            if (hand.Hand.CardName == name)
             {
                 player.HandCollection.SetLeaderHand(hand);
                 RPCManager.Instance.SendSelectLeaderHand(index, name);
@@ -109,7 +109,7 @@ public class HandSelecter : MonoBehaviour
 
         foreach (var hand in rspHands)
         {
-            if (hand.RSPHand.CardName == handName)
+            if (hand.Hand.CardName == handName)
             {
                 player.HandCollection.AddHand(hand);
                 rspHands.Remove(hand);
@@ -132,7 +132,7 @@ public class HandSelecter : MonoBehaviour
         var rspHands = PlayerManager.Instance.Players[index].PlayerParameter.RSPHands;
         foreach (var hand in rspHands)
         {
-            if (hand.RSPHand.CardName == handName)
+            if (hand.Hand.CardName == handName)
             {
                 player.HandCollection.SetHand(hand);
                 return;
@@ -155,12 +155,12 @@ public class HandSelecter : MonoBehaviour
 
         foreach (var hand in enemy.PlayerParameter.RSPHands)
         {
-            if (hand.RSPHand.CardName == handName)
+            if (hand.Hand.CardName == handName)
                 enemy.HandCollection.RemoveHand(hand);
         }
         foreach (var hand in player.PlayerParameter.RSPHands)
         {
-            if (hand.RSPHand.CardName == handName)
+            if (hand.Hand.CardName == handName)
                 player.GetableShield.GetShield(playerHand: hand);
         }
     }
@@ -195,7 +195,7 @@ public class HandSelecter : MonoBehaviour
         var player = PlayerManager.Instance.Players[index];
         foreach (var hand in player.PlayerParameter.RSPHands)
         {
-            if (hand.RSPHand.CardName == handName)
+            if (hand.Hand.CardName == handName)
             {
                 player.HandCollection.OnReserveHand(hand);
             }

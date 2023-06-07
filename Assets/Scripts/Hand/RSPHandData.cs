@@ -9,7 +9,7 @@ public class RSPHandData : HandDataBase
 {
     #region Properties
 
-    public RSPPlayerHand RSPHand { get; private set; }
+    public RSPPlayerHand Hand { get; private set; }
     public RSPHandEffect HandEffect { get; private set; }
 
     #endregion
@@ -18,7 +18,7 @@ public class RSPHandData : HandDataBase
 
     public RSPHandData(RSPPlayerHand hand, RSPHandEffect effect)
     {
-        RSPHand = hand;
+        Hand = hand;
         HandEffect = effect;
     }
 

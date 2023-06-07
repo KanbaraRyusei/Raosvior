@@ -30,6 +30,10 @@ public class GameManager : MonoBehaviour
 
         _battleManager.SetPlayerIndex();
         _battleManager.AllPhase();
+
+        new RoomIDSaveManager()
+            .SaveAsync(PhotonNetwork.CurrentRoom.Name)
+            .Forget();
     }
 
     private void Register()

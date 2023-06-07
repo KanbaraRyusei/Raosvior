@@ -56,7 +56,7 @@ public class PaperCardDrainShield : RSPHandEffect
         if(_enemyHand == null) _enemyHand = Enemy.PlayerParameter.RSPHands[0];
 
         var index = PlayerManager.Instance.Players[0] == Player ? 0 : 1;
-        var name = _enemyHand.RSPHand.CardName;
+        var name = _enemyHand.Hand.CardName;
         RPCManager.Instance.SendPaperCardDrainShield(index, name);
 
         Invoke(nameof(Init), _initTime);
